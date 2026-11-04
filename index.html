@@ -39,12 +39,12 @@ button{font:inherit;cursor:pointer;border:0;border-radius:13px;padding:14px 19px
 <div id="compat" class="notice">LIORA prüft im Chat die tatsächlichen Funktionen deiner Plattform und Modellversion. Ungeprüfte Kombinationen werden nicht als garantiert kompatibel ausgegeben.</div>
 </section>
 <section class="panel"><h2>02 · Bilder & Referenzen <span class="pill">optional</span></h2>
-<p class="small">Du kannst schon jetzt festlegen, welche Bilder du hast. Die Dateien selbst musst du später im Chat beziehungsweise im Videotool hochladen – sie werden nicht durch den kopierten Text übertragen.</p>
+<p class="small">Hier legst du nur fest, welche Referenzen du bereits hast. Die Bilder lädst du später direkt im Chat hoch – nicht in diesem Formular.</p>
 <details id="refDetails"><summary>Avatar, Outfits und Ort vorbereiten</summary><div class="inside">
 <div id="personRefs"></div>
-<div class="ref-card"><div class="ref-title">Umgebung / Ort</div><div class="grid"><div><label for="location">Wo spielt die Szene?</label><input id="location" placeholder="z. B. Küche, Café, Studio"></div><div><label for="locationFile">Ortsreferenz (optional)</label><input id="locationFile" type="file" accept="image/*"></div></div></div>
-<div class="ref-card"><div class="ref-title">Zusätzlicher Startframe / Keyframe</div><input id="keyframeFile" type="file" accept="image/*"><p class="small">Nur verwenden, wenn es für deine Idee und den gewählten Modus sinnvoll ist.</p></div>
-<p class="hint">Bildnummern wie Image 1 = Person A werden erst im Chat anhand der tatsächlichen Upload-Reihenfolge festgelegt. Outfit- und Ortsbilder bekommen eigene Rollen.</p>
+<div class="ref-card"><div class="ref-title">Umgebung / Ort</div><div class="grid"><div><label for="location">Wo spielt die Szene?</label><input id="location" placeholder="z. B. Küche, Café, Studio"></div><div><label for="locationRef">Ortsbild</label><select id="locationRef"><option value="none">Noch kein Bild</option><option value="ready">Bild vorhanden – im Chat hochladen</option><option value="create">LIORA soll ein Bildprompt erstellen</option></select></div></div></div>
+<div class="ref-card"><div class="ref-title">Startframe / Keyframe</div><label for="keyframeRef">Hast du bereits einen Startframe?</label><select id="keyframeRef"><option value="unsure">LIORA soll entscheiden, ob einer nötig ist</option><option value="ready">Ja – im Chat hochladen</option><option value="create">Nein – LIORA soll den Bildprompt erstellen</option></select></div>
+<p class="hint">Bildnummern wie Image 1 = Person A werden erst nach dem Hochladen im Chat anhand der tatsächlichen Upload-Reihenfolge festgelegt. Outfit- und Ortsbilder bekommen eigene Rollen.</p>
 </div></details>
 <details><summary>Besondere Wünsche</summary><div class="inside"><div class="field"><label for="extra">Was ist dir zusätzlich wichtig?</label><textarea id="extra" placeholder="z. B. trockener Humor, genaue Sätze, natürliche Bewegung, Loop, Kameraschwenk …"></textarea></div><div class="field"><label for="priority">Priorität</label><select id="priority"><option value="quality">Beste Qualität / gute Umsetzbarkeit</option><option value="credits">Möglichst wenig Test-Credits</option><option value="balanced">Ausgewogen</option></select></div></div></details>
 </section>
@@ -69,7 +69,7 @@ const models={
 const kindNames={auto:'LIORA entscheidet',whip:'Dialog / Whip-Pan',humor:'POV / Relatable Humor',talk:'Talking Head',story:'Story / Cinematic',twist:'Überraschung / Plot-Twist',loop:'Loop-Reel',other:'Andere Idee'};
 const modelNames={recommend:'LIORA empfiehlt',seedance:'Seedance',kling:'Kling',veo:'Veo',heygen:'HeyGen'};
 const platformNames={unsure:'Bitte empfehlen',higgsfield:'Higgsfield',openart:'OpenArt',flow:'Google Flow',heygen:'HeyGen',other:'Andere Plattform'};
-const fields=['kind','idea','platform','model','ratio','language','people','location','extra','priority'];
+const fields=['kind','idea','platform','model','ratio','language','people','location','locationRef','keyframeRef','extra','priority'];
 function getMode(){return document.querySelector('input[name=ideaMode]:checked').value}
 function updateModels(){
  const current=$('model').value;const list=models[$('platform').value]||models.unsure;
@@ -101,18 +101,18 @@ function renderPeople(){
  host.replaceChildren();
  for(let i=0;i<count;i++){
   const letter=String.fromCharCode(65+i),el=document.createElement('div');el.className='ref-card';
-  el.innerHTML=`<div class="ref-title">Person ${letter}</div><div class="grid"><div><label for="person${i}">Name / Rolle</label><input id="person${i}" type="text" placeholder="z. B. Nyra"></div><div><label for="avatar${i}">Avatarbild</label><input id="avatar${i}" type="file" accept="image/*"></div><div><label for="outfit${i}">Outfitbild</label><input id="outfit${i}" type="file" accept="image/*"></div><div><label for="notes${i}">Wichtige Merkmale</label><input id="notes${i}" type="text" placeholder="z. B. Frisur beibehalten"></div></div>`;
+  el.innerHTML=`<div class="ref-title">Person ${letter}</div><div class="grid"><div><label for="person${i}">Name / Rolle</label><input id="person${i}" type="text" placeholder="z. B. Nyra"></div><div><label for="avatar${i}">Avatarbild</label><select id="avatar${i}"><option value="none">Noch kein Bild</option><option value="ready">Vorhanden – im Chat hochladen</option><option value="create">LIORA soll Bildprompt erstellen</option></select></div><div><label for="outfit${i}">Outfitbild</label><select id="outfit${i}"><option value="none">Noch kein Bild</option><option value="ready">Vorhanden – im Chat hochladen</option><option value="create">LIORA soll Outfit vorschlagen</option></select></div><div><label for="notes${i}">Wichtige Merkmale</label><input id="notes${i}" type="text" placeholder="z. B. Frisur beibehalten"></div></div>`;
   host.append(el);['person'+i,'notes'+i].forEach(id=>{if(prior[id])$(id).value=prior[id]});
  }
  if(n==='auto'){const x=document.createElement('p');x.className='small';x.textContent='LIORA bestimmt die benötigte Personenzahl anhand der Idee. Referenzen werden anschliessend im Chat geklärt.';host.append(x)}
- if(count===0&&n!=='auto'){const x=document.createElement('p');x.className='small';x.textContent='Keine Personen vorgesehen. Du kannst trotzdem eine Orts- oder Startframe-Referenz angeben.';host.append(x)}
+ if(count===0&&n!=='auto'){const x=document.createElement('p');x.className='small';x.textContent='Keine Personen vorgesehen. Du kannst trotzdem eine Ortsreferenz oder einen Startframe vorbereiten.';host.append(x)}
  restorePersonFields();
 }
 function draftKey(){return 'liora-video-v33-draft'}
 function saveDraft(){
- try{const obj={};fields.forEach(id=>{if($(id))obj[id]=$(id).value});obj.ideaMode=getMode();for(let i=0;i<5;i++)for(const key of ['person','notes']){const id=key+i;if($(id))obj[id]=$(id).value}localStorage.setItem(draftKey(),JSON.stringify(obj))}catch(e){}
+ try{const obj={};fields.forEach(id=>{if($(id))obj[id]=$(id).value});obj.ideaMode=getMode();for(let i=0;i<5;i++)for(const key of ['person','notes','avatar','outfit']){const id=key+i;if($(id))obj[id]=$(id).value}localStorage.setItem(draftKey(),JSON.stringify(obj))}catch(e){}
 }
-function restorePersonFields(){if(!window._restoring)return;for(let i=0;i<5;i++)for(const key of ['person','notes']){const id=key+i;if($(id)&&window._restoring[id])$(id).value=window._restoring[id]}}
+function restorePersonFields(){if(!window._restoring)return;for(let i=0;i<5;i++)for(const key of ['person','notes','avatar','outfit']){const id=key+i;if($(id)&&window._restoring[id])$(id).value=window._restoring[id]}}
 function restoreDraft(){
  try{const o=JSON.parse(localStorage.getItem(draftKey())||'{}');window._restoring=o;
  if(o.ideaMode){const radio=document.querySelector(`input[name=ideaMode][value="${o.ideaMode}"]`);if(radio)radio.checked=true}
@@ -123,14 +123,14 @@ function restoreDraft(){
  $('ratioHint').textContent=$('kind').value==='whip'?'16:9 wird für seitliche Schwenks empfohlen.':'Format nach Plattform und Inszenierung wählen.';
  }catch(e){window._restoring=null}
 }
-function fileDescription(id){const el=$(id);return el&&el.files&&el.files.length?'vorhanden ('+el.files[0].name+')':'nicht hinterlegt'}
+function refDescription(id){const el=$(id);return el?({none:'Noch kein Bild',ready:'Bild vorhanden – wird im Chat hochgeladen',create:'LIORA soll helfen / Bildprompt erstellen',unsure:'LIORA soll Bedarf prüfen'}[el.value]||'offen'):'offen'}
 function makePrompt(){
  const mode=getMode(),kind=kindNames[$('kind').value],platform=platformNames[$('platform').value],model=modelNames[$('model').value];
  const idea=$('idea').value.trim();if(mode==='own'&&!idea){$('status').textContent='Bitte beschreibe zuerst kurz deine Idee.';$('idea').focus();return null}
  const count=$('people').value==='auto'?0:Number($('people').value);
  const people=[];for(let i=0;i<count;i++){
  const L=String.fromCharCode(65+i);
- people.push(`Person ${L}: ${$('person'+i)?.value.trim()||'Name offen'}; Avatarbild: ${fileDescription('avatar'+i)}; Outfitbild: ${fileDescription('outfit'+i)}; Merkmale: ${$('notes'+i)?.value.trim()||'offen'}.`);
+ people.push(`Person ${L}: ${$('person'+i)?.value.trim()||'Name offen'}; Avatarbild: ${refDescription('avatar'+i)}; Outfitbild: ${refDescription('outfit'+i)}; Merkmale: ${$('notes'+i)?.value.trim()||'offen'}.`);
  }
  return `DU BIST LIORA – EIN KREATIVER, TECHNISCH SORGFÄLTIGER KI-VIDEO-COACH.
 Arbeite mit diesem Auftrag und den später im Chat hochgeladenen Bildern. Erstelle genau EIN Video-Projekt. Du bist kreative Regisseurin, Story- und Dialog-Coach, Kontinuitätsprüferin, Keyframe-Planerin und modellspezifische Prompt-Architektin. Keine anderen LIORA-Module oder Wissensdateien voraussetzen. Behaupte keine Fähigkeiten, die du nicht geprüft hast.
@@ -146,8 +146,8 @@ Sprache: ${$('language').value}
 Personenzahl: ${$('people').value==='auto'?'Bitte passend bestimmen':$('people').value}
 Priorität: ${$('priority').value==='quality'?'Beste Qualität und Umsetzbarkeit':$('priority').value==='credits'?'Credits sparen':'Ausgewogen'}
 Ort / Umgebung: ${$('location').value.trim()||'Noch offen'}
-Ortsreferenz: ${fileDescription('locationFile')}
-Startframe / Keyframe: ${fileDescription('keyframeFile')}
+Ortsreferenz: ${refDescription('locationRef')}
+Startframe / Keyframe: ${refDescription('keyframeRef')}
 ${people.length?people.join('\n'):'Personen-Referenzen: im Chat nur bei Bedarf klären.'}
 Besondere Wünsche: ${$('extra').value.trim()||'Keine'}
 
