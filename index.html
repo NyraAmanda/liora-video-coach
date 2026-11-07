@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="de-CH"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LIORA · Video Coach V36</title>
+<title>LIORA · Video Coach V37</title>
 <style>
 :root{--ink:#372b46;--purple:#704b93;--muted:#786c82;--mint:#a7e7d2;--line:#e9e0ed;--bg:#faf8fc}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:radial-gradient(ellipse at 0% 0%,#f0e6fb 0,transparent 40%),radial-gradient(ellipse at 100% 20%,#e4fbf2 0,transparent 35%),var(--bg)}
@@ -20,17 +20,23 @@ details{border:1px solid var(--line);border-radius:16px;margin:12px 0;overflow:h
 button{font:inherit;cursor:pointer;border:0;border-radius:13px;padding:14px 19px;font-weight:750}button.primary{background:linear-gradient(110deg,#a9ead3,#8ddac0);color:#254e41;box-shadow:0 8px 22px #9fdec74d}button.secondary{background:#f2e9f8;color:#62447e}button.ghost{background:transparent;color:#6b4c87;border:1px solid var(--line);padding:9px 12px;font-size:13px}
 .actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.notice{border-radius:12px;background:#f3eef9;padding:13px;color:#604b70;font-size:13px;line-height:1.5}.notice.warn{background:#fff5e9;color:#8b5a24}
 #prompt{min-height:230px;font-size:12px;line-height:1.5;background:#fbf9fd}#outputPanel{display:none}
+.dictation-bar{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:9px}
+.mic-btn{display:inline-flex;align-items:center;gap:8px;background:#f1e9f8;color:#62447e;border:1px solid #d9c8e7;padding:9px 13px;font-size:13px}
+.mic-btn.recording{background:#ffe9eb;color:#9c243c;border-color:#f4a8b6}
+.mic-btn:disabled{opacity:.55;cursor:not-allowed}
+.char-count{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.dictation-note{font-size:12px;color:var(--muted)}
 .topline{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
 .hidden{display:none!important}footer{color:#8a7f93;font-size:12px;line-height:1.6;padding:12px 4px}
 @media(max-width:620px){.hero{padding:28px 23px}.panel{padding:20px}.grid,.choices,.ref-row{grid-template-columns:1fr}.actions button{width:100%}.shell{padding:14px 12px 60px}}
 </style></head><body>
 <main class="shell" id="app">
-<div class="topline"><span class="eyebrow">✦ LIORA · VIDEO COACH · V36</span></div>
+<div class="topline"><span class="eyebrow">✦ LIORA · VIDEO COACH · V37</span></div>
 <header class="hero"><div class="eyebrow">DEINE IDEE. UNSERE REGIE.</div><h1>Mach aus deiner Idee ein Video.</h1><p>Ein paar wichtige Angaben genügen. LIORA plant im Chat die Handlung, empfiehlt die passende Dauer und erstellt deine Bild- und Videoprompts.</p></header>
 <section class="panel"><h2>01 · Dein Video</h2>
 <div class="field"><label>Wie möchtest du starten?</label><div class="choices"><label class="choice"><input type="radio" name="ideaMode" value="own" checked> Ich habe eine Idee</label><label class="choice"><input type="radio" name="ideaMode" value="inspire"> LIORA soll Ideen vorschlagen</label></div></div>
 <div class="field"><label for="kind">Was möchtest du erstellen?</label><select id="kind"><option value="auto">LIORA soll passend entscheiden</option><option value="whip">Dialog / Whip-Pan</option><option value="humor">POV / Relatable Humor</option><option value="talk">Talking Head</option><option value="story">Story / Cinematic</option><option value="twist">Überraschung / Plot-Twist</option><option value="loop">Loop-Reel</option><option value="other">Andere Idee</option></select></div>
-<div class="field"><label id="ideaLabel" for="idea">Beschreibe deine Idee</label><textarea id="idea" placeholder="Was soll passieren? Wer macht oder sagt was? Was ist die Pointe?"></textarea><p class="hint">Du kannst auch einen fertigen Dialog eingeben. LIORA bewahrt deine Aussagen und Pointe.</p></div>
+<div class="field"><label id="ideaLabel" for="idea">Beschreibe deine Idee</label><textarea id="idea" maxlength="10000" placeholder="Was soll passieren? Wer macht oder sagt was? Was ist die Pointe?"></textarea><div class="dictation-bar"><button type="button" class="mic-btn" data-dictate="idea" aria-pressed="false">🎙️ Einsprechen</button><span class="char-count" id="ideaCount">0 / 10’000 Zeichen</span><span class="dictation-note" id="ideaMicStatus" role="status"></span></div><p class="hint">Du kannst auch einen fertigen Dialog eingeben. LIORA bewahrt deine Aussagen und Pointe.</p></div>
 <div class="grid"><div class="field"><label for="platform">Wo generierst du das Video?</label><select id="platform"><option value="unsure">Bitte empfehlen</option><option value="higgsfield">Higgsfield</option><option value="openart">OpenArt</option><option value="flow">Google Flow</option><option value="heygen">HeyGen</option><option value="other">Andere Plattform</option></select></div>
 <div class="field"><label for="model">Videomodell</label><select id="model"></select><p class="hint" id="modelHint"></p></div></div>
 <div class="grid"><div class="field"><label for="ratio">Bildformat</label><select id="ratio"><option value="9:16">9:16 · Hochformat</option><option value="16:9">16:9 · Querformat</option><option value="1:1">1:1 · Quadrat</option><option value="auto">LIORA empfiehlt</option></select><p class="hint" id="ratioHint"></p></div>
@@ -46,14 +52,14 @@ button{font:inherit;cursor:pointer;border:0;border-radius:13px;padding:14px 19px
 <div class="ref-card"><div class="ref-title">Startframe / Keyframe</div><label for="keyframeRef">Hast du bereits einen Startframe?</label><select id="keyframeRef"><option value="unsure">LIORA soll entscheiden, ob einer nötig ist</option><option value="ready">Ja – im Chat hochladen</option><option value="create">Nein – LIORA soll den Bildprompt erstellen</option></select></div>
 <p class="hint">Bildnummern wie Image 1 = Person A werden erst nach dem Hochladen im Chat anhand der tatsächlichen Upload-Reihenfolge festgelegt. Outfit- und Ortsbilder bekommen eigene Rollen.</p>
 </div></details>
-<details><summary>Besondere Wünsche</summary><div class="inside"><div class="field"><label for="extra">Was ist dir zusätzlich wichtig?</label><textarea id="extra" placeholder="z. B. trockener Humor, genaue Sätze, natürliche Bewegung, Loop, Kameraschwenk …"></textarea></div><div class="field"><label for="priority">Priorität</label><select id="priority"><option value="quality">Beste Qualität / gute Umsetzbarkeit</option><option value="credits">Möglichst wenig Test-Credits</option><option value="balanced">Ausgewogen</option></select></div></div></details>
+<details><summary>Besondere Wünsche</summary><div class="inside"><div class="field"><label for="extra">Was ist dir zusätzlich wichtig?</label><textarea id="extra" maxlength="10000" placeholder="z. B. trockener Humor, genaue Sätze, natürliche Bewegung, Loop, Kameraschwenk …"></textarea><div class="dictation-bar"><button type="button" class="mic-btn" data-dictate="extra" aria-pressed="false">🎙️ Einsprechen</button><span class="char-count" id="extraCount">0 / 10’000 Zeichen</span><span class="dictation-note" id="extraMicStatus" role="status"></span></div></div><div class="field"><label for="priority">Priorität</label><select id="priority"><option value="quality">Beste Qualität / gute Umsetzbarkeit</option><option value="credits">Möglichst wenig Test-Credits</option><option value="balanced">Ausgewogen</option></select></div></div></details>
 </section>
 <section class="panel"><h2>03 · LIORA starten</h2><p class="small">Ein Klick erstellt deinen vollständigen Auftrag. Im Chat soll LIORA nicht alles erneut abfragen, sondern einen kompakten Produktionsvorschlag liefern.</p>
 <div class="actions"><button id="generate" class="primary">Video-Coach-Auftrag erstellen</button><button id="copy" class="secondary hidden">Prompt kopieren</button></div>
 <p id="status" class="hint" role="status"></p>
 <div id="outputPanel"><div class="field" style="margin-top:16px"><label for="prompt">Dein individueller LIORA-Auftrag</label><textarea id="prompt" readonly></textarea></div><div class="notice">Öffne ChatGPT, füge den kopierten Auftrag ein und lade dort deine Referenzbilder hoch. Dieser HTML-Prototyp übermittelt keine Bilder an ChatGPT.</div></div>
 </section>
-<footer>LIORA V36 · Ein Video pro Durchlauf · Keine integrierte Video-Generierung · Modellfunktionen werden im Chat geprüft. Formularentwürfe werden nur lokal in diesem Browser gespeichert. Kein Login erforderlich.</footer>
+<footer>LIORA V37 · Ein Video pro Durchlauf · Keine integrierte Video-Generierung · Modellfunktionen werden im Chat geprüft. Formularentwürfe werden nur lokal in diesem Browser gespeichert. Spracheingabe verwendet die Spracherkennung des Browsers und kann über dessen Anbieter verarbeitet werden. Kein Login erforderlich.</footer>
 </main>
 <script>
 'use strict';
@@ -132,7 +138,7 @@ function makePrompt(){
  const L=String.fromCharCode(65+i);
  people.push(`Person ${L}: ${$('person'+i)?.value.trim()||'Name offen'}; Avatarbild: ${refDescription('avatar'+i)}; Outfitbild: ${refDescription('outfit'+i)}; Merkmale: ${$('notes'+i)?.value.trim()||'offen'}.`);
  }
- return `DU BIST LIORA V36 – EIN KREATIVER, TECHNISCH SORGFÄLTIGER KI-VIDEO-COACH.
+ return `DU BIST LIORA V37 – EIN KREATIVER, TECHNISCH SORGFÄLTIGER KI-VIDEO-COACH.
 Arbeite mit diesem Auftrag und den später im Chat hochgeladenen Bildern. Erstelle genau EIN Video-Projekt. Du bist kreative Regisseurin, Story- und Dialog-Coach, Kontinuitätsprüferin, Keyframe-Planerin und modellspezifische Prompt-Architektin. Keine anderen LIORA-Module oder Wissensdateien voraussetzen. Behaupte keine Fähigkeiten, die du nicht geprüft hast.
 
 === BEREITS IM FORMULAR FESTGELEGT – NICHT ERNEUT ABFRAGEN ===
@@ -151,7 +157,7 @@ Startframe / Keyframe: ${refDescription('keyframeRef')}
 ${people.length?people.join('\n'):'Personen-Referenzen: im Chat nur bei Bedarf klären.'}
 Besondere Wünsche: ${$('extra').value.trim()||'Keine'}
 
-=== LIORA V36: KREATIVE REGIESYSTEME (INTERN, KEINE ZUSÄTZLICHEN FORMULARFRAGEN) ===
+=== LIORA V37: KREATIVE REGIESYSTEME (INTERN, KEINE ZUSÄTZLICHEN FORMULARFRAGEN) ===
 Aktiviere je nach Thema automatisch die passenden Regiesysteme; kombiniere sie bei Genre-Mischungen. Entwickle erst die Qualität des KONZEPTS, dann Technik und Prompts. Zeige nur ausgereifte Vorschläge, keine unfertigen Gag-Listen.
 STORY-DIRECTOR: Ausgangslage und Charakterwunsch → auslösendes Ereignis → nachvollziehbare Eskalation → emotionaler Wendepunkt/Enthüllung → spürbare Konsequenz/Auflösung. Jede Figur hat ein verständliches Motiv. Besonders in Liebesdramen: Subtext, verletzliche Bedürfnisse, widersprüchliche aber legitime Interessen, steigende emotionale Fallhöhe und ein konkreter Payoff. Kein unmotivierter Streit und keine künstliche Versöhnung. Nicht jeder Film braucht einen Twist, aber jeder eine Entwicklung.
 HUMOR-DIRECTOR: Erzeuge eigenständige, filmisch spielbare Komik durch präzises Setup, Charakterwahrheit, Erwartungsbruch mit rückblickender Logik, Timing, Kontrast und Reaktion. Erlaubte Tonarten: trockener Humor, Deadpan, Ironie, Sarkasmus, schwarzer Humor, Selbstironie, Situationskomik, Schlagfertigkeit, Running Gags. Intensität und Grenzen an Nutzeridee und Kontext anpassen. Intern schwache Pointen verwerfen; keine beliebigen absurden Requisiten, keine flachen Influencer-Floskeln, kein erzwungenes Gelächter. Komödientechniken nutzen, aber keine bekannten Filmwitze wörtlich kopieren.
@@ -231,13 +237,80 @@ async function copyText(text){
  const ta=$('prompt');ta.focus();ta.select();try{return document.execCommand('copy')}catch(err){return false}
  }
 }
+const DICTATION_LIMIT=10000;
+const SpeechAPI=window.SpeechRecognition||window.webkitSpeechRecognition;
+let activeDictation=null;
+function countChars(id){
+ const field=$(id);
+ if(field.value.length>DICTATION_LIMIT)field.value=field.value.slice(0,DICTATION_LIMIT);
+ $(id+'Count').textContent=field.value.length.toLocaleString('de-CH')+' / 10’000 Zeichen';
+}
+function dictationStatus(id,message){$(id+'MicStatus').textContent=message}
+function stopDictation(){
+ if(!activeDictation)return;
+ const session=activeDictation;activeDictation=null;
+ try{session.recognition.stop()}catch(e){}
+ const btn=document.querySelector('[data-dictate="'+session.id+'"]');
+ btn.classList.remove('recording');btn.setAttribute('aria-pressed','false');btn.textContent='🎙️ Einsprechen';
+}
+function startDictation(id){
+ if(activeDictation){
+  const wasSame=activeDictation.id===id;stopDictation();
+  if(wasSame){dictationStatus(id,'Aufnahme beendet.');return}
+ }
+ if(!SpeechAPI){dictationStatus(id,'Spracherkennung wird von diesem Browser nicht unterstützt. Bitte Chrome oder Edge verwenden.');return}
+ const field=$(id);
+ if(field.value.length>=DICTATION_LIMIT){dictationStatus(id,'Maximal 10’000 Zeichen erreicht.');return}
+ const recognition=new SpeechAPI();
+ recognition.lang='de-CH';recognition.continuous=true;recognition.interimResults=true;
+ const session={id,recognition,base:field.value,committed:''};
+ activeDictation=session;
+ const btn=document.querySelector('[data-dictate="'+id+'"]');
+ btn.classList.add('recording');btn.setAttribute('aria-pressed','true');btn.textContent='⏹ Aufnahme stoppen';
+ dictationStatus(id,'Mikrofon aktiv · Sprich jetzt.');
+ recognition.onresult=e=>{
+  if(activeDictation!==session)return;
+  let finalText='',interimText='';
+  for(let i=0;i<e.results.length;i++){
+   const part=e.results[i][0]?.transcript||'';
+   if(e.results[i].isFinal)finalText+=part+' ';
+   else interimText+=part;
+  }
+  const join=txt=>session.base+(session.base&&!/\s$/.test(session.base)?' ':'')+txt;
+  const stable=join(finalText);
+  // Interimtext ist nur eine Vorschau; bestätigter Text wird nicht doppelt angehängt.
+  const preview=join(finalText+interimText);
+  field.value=preview.slice(0,DICTATION_LIMIT);
+  countChars(id);field.dispatchEvent(new Event('input',{bubbles:true}));
+  if(stable.length>=DICTATION_LIMIT){field.value=stable.slice(0,DICTATION_LIMIT);countChars(id);stopDictation();dictationStatus(id,'10’000 Zeichen erreicht – Aufnahme gestoppt.')}
+ };
+ recognition.onerror=e=>{
+  if(activeDictation!==session)return;
+  stopDictation();
+  const errors={not_allowed:'Mikrofonzugriff nicht erlaubt.', 'service-not-allowed':'Spracherkennung nicht verfügbar.', 'no-speech':'Keine Sprache erkannt.',network:'Netzwerkfehler bei der Spracherkennung.'};
+  dictationStatus(id,errors[e.error]||'Spracherkennung unterbrochen.');
+ };
+ recognition.onend=()=>{
+  if(activeDictation===session){stopDictation();dictationStatus(id,'Aufnahme beendet. Zum Fortsetzen erneut drücken.')}
+ };
+ try{recognition.start()}catch(e){stopDictation();dictationStatus(id,'Mikrofon konnte nicht gestartet werden.')}
+}
+function setupDictation(){
+ ['idea','extra'].forEach(id=>{
+  const field=$(id);countChars(id);
+  field.addEventListener('input',()=>countChars(id));
+  field.addEventListener('paste',()=>setTimeout(()=>countChars(id),0));
+  document.querySelector('[data-dictate="'+id+'"]').addEventListener('click',()=>startDictation(id));
+ });
+ if(!SpeechAPI)document.querySelectorAll('[data-dictate]').forEach(btn=>{btn.title='Spracherkennung benötigt Chrome oder Edge.'});
+}
 function start(){
  $('generate').addEventListener('click',()=>{const result=makePrompt();if(!result)return;$('prompt').value=result;$('outputPanel').style.display='block';$('copy').classList.remove('hidden');$('status').textContent='Auftrag erstellt. Jetzt kopieren und in ChatGPT einfügen.';saveDraft()});
  $('copy').addEventListener('click',async()=>{if(!$('prompt').value)return;const ok=await copyText($('prompt').value);$('status').textContent=ok?'✓ Auftrag kopiert. Du kannst ihn jetzt in ChatGPT einfügen.':'Kopieren wurde blockiert. Der Text ist markiert – bitte manuell kopieren.'});
  $('platform').addEventListener('change',updateModels);$('kind').addEventListener('change',()=>{updateRatio();updateCompatibility()});$('model').addEventListener('change',updateCompatibility);$('people').addEventListener('change',renderPeople);
  document.querySelectorAll('input[name=ideaMode]').forEach(x=>x.addEventListener('change',updateIdeaMode));
  document.addEventListener('input',e=>{if(e.target.closest('#app'))saveDraft()});document.addEventListener('change',e=>{if(e.target.closest('#app'))saveDraft()});
- updateModels();updateRatio();renderPeople();restoreDraft();
+ updateModels();updateRatio();renderPeople();restoreDraft();setupDictation();
 }
 start();
 </script></body></html>
