@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="de-CH"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LIORA · Video Coach V39</title>
+<title>LIORA · Video Coach V40</title>
 <style>
 :root{--ink:#372b46;--purple:#704b93;--muted:#786c82;--mint:#a7e7d2;--line:#e9e0ed;--bg:#faf8fc}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:radial-gradient(ellipse at 0% 0%,#f0e6fb 0,transparent 40%),radial-gradient(ellipse at 100% 20%,#e4fbf2 0,transparent 35%),var(--bg)}
@@ -31,10 +31,11 @@ button{font:inherit;cursor:pointer;border:0;border-radius:13px;padding:14px 19px
 @media(max-width:620px){.hero{padding:28px 23px}.panel{padding:20px}.grid,.choices,.ref-row{grid-template-columns:1fr}.actions button{width:100%}.shell{padding:14px 12px 60px}}
 </style></head><body>
 <main class="shell" id="app">
-<div class="topline"><span class="eyebrow">✦ LIORA · VIDEO COACH · V39</span></div>
-<header class="hero"><div class="eyebrow">DEINE IDEE. UNSERE REGIE.</div><h1>Mach aus deiner Idee ein Video.</h1><p>Ein paar wichtige Angaben genügen. LIORA plant im Chat die Handlung, empfiehlt die passende Dauer und erstellt deine Bild- und Videoprompts.</p></header>
+<div class="topline"><span class="eyebrow">✦ LIORA · VIDEO COACH · V40</span></div>
+<header class="hero"><div class="eyebrow">DEINE IDEE. UNSERE REGIE.</div><h1>Mach aus deiner Idee ein Video.</h1><p>Starte mit einer eigenen Idee, lass dir Vorschläge machen oder nutze einen Screenshot als Inspiration. LIORA plant im Chat die Handlung, empfiehlt die Engine und erstellt deine Bild- und Videoprompts.</p></header>
 <section class="panel"><h2>01 · Dein Video</h2>
-<div class="field"><label>Wie möchtest du starten?</label><div class="choices"><label class="choice"><input type="radio" name="ideaMode" value="own" checked> Ich habe eine Idee</label><label class="choice"><input type="radio" name="ideaMode" value="inspire"> LIORA soll Ideen vorschlagen</label></div></div>
+<div class="field"><label>Wie möchtest du starten?</label><div class="choices"><label class="choice"><input type="radio" name="ideaMode" value="own" checked> Ich habe eine Idee</label><label class="choice"><input type="radio" name="ideaMode" value="inspire"> LIORA soll Ideen vorschlagen</label><label class="choice"><input type="radio" name="ideaMode" value="reference"> Ich habe ein Video als Inspiration</label></div></div>
+<div id="referenceHelp" class="notice hidden"><strong>🎬 Video als Inspiration</strong><br>Beschreibe, was im Video passiert und was du daran magst. Den Screenshot lädst du erst nach dem Einfügen des Auftrags direkt in ChatGPT hoch. LIORA analysiert das Bild und deinen beschriebenen Ablauf, empfiehlt danach eine passende Engine und entwickelt deine eigenständige Version.</div>
 <div class="field"><label for="kind">Was möchtest du erstellen?</label><select id="kind"><option value="auto">LIORA soll passend entscheiden</option><option value="whip">Dialog / Whip-Pan</option><option value="humor">POV / Relatable Humor</option><option value="talk">Talking Head</option><option value="story">Story / Cinematic</option><option value="twist">Überraschung / Plot-Twist</option><option value="loop">Loop-Reel</option><option value="other">Andere Idee</option></select></div>
 <div class="field"><label id="ideaLabel" for="idea">Beschreibe deine Idee</label><textarea id="idea" maxlength="10000" placeholder="Was soll passieren? Wer macht oder sagt was? Was ist die Pointe?"></textarea><div class="dictation-bar"><button type="button" class="mic-btn" data-dictate="idea" aria-pressed="false">🎙️ Einsprechen</button><span class="char-count" id="ideaCount">0 / 10’000 Zeichen</span><span class="dictation-note" id="ideaMicStatus" role="status"></span></div><p class="hint">Du kannst auch einen fertigen Dialog eingeben. LIORA bewahrt deine Aussagen und Pointe.</p></div>
 <div class="grid"><div class="field"><label for="platform">Wo generierst du das Video?</label><select id="platform"><option value="unsure">Bitte empfehlen</option><option value="higgsfield">Higgsfield</option><option value="openart">OpenArt</option><option value="flow">Google Flow</option><option value="heygen">HeyGen</option><option value="other">Andere Plattform</option></select></div>
@@ -59,7 +60,7 @@ button{font:inherit;cursor:pointer;border:0;border-radius:13px;padding:14px 19px
 <p id="status" class="hint" role="status"></p>
 <div id="outputPanel"><div class="field" style="margin-top:16px"><label for="prompt">Dein individueller LIORA-Auftrag</label><textarea id="prompt" readonly></textarea></div><div class="notice">Öffne ChatGPT, füge den kopierten Auftrag ein und lade dort deine Referenzbilder hoch. Dieser HTML-Prototyp übermittelt keine Bilder an ChatGPT.</div></div>
 </section>
-<footer>LIORA V39 · Ein Video pro Durchlauf · Keine integrierte Video-Generierung · Modellfunktionen werden im Chat geprüft. Formularentwürfe werden nur lokal in diesem Browser gespeichert. Spracheingabe verwendet die Spracherkennung des Browsers und kann über dessen Anbieter verarbeitet werden. Kein Login erforderlich.</footer>
+<footer>LIORA V40 · Ein Video pro Durchlauf · Keine integrierte Video-Generierung · Modellfunktionen werden im Chat geprüft. Formularentwürfe werden nur lokal in diesem Browser gespeichert. Spracheingabe verwendet die Spracherkennung des Browsers und kann über dessen Anbieter verarbeitet werden. Kein Login erforderlich.</footer>
 </main>
 <script>
 'use strict';
@@ -97,9 +98,10 @@ function updateRatio(){
  else{$('ratio').value='9:16';$('ratioHint').textContent='Vorauswahl für vertikale Social-Videos. Du kannst sie ändern.'}
 }
 function updateIdeaMode(){
- const inspire=getMode()==='inspire';
- $('ideaLabel').textContent=inspire?'Worüber soll LIORA Ideen entwickeln? (optional)':'Beschreibe deine Idee';
- $('idea').placeholder=inspire?'Thema, Zielgruppe, Stimmung oder Alltagssituation – oder einfach frei lassen.':'Was soll passieren? Wer macht oder sagt was? Was ist die Pointe?';
+ const mode=getMode(),inspire=mode==='inspire',reference=mode==='reference';
+ $('referenceHelp').classList.toggle('hidden',!reference);
+ $('ideaLabel').textContent=reference?'Was passiert im Inspirationsvideo?':inspire?'Worüber soll LIORA Ideen entwickeln? (optional)':'Beschreibe deine Idee';
+ $('idea').placeholder=reference?'Beschreibe die Handlung in zeitlicher Reihenfolge: Was macht die Person, was bewegt sich, welche Kameraperspektive und welcher Effekt gefallen dir? Was möchtest du anders machen?':inspire?'Thema, Zielgruppe, Stimmung oder Alltagssituation – oder einfach frei lassen.':'Was soll passieren? Wer macht oder sagt was? Was ist die Pointe?';
 }
 function renderPeople(){
  const n=$('people').value;const count=n==='auto'?0:Number(n);const host=$('personRefs');
@@ -138,13 +140,13 @@ function makePrompt(){
  const L=String.fromCharCode(65+i);
  people.push(`Person ${L}: ${$('person'+i)?.value.trim()||'Name offen'}; Avatarbild: ${refDescription('avatar'+i)}; Outfitbild: ${refDescription('outfit'+i)}; Merkmale: ${$('notes'+i)?.value.trim()||'offen'}.`);
  }
- return `DU BIST LIORA V39 – EIN KREATIVER, TECHNISCH SORGFÄLTIGER KI-VIDEO-COACH.
+ return `DU BIST LIORA V40 – EIN KREATIVER, TECHNISCH SORGFÄLTIGER KI-VIDEO-COACH.
 Arbeite mit diesem Auftrag und den später im Chat hochgeladenen Bildern. Erstelle genau EIN Video-Projekt. Du bist kreative Regisseurin, Story- und Dialog-Coach, Kontinuitätsprüferin, Keyframe-Planerin und modellspezifische Prompt-Architektin. Keine anderen LIORA-Module oder Wissensdateien voraussetzen. Behaupte keine Fähigkeiten, die du nicht geprüft hast.
 
 === BEREITS IM FORMULAR FESTGELEGT – NICHT ERNEUT ABFRAGEN ===
-Ideenmodus: ${mode==='own'?'Eigene Idee bewahren':'LIORA entwickelt Ideen'}
+Ideenmodus: ${mode==='own'?'Eigene Idee bewahren':mode==='reference'?'INSPIRATIONSVIDEO – Screenshot folgt im Chat':'LIORA entwickelt Ideen'}
 Videoart: ${kind}
-Idee / Thema / Dialog: ${idea||'Noch offen – bitte zwei konkrete Ideen entwickeln'}
+Idee / Thema / Dialog: ${idea||(mode==='reference'?'Ablauf folgt mündlich oder im Chat; Screenshot folgt':'Noch offen – bitte zwei konkrete Ideen entwickeln')}
 Plattform: ${platform}
 Modellwunsch: ${model}
 Bildformat: ${$('ratio').value}
@@ -157,7 +159,17 @@ Startframe / Keyframe: ${refDescription('keyframeRef')}
 ${people.length?people.join('\n'):'Personen-Referenzen: im Chat nur bei Bedarf klären.'}
 Besondere Wünsche: ${$('extra').value.trim()||'Keine'}
 
-=== LIORA V39: KREATIVE REGIESYSTEME (INTERN, KEINE ZUSÄTZLICHEN FORMULARFRAGEN) ===
+=== MODUS VIDEO ALS INSPIRATION – REFERENZANALYSE UND ENGINE-BERATUNG ===
+Wenn Ideenmodus = INSPIRATIONSVIDEO:
+1. BEGINNE damit, die Nutzerin kurz um den Screenshot des gesehenen Videos zu bitten, sofern er noch nicht hochgeladen wurde. Frage NICHT erneut nach bereits ausgefüllten Angaben. Der Screenshot wird im Chat hochgeladen; der Web-App-Formulartext enthält KEINE Bilddatei und kann keine übertragen. Warte auf den Screenshot, wenn er für die Analyse benötigt wird. Ein einzelner Screenshot zeigt nur einen Moment, keine tatsächliche Bewegung, Tonspur, Schnitte oder vollständige Handlung. Nutze die Beschreibung der Nutzerin für diese nicht sichtbaren Abläufe; behaupte nicht, das Originalvideo gesehen zu haben.
+2. Analysiere nach Eingang des Screenshots sichtbar belegbare Merkmale: Bildausschnitt, Kamera, Blickrichtung, Positionen, Objekte, Raumtiefe, Licht und Stil. Trenne klar: sichtbar im Screenshot / von der Nutzerin erzählt / eigene plausible Interpretation. Bei unklarem Ablauf höchstens EINE gezielte Rückfrage.
+3. Extrahiere die kreative Mechanik: Hook, Ausgangslage, Handlungsschritte, Wechsel der visuellen Zustände, überraschender Moment, Reaktion und Abschluss. Entwickle daraus eine EIGENSTÄNDIGE Version für die Nutzerin mit ihrem Avatar, eigener Inszenierung und passenden Referenzen; keine fremden Bildidentitäten, Marken oder originellen Dialoge unnötig kopieren. Bewahre die gewünschte Kernidee.
+4. ERST DANACH die passende Engine und den Produktionsmodus empfehlen. Prüfe anhand der tatsächlich zugänglichen Plattform/Modellvariante: Start-/Endframes, eventuelle Middle-Keyframes, Referenzbilder, Identitätskonsistenz, Dialog, Audio, Bewegungspräzision, Clipdauer, Format, Credits und nötige Clipzahl. Die Modell-/Plattformangabe im Formular ist eine PRÄFERENZ, keine unveränderliche Festlegung; bei schlechter Eignung Alternative begründen und Zustimmung einholen. Ohne Live-Verifikation keine aktuellen Features garantieren.
+5. Erstelle einen kurzen, konkret filmbaren Produktionsvorschlag: Handlung als Beats, empfohlene Engine mit Begründung, Ein-Clip- oder Mehrclip-Plan, grobe Dauer, benötigte Avatar-/Outfit-/Szenenreferenzen und Keyframes. Erst nach Bestätigung Bildprompts und pro Clip getrennte modellspezifische Videoprompts ausgeben.
+6. Bei Mehrclip-Produktionen: Endframe von Clip N unverändert als Startframe von Clip N+1 wiederverwenden. Augenfarbe, Person, Outfit, Objektposition, Licht, Kamerawinkel und Zustandsänderungen über alle Clips kontrollieren. Keyframes räumlich und physikalisch auf die geplante Bewegung prüfen. Nie einen Clip künstlich überladen.
+7. Der Ablauf soll beratend, nicht formularartig sein: keine lange Fragenliste und kein vorschneller Videoprompt vor der Analyse. Wenn kein Screenshot verfügbar ist, darf die Nutzerin die Szene vollständig beschreiben; benenne die daraus resultierende Unsicherheit.
+
+=== LIORA V40: KREATIVE REGIESYSTEME (INTERN, KEINE ZUSÄTZLICHEN FORMULARFRAGEN) ===
 Aktiviere je nach Thema automatisch die passenden Regiesysteme; kombiniere sie bei Genre-Mischungen. Entwickle erst die Qualität des KONZEPTS, dann Technik und Prompts. Zeige nur ausgereifte Vorschläge, keine unfertigen Gag-Listen.
 STORY-DIRECTOR: Ausgangslage und Charakterwunsch → auslösendes Ereignis → nachvollziehbare Eskalation → emotionaler Wendepunkt/Enthüllung → spürbare Konsequenz/Auflösung. Jede Figur hat ein verständliches Motiv. Besonders in Liebesdramen: Subtext, verletzliche Bedürfnisse, widersprüchliche aber legitime Interessen, steigende emotionale Fallhöhe und ein konkreter Payoff. Kein unmotivierter Streit und keine künstliche Versöhnung. Nicht jeder Film braucht einen Twist, aber jeder eine Entwicklung.
 HUMOR-DIRECTOR: Erzeuge eigenständige, filmisch spielbare Komik durch präzises Setup, Charakterwahrheit, Erwartungsbruch mit rückblickender Logik, Timing, Kontrast und Reaktion. Erlaubte Tonarten: trockener Humor, Deadpan, Ironie, Sarkasmus, schwarzer Humor, Selbstironie, Situationskomik, Schlagfertigkeit, Running Gags. Intensität und Grenzen an Nutzeridee und Kontext anpassen. Intern schwache Pointen verwerfen; keine beliebigen absurden Requisiten, keine flachen Influencer-Floskeln, kein erzwungenes Gelächter. Komödientechniken nutzen, aber keine bekannten Filmwitze wörtlich kopieren.
@@ -215,7 +227,7 @@ KREATIVE QUALITÄTSPRÜFUNG VOR KONZEPTFREIGABE: Was will die Figur? Was steht a
 - Prüfe vor Ausgabe eine Dialog-Einmaligkeitskontrolle: Jeder gesprochene Satz genau einer Figur und einem Zeitfenster zugeordnet? Keine überlappenden oder wiederholten Sprechbeats? Genügend Zeit für vollständige Aussprache? Pointe nicht nochmals in späteren Beats oder als Voice-over angefordert? Referenzwechsel kein impliziter Szenen-/Dialogneustart?
 - Wichtig: Promptregeln können Wiederholungen bei generativen Videomodellen nur reduzieren, nicht ausschliessen. Bei wiederholtem Satz zuerst eine gezielte Reparatur empfehlen: kürzeres, exklusives Sprechfenster, striktere Trennung von Dialog und Lachen, bei Bedarf separater Schlussclip oder Schnitt. Bewährte Emotionen, Handlung und Timing dabei möglichst unverändert lassen.
 
-=== LIORA V39: MODEL-AWARE CLIP PLANNER / ZUSTANDS- UND ÜBERGANGSREGIE ===
+=== LIORA V40: MODEL-AWARE CLIP PLANNER / ZUSTANDS- UND ÜBERGANGSREGIE ===
 - Plane EIN zusammenhängendes Video-Projekt, das je nach Modell/Modus aus EINEM oder MEHREREN generierten Clips bestehen kann. Verwechsle Projektlänge nicht mit Länge eines einzelnen Generationsclips. Entscheide die Clipanzahl anhand der tatsächlich steuerbaren Keyframes, notwendigen Zustandswechsel, Dialogdauer, Identitätsstabilität und Schnittlogik; nicht nach einer pauschalen Sekundenregel.
 - ZERLEGE DIE HANDLUNG ZUERST IN VISUELLE ZUSTÄNDE (STATE 0, STATE 1, ...): Wer ist im Bild? Wo steht jede Person? Welche Kleidung? Wo ist die Kamera? Wo befindet sich der Button? Welche Farbe hat er? Was bleibt unverändert? Was darf sich in diesem Übergang ändern? Die Zustände müssen sich kausal und physisch nachvollziehbar verbinden lassen.
 - Prüfe vor dem Produktionsplan die realen Funktionen der KONKRETEN Plattform + Modellversion + ausgewähltem Modus: Anzahl Start-/Middle-/Endframes, Referenzbildmöglichkeiten, erlaubte Cliplängen, Audio, Verlängerungen und Übergänge. Die folgende Kling-/Veo-Unterscheidung ist ein erprobtes PLANUNGSBEISPIEL, keine pauschale Behauptung für sämtliche Versionen oder Anbieter: Ein Kling-4.0-Modus mit Start-, mehreren Middle- und Endframes kann mehr Zustände in EINEM Clip führen; ein Veo-Modus mit ausschliesslich Start- und Endframe benötigt für dieselben kontrollierten Zustandswechsel mehrere Clips. Wenn Funktionen ungeprüft sind, offen kennzeichnen, nicht erfinden.
@@ -264,7 +276,7 @@ KREATIVE QUALITÄTSPRÜFUNG VOR KONZEPTFREIGABE: Was will die Figur? Was steht a
 - Vor Ausgabe still prüfen: Idee treu? Handlung kausal? Zeit realistisch? Referenzen korrekt? Format/Modell kompatibel oder Unsicherheit transparent? Sprecher und Stimmen unterscheidbar? Adressat und Blickrichtung pro Beat klar? Stumme Reaktionen und Satzende vor Blickwechsel/Lachen korrekt getaktet? Anatomie/Physik? Augenfarben und Gesichter über alle Frames konstant? Sitznummern, Zählrichtung, Abstände und Kameraperspektive exakt? Start-Keyframe räumlich geeignet für alle geplanten Bewegungen? Clipzahl und Keyframe-Modus geprüft? Übergabe-Endframe exakt als nächster Startframe wiederverwendet? Zustandsänderungen kausal? Extrempositionen tatsächlich am Bildrand und Reichweite sichtbar? Jede Dialogzeile nur einem Sprechfenster zugeordnet und nach Satzende keine Wiederholung? Prompt frei von Widersprüchen? Keine künstlichen Qualitätspunkte vergeben.
 - Liefere getrennte, klar beschriftete KOPIERBLÖCKE für jeden Bildprompt und den finalen Videoprompt. Erkläre kurz, in welcher Reihenfolge Bilder hochgeladen und Prompts verwendet werden.
 
-BEGINNE JETZT: Wenn Ideenmodus = eigene Idee und die Angaben reichen, gib direkt einen kurzen Produktionsvorschlag samt sinnvoller Dauerempfehlung; wenn Ideenmodus = Ideen entwickeln, gib genau zwei kausale Ideen zur Auswahl. Keine lange Einleitung.`;
+BEGINNE JETZT: Wenn Ideenmodus = INSPIRATIONSVIDEO, bitte zuerst um den Screenshot und werte anschliessend Bild und beschriebene Handlung aus, bevor du eine Engine empfiehlst. Wenn Ideenmodus = eigene Idee und die Angaben reichen, gib direkt einen kurzen Produktionsvorschlag samt sinnvoller Dauerempfehlung; wenn Ideenmodus = Ideen entwickeln, gib genau zwei kausale Ideen zur Auswahl. Keine lange Einleitung.`;
 }
 async function copyText(text){
  try{await navigator.clipboard.writeText(text);return true}catch(e){
@@ -344,7 +356,7 @@ function start(){
  $('platform').addEventListener('change',updateModels);$('kind').addEventListener('change',()=>{updateRatio();updateCompatibility()});$('model').addEventListener('change',updateCompatibility);$('people').addEventListener('change',renderPeople);
  document.querySelectorAll('input[name=ideaMode]').forEach(x=>x.addEventListener('change',updateIdeaMode));
  document.addEventListener('input',e=>{if(e.target.closest('#app'))saveDraft()});document.addEventListener('change',e=>{if(e.target.closest('#app'))saveDraft()});
- updateModels();updateRatio();renderPeople();restoreDraft();setupDictation();
+ updateModels();updateRatio();renderPeople();restoreDraft();updateIdeaMode();setupDictation();
 }
 start();
 </script></body></html>
