@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="de-CH"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LIORA · Video Coach V48</title>
+<title>LIORA · Video Coach V51</title>
 <style>
 :root{--ink:#372b46;--purple:#704b93;--muted:#786c82;--mint:#a7e7d2;--line:#e9e0ed;--bg:#faf8fc}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:radial-gradient(ellipse at 0% 0%,#f0e6fb 0,transparent 40%),radial-gradient(ellipse at 100% 20%,#e4fbf2 0,transparent 35%),var(--bg)}
@@ -31,7 +31,7 @@ button{font:inherit;cursor:pointer;border:0;border-radius:13px;padding:14px 19px
 @media(max-width:620px){.hero{padding:28px 23px}.panel{padding:20px}.grid,.choices,.ref-row{grid-template-columns:1fr}.actions button{width:100%}.shell{padding:14px 12px 60px}}
 </style></head><body>
 <main class="shell" id="app">
-<div class="topline"><span class="eyebrow">✦ LIORA · VIDEO COACH · V48</span></div>
+<div class="topline"><span class="eyebrow">✦ LIORA · VIDEO COACH · V51</span></div>
 <header class="hero"><div class="eyebrow">DEINE IDEE. UNSERE REGIE.</div><h1>Mach aus deiner Idee ein Video.</h1><p>Starte mit einer eigenen Idee, lass dir Vorschläge machen oder nutze einen Screenshot als Inspiration. LIORA plant im Chat die Handlung, empfiehlt die Engine und erstellt deine Bild- und Videoprompts.</p></header>
 <section class="panel"><h2>01 · Dein Video</h2>
 <div class="field"><label>Wie möchtest du starten?</label><div class="choices"><label class="choice"><input type="radio" name="ideaMode" value="own" checked> Ich habe eine Idee</label><label class="choice"><input type="radio" name="ideaMode" value="inspire"> LIORA soll Ideen vorschlagen</label><label class="choice"><input type="radio" name="ideaMode" value="reference"> Ich habe ein Video als Inspiration</label></div></div>
@@ -56,7 +56,7 @@ button{font:inherit;cursor:pointer;border:0;border-radius:13px;padding:14px 19px
 </div></details>
 <details><summary>Besondere Wünsche</summary><div class="inside"><div class="field"><label for="extra">Was ist dir zusätzlich wichtig?</label><textarea id="extra" maxlength="10000" placeholder="z. B. trockener Humor, genaue Sätze, natürliche Bewegung, Loop, Kameraschwenk …"></textarea><div class="dictation-bar"><button type="button" class="mic-btn" data-dictate="extra" aria-pressed="false">🎙️ Einsprechen</button><span class="char-count" id="extraCount">0 / 10’000 Zeichen</span><span class="dictation-note" id="extraMicStatus" role="status"></span></div></div><div class="field"><label for="priority">Priorität</label><select id="priority"><option value="quality">Beste Qualität / gute Umsetzbarkeit</option><option value="credits">Möglichst wenig Test-Credits</option><option value="balanced">Ausgewogen</option></select></div></div></details>
 </section>
-<details><summary>📚 Wissensbasis & Quellen ansehen <span class="pill">V1 · 5 Engines</span></summary><div class="inside"><p class="small">Die Regeln sind im erzeugten LIORA-Auftrag enthalten. Offizielle Anleitungen, LIORA-Praxistests und Empfehlungen werden getrennt bewertet. Die Links sind Nachschlagequellen; diese Offline-Web-App aktualisiert sie nicht automatisch.</p><div class="ref-card"><strong>Kling 4.0</strong><p class="small">Offizielle Modellübersicht plus LIORA-Tests zu Dialog, Emotionen und Timing.</p><a href="https://kling.ai/de/quickstart" target="_blank" rel="noopener noreferrer">Offizieller Kling-Guide ↗</a></div><div class="ref-card"><strong>Seedance</strong><p class="small">LIORA-Praxistest: zwei Identitätsreferenzen + handlungsgenauer Szenen-Keyframe, Whip-Pan-Dialog, Requisiten- und Sprecherkontinuität. Modusabhängigkeit beachten.</p></div><div class="ref-card"><strong>Veo / Google Flow</strong><p class="small">Offizielle Anleitung zu Bildgestaltung, Bewegung, Handlung und Dialog.</p><a href="https://deepmind.google/models/veo/prompt-guide/" target="_blank" rel="noopener noreferrer">Google Veo Prompt Guide ↗</a></div><div class="ref-card"><strong>HeyGen</strong><p class="small">Vorläufiges Modellprofil für Avatar-/Talking-Head-Workflows. Konkrete Modusregeln und Tests noch offen.</p></div><div class="ref-card"><strong>Runway (Vergleich)</strong><p class="small">Offizielle Anleitungen zu Image-to-Video, Motion-Prompting und zeitlicher Szenenführung.</p><a href="https://help.runwayml.com/hc/en-us/articles/39789879462419-Gen-4-Video-Prompting-Guide" target="_blank" rel="noopener noreferrer">Runway Gen-4 Guide ↗</a> · <a href="https://help.runwayml.com/hc/en-us/articles/42460036199443-Text-to-Video-Prompting-Guide" target="_blank" rel="noopener noreferrer">Runway Gen-4.5 Guide ↗</a></div></div></details>
+<details><summary>📚 Wissensbasis & Quellen ansehen <span class="pill">V1 · 5 Engines</span></summary><div class="inside"><p class="small">Die Regeln sind im erzeugten LIORA-Auftrag enthalten. Offizielle Anleitungen, LIORA-Praxistests und Empfehlungen werden getrennt bewertet. Die Links sind Nachschlagequellen; diese Offline-Web-App aktualisiert sie nicht automatisch.</p><div class="ref-card"><strong>Kling 4.0</strong><p class="small">Für nativen deutschen Dialog bei Kling gezielt Version 4.0 wählen; Verfügbarkeit beim Anbieter prüfen. Offizielle Modellübersicht plus LIORA-Tests zu Dialog, Emotionen und Timing.</p><a href="https://kling.ai/de/quickstart" target="_blank" rel="noopener noreferrer">Offizieller Kling-Guide ↗</a></div><div class="ref-card"><strong>Living Keyframe · LIORA-Praxistest</strong><p class="small">Der Szenen-Keyframe zeigt die tatsächliche Anfangshandlung: natürliche Körperhaltung, eine sinnvolle Beschäftigung, richtige Requisiten und klare Positionen. Dialoge bekommen konkrete Reaktionen, Betonungen und Pausen statt monotoner Vorträge. Kein zusätzlicher Formularschritt.</p></div><div class="ref-card"><strong>Seedance 2.5</strong><p class="small">Deutsch: Aussprachekontrolle bei Umlauten, sch-Lauten, Vorsilben und zusammengesetzten Wörtern (LIORA-Praxisbeobachtung). LIORA-Praxistest: zwei Identitätsreferenzen + handlungsgenauer Szenen-Keyframe, Whip-Pan-Dialog, Requisiten- und Sprecherkontinuität. Modusabhängigkeit beachten.</p></div><div class="ref-card"><strong>Veo 3.1 / Google Flow</strong><p class="small">Deutsch im gewählten Audio-/Sprachmodus prüfen. Offizielle Anleitung zu Bildgestaltung, Bewegung, Handlung und Dialog.</p><a href="https://deepmind.google/models/veo/prompt-guide/" target="_blank" rel="noopener noreferrer">Google Veo Prompt Guide ↗</a></div><div class="ref-card"><strong>HeyGen</strong><p class="small">Vorläufiges Modellprofil für Avatar-/Talking-Head-Workflows. Konkrete Modusregeln und Tests noch offen.</p></div><div class="ref-card"><strong>Runway (Vergleich)</strong><p class="small">Offizielle Anleitungen zu Image-to-Video, Motion-Prompting und zeitlicher Szenenführung.</p><a href="https://help.runwayml.com/hc/en-us/articles/39789879462419-Gen-4-Video-Prompting-Guide" target="_blank" rel="noopener noreferrer">Runway Gen-4 Guide ↗</a> · <a href="https://help.runwayml.com/hc/en-us/articles/42460036199443-Text-to-Video-Prompting-Guide" target="_blank" rel="noopener noreferrer">Runway Gen-4.5 Guide ↗</a></div></div></details>
 <section class="panel"><h2>03 · LIORA starten</h2><p class="small">Ein Klick erstellt deinen vollständigen Auftrag. Im Chat soll LIORA nicht alles erneut abfragen, sondern einen kompakten Produktionsvorschlag liefern.</p>
 <div class="actions"><button id="generate" class="primary">Video-Coach-Auftrag erstellen</button><button id="copy" class="secondary hidden">Prompt kopieren</button></div>
 <p id="status" class="hint" role="status"></p>
@@ -70,18 +70,18 @@ button{font:inherit;cursor:pointer;border:0;border-radius:13px;padding:14px 19px
 </div>
 <div id="outputPanel"><div class="field" style="margin-top:16px"><label for="prompt">Dein individueller LIORA-Auftrag</label><textarea id="prompt" readonly></textarea></div><div class="notice">Öffne ChatGPT, füge den kopierten Auftrag ein und lade dort deine Referenzbilder hoch. Dieser HTML-Prototyp übermittelt keine Bilder an ChatGPT.</div></div>
 </section>
-<footer>LIORA V48 · Ein Video pro Durchlauf · Keine integrierte Video-Generierung · Modellfunktionen werden im Chat geprüft. Formularentwürfe werden nur lokal in diesem Browser gespeichert. Spracheingabe verwendet die Spracherkennung des Browsers und kann über dessen Anbieter verarbeitet werden. Kein Login erforderlich.</footer>
+<footer>LIORA V51 · Ein Video pro Durchlauf · Keine integrierte Video-Generierung · Modellfunktionen werden im Chat geprüft. Formularentwürfe werden nur lokal in diesem Browser gespeichert. Spracheingabe verwendet die Spracherkennung des Browsers und kann über dessen Anbieter verarbeitet werden. Kein Login erforderlich.</footer>
 </main>
 <script>
 'use strict';
 const $=id=>document.getElementById(id);
 const models={
-  unsure:[['recommend','LIORA soll empfehlen'],['seedance','Seedance · Version prüfen'],['kling','Kling · Version prüfen'],['veo','Veo · Version prüfen'],['heygen','HeyGen · Modus prüfen']],
-  higgsfield:[['recommend','LIORA soll empfehlen'],['seedance','Seedance · Verfügbarkeit prüfen'],['kling','Kling · Verfügbarkeit prüfen'],['veo','Veo · Verfügbarkeit prüfen']],
-  openart:[['recommend','LIORA soll empfehlen'],['seedance','Seedance · Verfügbarkeit prüfen'],['kling','Kling · Verfügbarkeit prüfen'],['veo','Veo · Verfügbarkeit prüfen']],
-  flow:[['veo','Veo · Modus prüfen'],['recommend','LIORA soll prüfen']],
+  unsure:[['recommend','LIORA soll empfehlen'],['seedance','Seedance 2.5 · Deutsch eingeschränkt'],['kling','Kling 4.0 · bei Deutsch'],['veo','Veo 3.1 · Deutsch prüfen'],['heygen','HeyGen · Modus prüfen']],
+  higgsfield:[['recommend','LIORA soll empfehlen'],['seedance','Seedance 2.5 · Deutsch eingeschränkt'],['kling','Kling 4.0 · bei Deutsch'],['veo','Veo 3.1 · Deutsch prüfen']],
+  openart:[['recommend','LIORA soll empfehlen'],['seedance','Seedance 2.5 · Deutsch eingeschränkt'],['kling','Kling 4.0 · bei Deutsch'],['veo','Veo 3.1 · Deutsch prüfen']],
+  flow:[['veo','Veo 3.1 · Modus prüfen'],['recommend','LIORA soll prüfen']],
   heygen:[['heygen','HeyGen · Avatar-Modus prüfen']],
-  other:[['recommend','LIORA soll empfehlen'],['seedance','Seedance · Verfügbarkeit prüfen'],['kling','Kling · Verfügbarkeit prüfen'],['veo','Veo · Verfügbarkeit prüfen'],['heygen','HeyGen · Modus prüfen']]
+  other:[['recommend','LIORA soll empfehlen'],['seedance','Seedance 2.5 · Deutsch eingeschränkt'],['kling','Kling 4.0 · bei Deutsch'],['veo','Veo 3.1 · Deutsch prüfen'],['heygen','HeyGen · Modus prüfen']]
 };
 const kindNames={auto:'LIORA entscheidet',whip:'Dialog / Whip-Pan',humor:'POV / Relatable Humor',talk:'Talking Head',story:'Story / Cinematic',twist:'Überraschung / Plot-Twist',loop:'Loop-Reel',other:'Andere Idee'};
 const modelNames={recommend:'LIORA empfiehlt',seedance:'Seedance',kling:'Kling',veo:'Veo',heygen:'HeyGen'};
@@ -96,11 +96,18 @@ function updateModels(){
  updateCompatibility();
 }
 function updateCompatibility(){
- const p=$('platform').value,m=$('model').value,k=$('kind').value;
+ const p=$('platform').value,m=$('model').value,k=$('kind').value,lang=$('language').value;
  let note='Die genaue Modellversion, Referenzanzahl, Audiofunktionen und erlaubten Clip-Längen werden im Chat vor der Produktion geprüft.';
  if(p==='flow')note='Google Flow: Gewählter Veo-Modus, Seitenverhältnis, Audio und Referenzfunktionen müssen im tatsächlichen Interface geprüft werden.';
  if(p==='heygen'&&k==='whip')note='Achtung: Ein schneller Zwei-Personen-Whip-Pan ist nicht der typische HeyGen-Avatar-Workflow. LIORA muss im Chat einen passenden Produktionsweg vorschlagen.';
  if(m==='recommend')note='LIORA wählt erst nach Prüfung von Idee, Plattform, Referenzen und Audio ein konkretes Modell.';
+ if(lang==='Deutsch'){
+  if(m==='kling')note='Deutsch gewählt: Kling 4.0 verwenden. Ältere Kling-Versionen nicht als Standard für native deutsche Dialoge empfehlen. Verfügbarkeit auf deiner Plattform prüfen.';
+  else if(m==='seedance')note='Deutsch mit Seedance 2.5: Aussprache und Lip-Sync prüfen, insbesondere Umlaute, sch-Laut, Vorsilben und zusammengesetzte Wörter. Keine automatische phonetische Umschreibung.';
+  else if(m==='veo')note='Deutsch mit Veo 3.1: Audio-/Sprachmodus auf der gewählten Plattform prüfen und einen kurzen Sprachtest einplanen.';
+  else if(m==='recommend')note='Deutscher Dialog: zuerst Kling 4.0, Veo 3.1 oder Seedance 2.5 (mit Aussprachekontrolle) auf der gewählten Plattform prüfen; keine pauschale Empfehlung älterer Kling-Versionen.';
+  else if(m==='heygen')note='HeyGen ist ein separater Avatar-/Sprachworkflow; deutsche Sprache und Lip-Sync im gewählten Modus prüfen. Die Kling-/Seedance-Regel gilt nicht pauschal für HeyGen.';
+ }
  $('compat').textContent=note;
 }
 function updateRatio(){
@@ -137,7 +144,7 @@ function restoreDraft(){
  ['kind','idea','platform'].forEach(id=>{if(o[id]!==undefined)$(id).value=o[id]});
  updateModels();
  fields.filter(x=>!['kind','idea','platform'].includes(x)).forEach(id=>{if(o[id]!==undefined&&$(id).querySelector('option[value="'+o[id]+'"]')||o[id]!==undefined&&$(id).tagName!=='SELECT')$(id).value=o[id]});
- updateIdeaMode();renderPeople();window._restoring=null;
+ updateIdeaMode();renderPeople();updateCompatibility();window._restoring=null;
  $('ratioHint').textContent=$('kind').value==='whip'?'16:9 wird für seitliche Schwenks empfohlen.':'Format nach Plattform und Inszenierung wählen.';
  }catch(e){window._restoring=null}
 }
@@ -150,7 +157,7 @@ function makePrompt(){
  const L=String.fromCharCode(65+i);
  people.push(`Person ${L}: ${$('person'+i)?.value.trim()||'Name offen'}; Avatarbild: ${refDescription('avatar'+i)}; Outfitbild: ${refDescription('outfit'+i)}; Merkmale: ${$('notes'+i)?.value.trim()||'offen'}.`);
  }
- return `DU BIST LIORA V48 – EINE EMPATHISCHE, KREATIV MUTIGE UND TECHNISCH SORGFÄLTIGE KI-VIDEO-REGISSEURIN.
+ return `DU BIST LIORA V51 – EINE EMPATHISCHE, KREATIV MUTIGE UND TECHNISCH SORGFÄLTIGE KI-VIDEO-REGISSEURIN.
 Arbeite mit diesem Auftrag und den später im Chat hochgeladenen Bildern. Erstelle genau EIN Video-Projekt. Du bist kreative Regisseurin, Story- und Dialog-Coach, Kontinuitätsprüferin, Keyframe-Planerin und modellspezifische Prompt-Architektin. Keine anderen LIORA-Module oder Wissensdateien voraussetzen. Behaupte keine Fähigkeiten, die du nicht geprüft hast.
 
 === BEREITS IM FORMULAR FESTGELEGT – NICHT ERNEUT ABFRAGEN ===
@@ -180,6 +187,34 @@ Wenn Ideenmodus = INSPIRATIONSVIDEO:
 5. Erstelle einen kurzen, konkret filmbaren Produktionsvorschlag: Handlung als Beats, empfohlene Engine mit Begründung, Ein-Clip- oder Mehrclip-Plan, grobe Dauer, benötigte Avatar-/Outfit-/Szenenreferenzen und Keyframes. Erst nach Bestätigung Bildprompts und pro Clip getrennte modellspezifische Videoprompts ausgeben.
 6. Bei Mehrclip-Produktionen: Endframe von Clip N unverändert als Startframe von Clip N+1 wiederverwenden. Augenfarbe, Person, Outfit, Objektposition, Licht, Kamerawinkel und Zustandsänderungen über alle Clips kontrollieren. Keyframes räumlich und physikalisch auf die geplante Bewegung prüfen. Nie einen Clip künstlich überladen.
 7. Der Ablauf soll beratend, nicht formularartig sein: keine lange Fragenliste und kein vorschneller Videoprompt vor der Analyse. Wenn kein Screenshot verfügbar ist, darf die Nutzerin die Szene vollständig beschreiben; benenne die daraus resultierende Unsicherheit.
+
+=== LIORA V51: EXPRESSIVE PERFORMANCE DIRECTOR [LIORA-PRAXISERKENNTNIS] ===
+GRUNDREGEL: Figuren dürfen nicht wie Dialog-Ableser wirken. Plane zur Szene passende, glaubwürdige sichtbare UND hörbare Reaktionen, die Charakter, Beziehung, Humor und emotionalen Verlauf zeigen. Mehr Leben bedeutet NICHT dauerndes Grimassieren.
+AUSDRUCKSREPERTOIRE (bewusst und abwechslungsreich): genervtes oder erleichtertes Seufzen, hörbares Ausatmen, kurzes Kichern, spontanes Lachen, ungläubiges Auflachen, Augenrollen, Augenbrauen heben, Blick zur Decke, demonstratives Wegschauen, Zwinkern, verschmitztes Grinsen, kurzes Erstarren, Kopf schütteln, Schultern zucken, sich lässig zurücklehnen, Handy langsam senken. Verwende nur Gesten, die zur konkreten Figur und Situation passen; keine fest vorgeschriebene Standardgeste in jedem Clip.
+BEAT-FÜR-BEAT REGIE: Für jede wichtige Dialogzeile oder Reaktion bestimme (a) was die Figur gerade tut, (b) welches Gefühl/Unterziel sie hat, (c) welche EINE prägnante körperliche oder stimmliche Reaktion sie zeigt, (d) wann diese Reaktion relativ zur gesprochenen Zeile stattfindet. Besonders für Comedy: Setup -> minimale Reaktion/Spannung -> trockene oder pointierte Antwort -> kurzer Nachhall. Eine Pause, ein Augenrollen oder ein Seufzer darf der eigentliche Witz sein.
+STIMME MIT LEBEN: Kein durchgehend gleiches Tempo, gleiche Lautstärke oder gleiche Melodie. Nutze natürliche Wechsel von beiläufig zu überrascht, genervt, ironisch, flüsternd oder lachend, mit präziser Betonung der Pointe. Nicht alle Emotionen gleichzeitig; bei ernsten Momenten Zurückhaltung respektieren. Seufzen, Lachen und andere nichtsprachliche Laute zeitlich und personell eindeutig zuordnen.
+OFF-DIALOG: Wenn Person B aus dem Off spricht, bleibt B unsichtbar; Person A kann währenddessen glaubwürdig reagieren (z. B. Scrollen stoppt, kurzer Blick, Seufzen, Augenrollen), spricht aber keine fremde Zeile. Kamera- und Sprechkontinuität beachten.
+KEYFRAME-ABGLEICH: Ausgangsbeschäftigung, Mimik und Körperhaltung im Startframe vorbereiten. Spätere Reaktionen dürfen sich organisch aus diesem Zustand entwickeln; kein abruptes Requisiten- oder Haltungs-Teleportieren.
+MODELLGERECHTE DOSIERUNG: Pro kurzem Beat 1 dominierende Reaktion, bei komplexen Händen/Requisiten weniger Gesten. Keine überladenen Ketten von Mikroaktionen, die Renderingfehler fördern. Explizite Zeitpunkte nur, wenn sie dem Timing helfen; natürliche Performance wichtiger als starre Sekundenpläne.
+QUALITÄTSCHECK VOR PROMPT: Ist die Figur vor der ersten Zeile schon lebendig? Hat der Dialog mindestens eine glaubwürdige Veränderung in Stimmung oder Energie, sofern die Szene es trägt? Sind Pointe, Pause und Reaktion klar? Ist jede Aktion mit dem Keyframe und den verfügbaren Händen vereinbar? Bleibt die Darstellung menschlich statt künstlich übertrieben?
+QUELLENSTATUS: LIORA-Praxiserkenntnis und kreative Regieempfehlung, keine Garantie für die tatsächliche Umsetzung durch das Videomodell.
+
+=== LIORA V51: LIVING KEYFRAME + NATÜRLICHE DIALOGDYNAMIK [LIORA-PRAXISERKENNTNIS] ===
+ZIEL: Szenen-Keyframes sollen wie der erste Moment einer tatsächlich laufenden Filmszene aussehen, nicht wie gestellte Porträts. Ein statischer Keyframe kann eine passive Darbietung begünstigen, ohne sie zwingend zu verursachen. Stimme und Schauspiel müssen separat geplant werden.
+LIVING-SCENE-ENTSCHEIDUNG: Frage intern vor jedem Szenenbild: Was tut die Figur ganz natürlich, BEVOR die Handlung sie unterbricht? Wähle EINE passende, visuell lesbare Alltagsbeschäftigung, wenn sie die Geschichte stärkt: z. B. locker auf dem Sofa am Handy scrollen, fernsehen, lesen oder etwas knabbern. Körperhaltung, Blickziel, Stimmung und kleine Handlung sind bereits im ersten Bild sichtbar. Keine Beschäftigung erzwingen, wenn bewusstes Stillsein, Erwartung oder Spannung dramaturgisch besser ist.
+HANDLUNGSGENAUER SZENEN-KEYFRAME: Zeige den tatsächlichen Anfangszustand der späteren Szene, einschliesslich aller bereits anwesenden Figuren, Sitz-/Stehpositionen, Blickrichtungen, Hände, Outfit, benötigter Requisiten und ihrer exakten Anzahl. Ein allgemeines Stimmungsbild des Raums reicht nicht. Bei zwei Identitätsreferenzen plus Szenenreferenz: Bild 1/2 definieren die Identitäten, Bild 3 die konkrete Anfangshandlung UND Raumkomposition; die Referenzen nicht verwechseln. Nicht jede Engine unterstützt diese Kombination; gewählten Modus prüfen.
+HANDLUNGSKETTE: Lege bei jeder aktiven Requisite fest: Anfangsposition -> Benutzung -> Ablegen/Weiterhalten. Beispiel Sofa/Handy: Sie scrollt; hört die Stimme aus dem Off; ihr Daumen stoppt; sie senkt das Handy; erst dann antwortet sie. Genau EIN Handy bleibt dasselbe Objekt, keine spontane Verdoppelung oder ungewollter Handwechsel. Die Handlung muss mit dem Keyframe räumlich und zeitlich möglich sein.
+LEBENDIGER DIALOG: Gib jedem Sprechbeat eine glaubwürdige Absicht und hörbare Entwicklung: z. B. beiläufig -> irritiert -> trocken-ironisch; variiere Betonung, Sprechtempo, kurze Reaktionspausen, Atem, Blick und Mimik gezielt. Kein monotones gleichförmiges Ablesen und keine pauschal übertriebene Schauspielerei. Binde Regieanweisungen an die KONKRETE Zeile und den Moment; wer spricht, muss eindeutig bleiben. Ein Off-Sprecher bleibt aus dem Off, wenn die Nutzerin dies vorgibt. Sichtbare Figur reagiert während des Off-Dialogs ggf. nonverbal, ohne fremde Worte zu sprechen.
+SPARSAMKEIT: Maximal eine sinnvolle Nebenbeschäftigung pro Beat, keine unnötigen Props, Gesten oder Kamerawechsel. Vor allem bei günstigen/instabilen Modi einfache Handlungen und klare Objektzustände bevorzugen. Ein gut komponierter Startframe ersetzt keine separate Voice-/Performance-Regie.
+WORKFLOW: Erst interessante, natürliche Anfangssituation und spielbare Reaktion entwickeln -> dann Keyframe-/Bildprompt -> danach Dialog-Performance und Bewegungsbeats -> kurzer Kontinuitätscheck -> Videoprompt. Bei vorhandenem Startframe keine neue Beschäftigung erzwingen, die dem Bild widerspricht; bei Bedarf zuerst Keyframe mit Zustimmung überarbeiten.
+QUELLENSTATUS: Diese Regeln stammen aus LIORA-Tests und Regieableitungen, nicht aus einer nachgewiesenen universellen Erfolgsformel.
+
+=== LIORA V49: GERMAN SPEECH DIRECTOR – ENGINEWAHL UND AUSSPRACHE ===
+AKTIVIERUNG: Nur wenn im Video tatsächlich Deutsch GESPROCHEN werden soll. Eine deutschsprachige Nutzeranfrage ohne gesprochene Sprache im Video löst diese Regel nicht aus. Deutsch als Sprache des Dialogs ist getrennt von der Sprache der Regieanweisungen zu behandeln.
+MODELL-ROUTING: Bei gewählter Engine Kling für nativen deutschen Dialog ausdrücklich Kling 4.0 auswählen und die genaue Verfügbarkeit/Sprachfunktion im gewählten Anbieter-Modus vor der Produktion prüfen; nicht stillschweigend auf Kling 3.0 oder eine günstigere Version zurückfallen. Für nativen deutschen Dialog ausserdem Veo 3.1 oder Seedance 2.5 als mögliche Wege prüfen. Bei HeyGen gesondert die Avatar- und Sprachfunktionen des gewählten Modus prüfen; keine falsche pauschale Ausschlussregel für andere Sprach-/Lip-Sync-Workflows. Plattformverfügbarkeit, Modellversion und Audiofähigkeit nie erfinden. Wenn der gewünschte Anbieter kein passendes Modell bereitstellt, kurz erklären und eine Alternative mit Zustimmung anbieten.
+SEEDANCE 2.5 – AUSSPRACHE-WATCHLIST [LIORA-PRAXISBEOBACHTUNG, NICHT WISSENSCHAFTLICH BELEGTE GENERELLE FEHLERLISTE]: Vorsicht bei ä/ö/ü, sch-Lauten, be-/ge-Vorsilben, Wortgrenzen und zusammengesetzten Wörtern (z. B. «Zwischenräume», «zurückgehen»). Diese Wörter NICHT pauschal als unsprechbar deklarieren und NICHT automatisch falsch trennen oder umschreiben. Den vom Nutzer freigegebenen deutschen Originaldialog exakt bewahren. Natürliches Tempo, klare Sprecherzuweisung, realistische Pausen und gut sichtbare Lippen planen. Wenn ein konkretes Wort im Render falsch ausgesprochen wurde, ausschliesslich dieses Wort bzw. den betroffenen Satz gezielt mit einer testbaren Aussprachehilfe reparieren; Originalversion beibehalten und phonetische Variante als Versuch kennzeichnen. Keine Erfolgszusage.
+QUALITÄTSPRÜFUNG: Bei deutscher Sprache vor dem Render Länge und Sprecherwechsel plausibilisieren; bei Seedance kritische Wörter als Testhinweis markieren, aber Nutzerinnen nicht mit einer allgemeinen Wortwarnliste überfrachten. Standarddeutsch mit Schweizer Akzent von Schweizerdeutsch (Dialekt) unterscheiden. Die gewünschte Akzentvorgabe konsequent über Clips beibehalten. Englische technische Regieanweisungen sind möglich, aber der gesprochene deutsche Text bleibt unverändert.
+QUELLENSTATUS: Kling-4.0-Deutsch und weitere Modellfähigkeiten sind versions-/anbieterabhängig und müssen bei Bedarf aktuell verifiziert werden; die konkrete Seedance-Aussprache-Watchlist stammt aus LIORA-Erfahrungen. Keine Behauptung, dass eine dieser Engines zuverlässig jedes deutsche Wort korrekt ausspricht.
 
 === LIORA V47: ADAPTIVE REGIE – NUR RELEVANTE SYSTEME AKTIVIEREN ===
 Arbeite intern mit einem schlanken Regie-Router, nicht mit einer starren Checkliste für jedes Video. Erkenne zuerst: Kernhandlung, Genre, Anzahl Personen/Sprecher, räumliche Schwierigkeit, Anzahl visueller Zustände, erforderliche Emotionen, Referenzlage und die technische Plattform. Priorisiere höchstens die zwei bis vier wirklich entscheidenden Regiesysteme und deren Risiken. Die übrigen Systeme bleiben verfügbar, werden aber nicht mit unnötigen Anweisungen in die fertigen Prompts hineinkopiert.
@@ -522,7 +557,7 @@ function start(){
  $('fullReset').addEventListener('click',()=>resetVideo(false));
  $('generate').addEventListener('click',()=>{const result=makePrompt();if(!result)return;$('prompt').value=result;$('outputPanel').style.display='block';$('copy').classList.remove('hidden');$('status').textContent='Auftrag erstellt. Jetzt kopieren und in ChatGPT einfügen.';saveDraft()});
  $('copy').addEventListener('click',async()=>{if(!$('prompt').value)return;const ok=await copyText($('prompt').value);$('status').textContent=ok?'✓ Auftrag kopiert. Du kannst ihn jetzt in ChatGPT einfügen.':'Kopieren wurde blockiert. Der Text ist markiert – bitte manuell kopieren.'});
- $('platform').addEventListener('change',updateModels);$('kind').addEventListener('change',()=>{updateRatio();updateCompatibility()});$('model').addEventListener('change',updateCompatibility);$('people').addEventListener('change',renderPeople);
+ $('platform').addEventListener('change',updateModels);$('kind').addEventListener('change',()=>{updateRatio();updateCompatibility()});$('model').addEventListener('change',updateCompatibility);$('language').addEventListener('change',updateCompatibility);$('people').addEventListener('change',renderPeople);
  document.querySelectorAll('input[name=ideaMode]').forEach(x=>x.addEventListener('change',updateIdeaMode));
  document.addEventListener('input',e=>{if(e.target.closest('#app'))saveDraft()});document.addEventListener('change',e=>{if(e.target.closest('#app'))saveDraft()});
  updateModels();updateRatio();renderPeople();restoreDraft();updateIdeaMode();setupDictation();
