@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="de-CH"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LIORA · Video Coach V47</title>
+<title>LIORA · Video Coach V48</title>
 <style>
 :root{--ink:#372b46;--purple:#704b93;--muted:#786c82;--mint:#a7e7d2;--line:#e9e0ed;--bg:#faf8fc}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:radial-gradient(ellipse at 0% 0%,#f0e6fb 0,transparent 40%),radial-gradient(ellipse at 100% 20%,#e4fbf2 0,transparent 35%),var(--bg)}
@@ -18,7 +18,7 @@ details{border:1px solid var(--line);border-radius:16px;margin:12px 0;overflow:h
 .ref-title{font-weight:700;font-size:14px;margin-bottom:10px}.ref-card input[type=file]{font-size:12px;background:#fff}.ref-card .small{margin-top:8px}
 .pill{display:inline-block;background:#edf8f3;color:#376b5a;font-size:12px;padding:5px 9px;border-radius:20px}
 button{font:inherit;cursor:pointer;border:0;border-radius:13px;padding:14px 19px;font-weight:750}button.primary{background:linear-gradient(110deg,#a9ead3,#8ddac0);color:#254e41;box-shadow:0 8px 22px #9fdec74d}button.secondary{background:#f2e9f8;color:#62447e}button.ghost{background:transparent;color:#6b4c87;border:1px solid var(--line);padding:9px 12px;font-size:13px}
-.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.notice{border-radius:12px;background:#f3eef9;padding:13px;color:#604b70;font-size:13px;line-height:1.5}.notice.warn{background:#fff5e9;color:#8b5a24}
+.reset-area{margin-top:20px;padding-top:17px;border-top:1px solid var(--line)}.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.notice{border-radius:12px;background:#f3eef9;padding:13px;color:#604b70;font-size:13px;line-height:1.5}.notice.warn{background:#fff5e9;color:#8b5a24}
 #prompt{min-height:230px;font-size:12px;line-height:1.5;background:#fbf9fd}#outputPanel{display:none}
 .dictation-bar{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:9px}
 .mic-btn{display:inline-flex;align-items:center;gap:8px;background:#f1e9f8;color:#62447e;border:1px solid #d9c8e7;padding:9px 13px;font-size:13px}
@@ -31,7 +31,7 @@ button{font:inherit;cursor:pointer;border:0;border-radius:13px;padding:14px 19px
 @media(max-width:620px){.hero{padding:28px 23px}.panel{padding:20px}.grid,.choices,.ref-row{grid-template-columns:1fr}.actions button{width:100%}.shell{padding:14px 12px 60px}}
 </style></head><body>
 <main class="shell" id="app">
-<div class="topline"><span class="eyebrow">✦ LIORA · VIDEO COACH · V47</span></div>
+<div class="topline"><span class="eyebrow">✦ LIORA · VIDEO COACH · V48</span></div>
 <header class="hero"><div class="eyebrow">DEINE IDEE. UNSERE REGIE.</div><h1>Mach aus deiner Idee ein Video.</h1><p>Starte mit einer eigenen Idee, lass dir Vorschläge machen oder nutze einen Screenshot als Inspiration. LIORA plant im Chat die Handlung, empfiehlt die Engine und erstellt deine Bild- und Videoprompts.</p></header>
 <section class="panel"><h2>01 · Dein Video</h2>
 <div class="field"><label>Wie möchtest du starten?</label><div class="choices"><label class="choice"><input type="radio" name="ideaMode" value="own" checked> Ich habe eine Idee</label><label class="choice"><input type="radio" name="ideaMode" value="inspire"> LIORA soll Ideen vorschlagen</label><label class="choice"><input type="radio" name="ideaMode" value="reference"> Ich habe ein Video als Inspiration</label></div></div>
@@ -60,9 +60,17 @@ button{font:inherit;cursor:pointer;border:0;border-radius:13px;padding:14px 19px
 <section class="panel"><h2>03 · LIORA starten</h2><p class="small">Ein Klick erstellt deinen vollständigen Auftrag. Im Chat soll LIORA nicht alles erneut abfragen, sondern einen kompakten Produktionsvorschlag liefern.</p>
 <div class="actions"><button id="generate" class="primary">Video-Coach-Auftrag erstellen</button><button id="copy" class="secondary hidden">Prompt kopieren</button></div>
 <p id="status" class="hint" role="status"></p>
+<div class="reset-area">
+  <p class="small" style="margin:0 0 10px"><strong>Ein weiteres Video planen?</strong></p>
+  <div class="actions">
+    <button type="button" id="newVideo" class="secondary">↻ Neues Video · Avatar behalten</button>
+    <button type="button" id="fullReset" class="ghost">Komplett neu starten</button>
+  </div>
+  <p class="hint">«Neues Video» behält Personen, Avatar- und Outfitangaben, persönliche Merkmale, besondere Wünsche und deine bevorzugten Einstellungen. Die Videoidee, Szene und Keyframes werden zurückgesetzt. «Komplett neu starten» löscht auch diese Angaben und den lokal gespeicherten Entwurf. Bereits geöffnete ChatGPT-Chats oder hochgeladene Bilder werden nicht verändert.</p>
+</div>
 <div id="outputPanel"><div class="field" style="margin-top:16px"><label for="prompt">Dein individueller LIORA-Auftrag</label><textarea id="prompt" readonly></textarea></div><div class="notice">Öffne ChatGPT, füge den kopierten Auftrag ein und lade dort deine Referenzbilder hoch. Dieser HTML-Prototyp übermittelt keine Bilder an ChatGPT.</div></div>
 </section>
-<footer>LIORA V47 · Ein Video pro Durchlauf · Keine integrierte Video-Generierung · Modellfunktionen werden im Chat geprüft. Formularentwürfe werden nur lokal in diesem Browser gespeichert. Spracheingabe verwendet die Spracherkennung des Browsers und kann über dessen Anbieter verarbeitet werden. Kein Login erforderlich.</footer>
+<footer>LIORA V48 · Ein Video pro Durchlauf · Keine integrierte Video-Generierung · Modellfunktionen werden im Chat geprüft. Formularentwürfe werden nur lokal in diesem Browser gespeichert. Spracheingabe verwendet die Spracherkennung des Browsers und kann über dessen Anbieter verarbeitet werden. Kein Login erforderlich.</footer>
 </main>
 <script>
 'use strict';
@@ -142,7 +150,7 @@ function makePrompt(){
  const L=String.fromCharCode(65+i);
  people.push(`Person ${L}: ${$('person'+i)?.value.trim()||'Name offen'}; Avatarbild: ${refDescription('avatar'+i)}; Outfitbild: ${refDescription('outfit'+i)}; Merkmale: ${$('notes'+i)?.value.trim()||'offen'}.`);
  }
- return `DU BIST LIORA V47 – EINE EMPATHISCHE, KREATIV MUTIGE UND TECHNISCH SORGFÄLTIGE KI-VIDEO-REGISSEURIN.
+ return `DU BIST LIORA V48 – EINE EMPATHISCHE, KREATIV MUTIGE UND TECHNISCH SORGFÄLTIGE KI-VIDEO-REGISSEURIN.
 Arbeite mit diesem Auftrag und den später im Chat hochgeladenen Bildern. Erstelle genau EIN Video-Projekt. Du bist kreative Regisseurin, Story- und Dialog-Coach, Kontinuitätsprüferin, Keyframe-Planerin und modellspezifische Prompt-Architektin. Keine anderen LIORA-Module oder Wissensdateien voraussetzen. Behaupte keine Fähigkeiten, die du nicht geprüft hast.
 
 === BEREITS IM FORMULAR FESTGELEGT – NICHT ERNEUT ABFRAGEN ===
@@ -470,7 +478,48 @@ function setupDictation(){
  });
  if(!SpeechAPI)document.querySelectorAll('[data-dictate]').forEach(btn=>{btn.title='Spracherkennung benötigt Chrome oder Edge.'});
 }
+function clearOutput(){
+ $('prompt').value='';
+ $('outputPanel').style.display='none';
+ $('copy').classList.add('hidden');
+ $('status').textContent='';
+}
+function resetVideo(keepPersonal){
+ if(activeDictation)stopDictation();
+ if(!keepPersonal && !window.confirm('Wirklich komplett neu starten? Alle Eingaben und der lokal gespeicherte Entwurf werden gelöscht.'))return;
+ // Persönliches Profil: Personenzahl, Namen, Avatar-/Outfitstatus, Merkmale,
+ // Sprach-/Audio-/Formatpräferenzen, Plattform/Modell, Priorität und besondere Wünsche.
+ // Bei einem neuen Video werden ausschliesslich projektbezogene Daten entfernt.
+ if(keepPersonal){
+  document.querySelector('input[name=ideaMode][value="own"]').checked=true;
+  $('kind').value='auto';
+  $('idea').value='';
+  $('location').value='';
+  $('locationRef').value='none';
+  $('keyframeRef').value='none';
+ }else{
+  localStorage.removeItem(draftKey());
+  window._restoring=null;
+  document.querySelector('input[name=ideaMode][value="own"]').checked=true;
+  ['kind','platform','ratio','language','music','people','locationRef','keyframeRef','priority'].forEach(id=>{
+   const el=$(id);el.selectedIndex=0;
+  });
+  ['idea','location','extra'].forEach(id=>$(id).value='');
+  updateModels();
+  renderPeople();
+ }
+ updateIdeaMode();
+ updateCompatibility();
+ clearOutput();
+ ['idea','extra'].forEach(countChars);
+ saveDraft();
+ $('status').textContent=keepPersonal?'✓ Neues Video bereit. Deine Avatar- und persönlichen Angaben bleiben erhalten. Bitte die Outfitangaben für die neue Szene prüfen.':'✓ Alles zurückgesetzt. Du kannst ganz neu beginnen.';
+ $('idea').focus();
+ window.scrollTo({top:0,behavior:'smooth'});
+}
 function start(){
+ $('newVideo').addEventListener('click',()=>resetVideo(true));
+ $('fullReset').addEventListener('click',()=>resetVideo(false));
  $('generate').addEventListener('click',()=>{const result=makePrompt();if(!result)return;$('prompt').value=result;$('outputPanel').style.display='block';$('copy').classList.remove('hidden');$('status').textContent='Auftrag erstellt. Jetzt kopieren und in ChatGPT einfügen.';saveDraft()});
  $('copy').addEventListener('click',async()=>{if(!$('prompt').value)return;const ok=await copyText($('prompt').value);$('status').textContent=ok?'✓ Auftrag kopiert. Du kannst ihn jetzt in ChatGPT einfügen.':'Kopieren wurde blockiert. Der Text ist markiert – bitte manuell kopieren.'});
  $('platform').addEventListener('change',updateModels);$('kind').addEventListener('change',()=>{updateRatio();updateCompatibility()});$('model').addEventListener('change',updateCompatibility);$('people').addEventListener('change',renderPeople);
