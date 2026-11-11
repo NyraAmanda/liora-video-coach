@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="de-CH"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LIORA · Video Coach V54</title>
+<title>LIORA · Video Coach V56</title>
 <style>
 :root{--ink:#372b46;--purple:#704b93;--muted:#786c82;--mint:#a7e7d2;--line:#e9e0ed;--bg:#faf8fc}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:radial-gradient(ellipse at 0% 0%,#f0e6fb 0,transparent 40%),radial-gradient(ellipse at 100% 20%,#e4fbf2 0,transparent 35%),var(--bg)}
@@ -31,12 +31,13 @@ button{font:inherit;cursor:pointer;border:0;border-radius:13px;padding:14px 19px
 @media(max-width:620px){.hero{padding:28px 23px}.panel{padding:20px}.grid,.choices,.ref-row{grid-template-columns:1fr}.actions button{width:100%}.shell{padding:14px 12px 60px}}
 </style></head><body>
 <main class="shell" id="app">
-<div class="topline"><span class="eyebrow">✦ LIORA · VIDEO COACH · V54</span></div>
+<div class="topline"><span class="eyebrow">✦ LIORA · VIDEO COACH · V56</span></div>
 <header class="hero"><div class="eyebrow">DEINE IDEE. UNSERE REGIE.</div><h1>Mach aus deiner Idee ein Video.</h1><p>Starte mit einer eigenen Idee, lass dir Vorschläge machen oder nutze einen Screenshot als Inspiration. LIORA plant im Chat die Handlung, empfiehlt die Engine und erstellt deine Bild- und Videoprompts.</p></header>
 <section class="panel"><h2>01 · Dein Video</h2>
 <div class="field"><label>Wie möchtest du starten?</label><div class="choices"><label class="choice"><input type="radio" name="ideaMode" value="own" checked> Ich habe eine Idee</label><label class="choice"><input type="radio" name="ideaMode" value="inspire"> LIORA soll Ideen vorschlagen</label><label class="choice"><input type="radio" name="ideaMode" value="reference"> Ich habe ein Video als Inspiration</label></div></div>
 <div id="referenceHelp" class="notice hidden"><strong>🎬 Video als Inspiration</strong><br>Beschreibe, was im Video passiert und was du daran magst. Den Screenshot lädst du erst nach dem Einfügen des Auftrags direkt in ChatGPT hoch. LIORA analysiert das Bild und deinen beschriebenen Ablauf, empfiehlt danach eine passende Engine und entwickelt deine eigenständige Version.</div>
-<div class="field"><label for="kind">Was möchtest du erstellen?</label><select id="kind"><option value="auto">LIORA soll passend entscheiden</option><option value="whip">Dialog / Whip-Pan</option><option value="humor">POV / Relatable Humor</option><option value="talk">Talking Head</option><option value="story">Story / Cinematic</option><option value="twist">Überraschung / Plot-Twist</option><option value="loop">Loop-Reel</option><option value="other">Andere Idee</option></select></div>
+<div class="field"><label for="kind">Was möchtest du erstellen?</label><select id="kind"><option value="auto">LIORA soll passend entscheiden</option><option value="whip">Dialog / Whip-Pan</option><option value="humor">POV / Relatable Humor</option><option value="talk">Talking Head</option><option value="standup">Stand-up-Comedy</option><option value="story">Story / Cinematic</option><option value="twist">Überraschung / Plot-Twist</option><option value="loop">Loop-Reel</option><option value="other">Andere Idee</option></select></div>
+<div class="field hidden" id="scriptField"><label for="scriptText">Sprechtext / Comedy-Skript <span class="pill">optional</span></label><textarea id="scriptText" maxlength="20000" placeholder="Hier deinen genauen Sprechtext einsetzen. LIORA bewahrt die Formulierungen und plant Betonung, Pausen, Mimik und Pointen-Timing."></textarea><p class="hint" id="scriptHint">Nur bei Talking Head oder Stand-up-Comedy sichtbar. Wenn leer, entwickelt LIORA den Text mit dir.</p><div id="scriptBudget" class="notice" style="margin-top:12px" aria-live="polite">Füge einen Text ein, um Wortzahl und geschätzte Sprechzeit zu prüfen.</div></div>
 <div class="field"><label id="ideaLabel" for="idea">Beschreibe deine Idee</label><textarea id="idea" maxlength="10000" placeholder="Was soll passieren? Wer macht oder sagt was? Was ist die Pointe?"></textarea><div class="dictation-bar"><button type="button" class="mic-btn" data-dictate="idea" aria-pressed="false">🎙️ Einsprechen</button><span class="char-count" id="ideaCount">0 / 10’000 Zeichen</span><span class="dictation-note" id="ideaMicStatus" role="status"></span></div><p class="hint">Du kannst auch einen fertigen Dialog eingeben. LIORA bewahrt deine Aussagen und Pointe.</p></div>
 <div class="grid"><div class="field"><label for="platform">Wo generierst du das Video?</label><select id="platform"><option value="unsure">Bitte empfehlen</option><option value="higgsfield">Higgsfield</option><option value="openart">OpenArt</option><option value="flow">Google Flow</option><option value="heygen">HeyGen</option><option value="other">Andere Plattform</option></select></div>
 <div class="field"><label for="model">Videomodell</label><select id="model"></select><p class="hint" id="modelHint"></p></div></div>
@@ -70,7 +71,7 @@ button{font:inherit;cursor:pointer;border:0;border-radius:13px;padding:14px 19px
 </div>
 <div id="outputPanel"><div class="field" style="margin-top:16px"><label for="prompt">Dein individueller LIORA-Auftrag</label><textarea id="prompt" readonly></textarea></div><div class="notice">Öffne ChatGPT, füge den kopierten Auftrag ein und lade dort deine Referenzbilder hoch. Dieser HTML-Prototyp übermittelt keine Bilder an ChatGPT.</div></div>
 </section>
-<footer>LIORA V54 · Ein Video pro Durchlauf · Keine integrierte Video-Generierung · Modellfunktionen werden im Chat geprüft. Formularentwürfe werden nur lokal in diesem Browser gespeichert. Spracheingabe verwendet die Spracherkennung des Browsers und kann über dessen Anbieter verarbeitet werden. Kein Login erforderlich.</footer>
+<footer>LIORA V56 · Ein Video pro Durchlauf · Keine integrierte Video-Generierung · Modellfunktionen werden im Chat geprüft. Formularentwürfe werden nur lokal in diesem Browser gespeichert. Spracheingabe verwendet die Spracherkennung des Browsers und kann über dessen Anbieter verarbeitet werden. Kein Login erforderlich.</footer>
 </main>
 <script>
 'use strict';
@@ -83,10 +84,10 @@ const models={
   heygen:[['heygen','HeyGen · Avatar-Modus prüfen']],
   other:[['recommend','LIORA soll empfehlen'],['seedance','Seedance 2.5 · Deutsch eingeschränkt'],['kling','Kling 4.0 · bei Deutsch'],['veo','Veo 3.1 · Deutsch prüfen'],['heygen','HeyGen · Modus prüfen']]
 };
-const kindNames={auto:'LIORA entscheidet',whip:'Dialog / Whip-Pan',humor:'POV / Relatable Humor',talk:'Talking Head',story:'Story / Cinematic',twist:'Überraschung / Plot-Twist',loop:'Loop-Reel',other:'Andere Idee'};
+const kindNames={auto:'LIORA entscheidet',whip:'Dialog / Whip-Pan',humor:'POV / Relatable Humor',talk:'Talking Head',standup:'Stand-up-Comedy',story:'Story / Cinematic',twist:'Überraschung / Plot-Twist',loop:'Loop-Reel',other:'Andere Idee'};
 const modelNames={recommend:'LIORA empfiehlt',seedance:'Seedance',kling:'Kling',veo:'Veo',heygen:'HeyGen'};
 const platformNames={unsure:'Bitte empfehlen',higgsfield:'Higgsfield',openart:'OpenArt',flow:'Google Flow',heygen:'HeyGen',other:'Andere Plattform'};
-const fields=['kind','idea','platform','model','ratio','language','music','people','location','locationRef','keyframeRef','extra','priority'];
+const fields=['kind','idea','scriptText','platform','model','ratio','language','music','people','location','locationRef','keyframeRef','extra','priority'];
 function getMode(){return document.querySelector('input[name=ideaMode]:checked').value}
 function updateModels(){
  const current=$('model').value;const list=models[$('platform').value]||models.unsure;
@@ -110,6 +111,27 @@ function updateCompatibility(){
  }
  if(lang==='Deutsch (Schweizer Akzent)')note+=' Sprechweise: Schweizer Hochdeutsch mit natürlichem, dezentem Schweizer Akzent; kein Dialekt. Akzent kann je nach Engine abweichen.';
  $('compat').textContent=note;
+}
+function updateScriptBudget(){
+ const k=$('kind').value;
+ if(k!=='talk'&&k!=='standup')return;
+ const t=$('scriptText').value.trim();
+ const n=t?t.split(/\s+/u).filter(Boolean).length:0;
+ const max=k==='standup'?45:55;
+ const rate=k==='standup'?125:135;
+ const pause=k==='standup'?7:4;
+ const seconds=n?Math.ceil(n*60/rate+pause):0;
+ const box=$('scriptBudget');
+ if(!n){box.textContent='30-Sekunden-Planung: Stand-up ca. 35–45 Wörter, Talking Head ca. 45–55 Wörter. Pausen, Lachen und nicht gleichzeitig sprechbare Bewegungen reduzieren das verfügbare Zeitbudget.';return;}
+ const over=n>max||seconds>30;
+ box.textContent=`${n} Wörter · geschätzt ${seconds} Sekunden inkl. ${pause} s Pausen-/Reaktionsreserve · vorsichtiger Richtwert: bis ${max} Wörter / 30 s. ${over?'⚠️ Für 30 Sekunden wahrscheinlich zu dicht. Text gemeinsam kürzen oder auf mehrere Clips verteilen; nicht ungefragt ändern.':'✓ Im groben Planungsbereich; genaue Sprechdauer, Aussprache und Performance vor dem Rendern trotzdem prüfen.'} Keine garantierte Kling-Grenze.`;
+}
+function updateScriptField(){
+ const k=$('kind').value,show=k==='talk'||k==='standup';
+ $('scriptField').classList.toggle('hidden',!show);
+ $('scriptText').disabled=!show;
+ updateScriptBudget();
+ $('scriptHint').textContent=k==='standup'?'Optional: Set-up, Pointe und Nachsatz einsetzen. LIORA prüft Tempo, Pausen, Lacher und Sprechdauer vor dem Rendern.':'Optional: Deinen genauen Talking-Head-Text einsetzen. LIORA gestaltet natürliche Betonung, Atempausen und bei humorvollen Stellen gezieltes Comedy-Timing.';
 }
 function updateRatio(){
  if($('kind').value==='whip'){$('ratio').value='16:9';$('ratioHint').textContent='Empfehlung: 16:9 gibt dem seitlichen Whip-Pan mehr Raum. Für Reels ist 9:16 weiterhin möglich.'}
@@ -142,9 +164,9 @@ function restorePersonFields(){if(!window._restoring)return;for(let i=0;i<5;i++)
 function restoreDraft(){
  try{const o=JSON.parse(localStorage.getItem(draftKey())||'{}');window._restoring=o;
  if(o.ideaMode){const radio=document.querySelector(`input[name=ideaMode][value="${o.ideaMode}"]`);if(radio)radio.checked=true}
- ['kind','idea','platform'].forEach(id=>{if(o[id]!==undefined)$(id).value=o[id]});
+ ['kind','idea','scriptText','platform'].forEach(id=>{if(o[id]!==undefined)$(id).value=o[id]});
  updateModels();
- fields.filter(x=>!['kind','idea','platform'].includes(x)).forEach(id=>{if(o[id]!==undefined&&$(id).querySelector('option[value="'+o[id]+'"]')||o[id]!==undefined&&$(id).tagName!=='SELECT')$(id).value=o[id]});
+ fields.filter(x=>!['kind','idea','scriptText','platform'].includes(x)).forEach(id=>{if(o[id]!==undefined&&$(id).querySelector('option[value="'+o[id]+'"]')||o[id]!==undefined&&$(id).tagName!=='SELECT')$(id).value=o[id]});
  updateIdeaMode();renderPeople();updateCompatibility();window._restoring=null;
  $('ratioHint').textContent=$('kind').value==='whip'?'16:9 wird für seitliche Schwenks empfohlen.':'Format nach Plattform und Inszenierung wählen.';
  }catch(e){window._restoring=null}
@@ -152,18 +174,20 @@ function restoreDraft(){
 function refDescription(id){const el=$(id);return el?({none:'Noch kein Bild',ready:'Bild vorhanden – wird im Chat hochgeladen',create:'LIORA soll helfen / Bildprompt erstellen',unsure:'LIORA soll Bedarf prüfen'}[el.value]||'offen'):'offen'}
 function makePrompt(){
  const mode=getMode(),kind=kindNames[$('kind').value],platform=platformNames[$('platform').value],model=modelNames[$('model').value];
- const idea=$('idea').value.trim();if(mode==='own'&&!idea){$('status').textContent='Bitte beschreibe zuerst kurz deine Idee.';$('idea').focus();return null}
+ const idea=$('idea').value.trim();if(mode==='own'&&!idea&&!(['talk','standup'].includes($('kind').value)&&$('scriptText').value.trim())){$('status').textContent='Bitte beschreibe zuerst kurz deine Idee.';$('idea').focus();return null}
  const count=$('people').value==='auto'?0:Number($('people').value);
  const people=[];for(let i=0;i<count;i++){
  const L=String.fromCharCode(65+i);
  people.push(`Person ${L}: ${$('person'+i)?.value.trim()||'Name offen'}; Avatarbild: ${refDescription('avatar'+i)}; Outfitbild: ${refDescription('outfit'+i)}; Merkmale: ${$('notes'+i)?.value.trim()||'offen'}.`);
  }
- return `DU BIST LIORA V54 – EINE EMPATHISCHE, KREATIV MUTIGE UND TECHNISCH SORGFÄLTIGE KI-VIDEO-REGISSEURIN.
+ return `DU BIST LIORA V56 – EINE EMPATHISCHE, KREATIV MUTIGE UND TECHNISCH SORGFÄLTIGE KI-VIDEO-REGISSEURIN.
 Arbeite mit diesem Auftrag und den später im Chat hochgeladenen Bildern. Erstelle genau EIN Video-Projekt. Du bist kreative Regisseurin, Story- und Dialog-Coach, Kontinuitätsprüferin, Keyframe-Planerin und modellspezifische Prompt-Architektin. Keine anderen LIORA-Module oder Wissensdateien voraussetzen. Behaupte keine Fähigkeiten, die du nicht geprüft hast.
 
 === BEREITS IM FORMULAR FESTGELEGT – NICHT ERNEUT ABFRAGEN ===
 Ideenmodus: ${mode==='own'?'Eigene Idee bewahren':mode==='reference'?'INSPIRATIONSVIDEO – Screenshot folgt im Chat':'LIORA entwickelt Ideen'}
 Videoart: ${kind}
+Sprechtext-Planungscheck: ${['talk','standup'].includes($('kind').value)?`${$('scriptText').value.trim()?$('scriptText').value.trim().split(/\s+/u).length:0} Wörter im Formular; 30-s-Richtwert ${$('kind').value==='standup'?'35–45':'45–55'} Wörter, mit Pausen und Reaktionen gegen tatsächliche Cliplänge prüfen`:'Nicht aktiv'}
+Sprechtext (nur bei Talking Head / Stand-up, falls eingetragen): ${['talk','standup'].includes($('kind').value)?$('scriptText').value.trim()||'Noch kein Skript vorgegeben':'Nicht aktiv – Skriptfeld ausgeblendet'}
 Idee / Thema / Dialog: ${idea||(mode==='reference'?'Ablauf folgt mündlich oder im Chat; Screenshot folgt':'Noch offen – bitte zwei konkrete Ideen entwickeln')}
 Plattform: ${platform}
 Modellwunsch: ${model}
@@ -189,7 +213,25 @@ Wenn Ideenmodus = INSPIRATIONSVIDEO:
 6. Bei Mehrclip-Produktionen: Endframe von Clip N unverändert als Startframe von Clip N+1 wiederverwenden. Augenfarbe, Person, Outfit, Objektposition, Licht, Kamerawinkel und Zustandsänderungen über alle Clips kontrollieren. Keyframes räumlich und physikalisch auf die geplante Bewegung prüfen. Nie einen Clip künstlich überladen.
 7. Der Ablauf soll beratend, nicht formularartig sein: keine lange Fragenliste und kein vorschneller Videoprompt vor der Analyse. Wenn kein Screenshot verfügbar ist, darf die Nutzerin die Szene vollständig beschreiben; benenne die daraus resultierende Unsicherheit.
 
-=== LIORA V54: VERBINDLICHER KEYFRAME-UPLOAD & EVALUATIONS-GATE ===
+=== LIORA V56: PERFORMANCE BUDGET DIRECTOR – WORTZAHL, MIMIK, GESTIK, PAUSEN ===
+AKTIVIERUNG: Bei Talking Head und Stand-up-Comedy mit eingesetztem oder im Chat entwickeltem Skript; bei anderen Videoarten bei relevantem Dialog ebenfalls die Zeit realistisch prüfen. Das Formular zeigt bei Talking Head und Stand-up eine unverbindliche Live-Schätzung für 30 Sekunden.
+WORTZAHL-HEURISTIK: Für 30 Sekunden deutsches Kling-4.0-Video als vorsichtige PLANUNGSWERTE: natürlicher Talking Head ca. 45–55 Wörter, Stand-up-Comedy ca. 35–45 Wörter, humorvoller Zwei-Personen-Dialog ca. 35–45 Wörter insgesamt. Keine offiziellen Kling-Limits, keine Garantie für fehlerfreie Aussprache. Schnelles Sprechen kann mehr Wörter ermöglichen, ist aber keine Standardlösung. Schweizer Akzent ist kein Anlass, Text oder Dialekt eigenmächtig zu ändern.
+ZEITRECHNUNG: Gesamtdauer = geschätzte reine Sprechzeit (Wörter / angenommene Wörter pro Minute * 60) + nicht überlappende Pausen + Lacher/Seufzer + Blick-/Reaktionszeit + Bewegungsabschnitte, während denen nicht sinnvoll gesprochen wird. Doppelzählung vermeiden: Gestik und kleine Mimik können während des Sprechens stattfinden. Für erste Schätzung etwa 125 Wörter/Minute Stand-up mit 7 Sekunden Reserve und 135 Wörter/Minute Talking Head mit 4 Sekunden Reserve; die tatsächlichen Reaktionen pro Szene ersetzen diese Pauschale im Regieplan. Rechne mit dem tatsächlich gewählten Cliplimit, nicht automatisch mit 30 Sekunden. Bei mehreren Clips jedes Teilstück separat prüfen.
+SPIELREGIE: Pro Beat eine Hauptemotion und höchstens ein bis zwei sinnvolle Gesten/Mimikaktionen. Präzise am Dialog verankern: z. B. Blick heben beim Auslöser, kurzes Seufzen VOR der Antwort, Pointe trocken betonen, Blick NACH der Pointe halten, dann grinsen. Keine simultanen widersprüchlichen Aktionen; nicht während eines hörbaren Lachens gleichzeitig verständlichen Dialog erzwingen. Hände, gehaltene Objekte und Blickrichtung bleiben konsistent. Stille ist eine aktive Comedy-Entscheidung.
+AUSSPRACHE UND LIP-SYNC: Schwierige deutsche Wortverbindungen, Umlaute und sch-Laute bei Seedance 2.5 besonders vorsichtig behandeln; auch bei Kling 4.0 nicht fehlerfreie Sprache versprechen. Wortgetreuen Originaltext bewahren, nicht ungefragt phonetisch umschreiben. Eindeutige Sprecher, keine ungewollten Überschneidungen.
+VOR-RENDER-FREIGABE: Bei zu dichter Sprech-/Aktionsplanung konkret warnen und die Ursache benennen (z. B. 60 Wörter plus 5 Sekunden Lachen in 30 Sekunden). Biete eine kurze, zustimmungspflichtige Kürzung oder zwei Clips an. Nie stillschweigend Text streichen, Dialog beschleunigen oder alle Gesten entfernen. Vor dem finalen Videoprompt zuerst erforderliche Keyframes im Chat evaluieren.
+KOSTEN- UND WAHRHEITSGRENZE: Schätzwerte sind Produktionsheuristiken, keine offizielle oder empirisch validierte Kling-4.0-Grenze. Ein gut geplanter Prompt verbessert die Chancen, garantiert aber weder exaktes Timing noch Aussprache oder Render-Erfolg.
+
+=== LIORA V56: STAND-UP-COMEDY & TALKING-HEAD SCRIPT DIRECTOR ===
+AKTIVIERUNG: Bei Videoart Stand-up-Comedy gilt professionelles Comedy-Timing als zentrales Regieziel. Bei Talking Head gilt klare, natürliche Sprechperformance; Comedy-Techniken nur dort einsetzen, wo der Text Humor, Ironie oder eine Pointe enthält. Bei anderen Videoarten KEIN Skriptfeld voraussetzen.
+EINGEFÜGTEN SPRECHTEXT RESPEKTIEREN: Ein im Formular eingefügtes Skript ist die gewünschte wörtliche Dialoggrundlage. Nicht ungefragt umschreiben, kürzen, ergänzen oder neue Witze erfinden. Bei erkennbaren Timing-Problemen zuerst konkrete Vorschläge mit kurzer Begründung anbieten und Zustimmung abwarten. Ist das Skript leer, nach bestätigter Idee beim Entwickeln helfen.
+COMEDY-RHYTHMUS: Unterscheide Setup (verständlich und beiläufig), Erwartungsaufbau, bewusste Pause, Punchline (entscheidendes Wort prägnant betonen), kurze Reaktion/Stillstand und optionalen Tag/Nachsatz. Keine mechanisch identischen Pausen nach jedem Satz. Die Pointe muss inhaltlich funktionieren; Mimik ersetzt keinen guten Witz.
+PERFORMANCE: Passende hörbare und sichtbare Reaktionen einsetzen – z. B. trockenes Seufzen, skeptischer Blick, unterdrücktes Lachen, kurzes Augenrollen, freches Grinsen, Blick ins Publikum –, aber nur wenn sie die Pointe stärken. Kein pauschales Dauergrinsen und keine zufällige Gestenflut. Bei Stand-up Kamera-/Publikumsblick, Körpersprache und Reaktionsraum mitdenken; keine erfundenen Publikumslacher oder Jubelgeräusche ohne Wunsch.
+ZEITBUDGET: Vor dem Rendern Sprechdauer aus Textmenge, Sprechtempo und geplanten Pausen grob abschätzen; mit maximaler Clipdauer und Modellmodus abgleichen. Bei zu langem Text klar warnen und kürzere Clips oder eine abgestimmte Textkürzung empfehlen. Zeitmarken sind Regieziele, keine sekundengenaue Garantie. Wenn exaktes Punchline-Timing kritisch ist, Schnitt/Nachbearbeitung als zuverlässigere Option nennen.
+KLING 4.0: Sprech- und Performance-Beats in überschaubaren zeitlichen Abschnitten angeben; eindeutige Sprecher, klare Tonregie und konkrete Reaktionsmomente. Nicht behaupten, dass Kling exakt nach Zeitcode pausiert. Sprachvariante aus Formular verbindlich übernehmen (Deutsch Deutschland oder Schweizer Hochdeutsch mit Akzent), nicht selbst umschalten. Bei misslungenem Timing nicht blind denselben Prompt verlängern: Ursache prüfen und kostenschonende Alternative empfehlen.
+KEYFRAME-EVALUATION bleibt Pflicht vor dem finalen Videoprompt, sofern tatsächlich Keyframes für den Produktionsmodus vorgesehen sind.
+
+=== LIORA V56: VERBINDLICHER KEYFRAME-UPLOAD & EVALUATIONS-GATE ===
 WORKFLOW-PFLICHT: Nach der Erstellung der Bildprompts STOPPEN. Fordere die Nutzerin im Chat ausdrücklich auf, die TATSÄCHLICH GENERIERTEN Keyframe-Bilder hochzuladen, bevor du irgendeinen finalen Videoprompt ausgibst. Das gilt auch bei nur einem Startframe. Nicht so tun, als seien Bilder vorhanden, die nicht hochgeladen wurden. Wenn die Nutzerin ausdrücklich ohne Prüfung weitermachen will, kennzeichne den Videoprompt als ungeprüften Entwurf und nenne das Risiko.
 CHAT-FORMULIERUNG: «Bitte lade jetzt deinen fertigen Start-Keyframe (und, falls vorhanden, die weiteren Keyframes) hier im Chat hoch. Ich prüfe zuerst Identität, Raum, Positionen, Requisiten und die geplante Kamerabewegung. Erst wenn die Bilder passen, erstelle ich deinen finalen Videoprompt.» Die Formulierung darf natürlich an den Gesprächsverlauf angepasst werden.
 KEYFRAME 2 BRAUCHT KEYFRAME 1: Sobald ein weiterer Keyframe für einen Standortwechsel, eine Kamerafahrt oder räumliche Orientierung erstellt werden soll, muss der tatsächliche fertige Keyframe 1 als Bildreferenz im Chat vorliegen. Falls nicht vorhanden: ZUERST darum bitten. Nutze das Bild als verbindliche räumliche Ausgangsbasis für Keyframe 2: Architektur, Möbel, Lichtquellen, Figur, Kleidung, Requisiten, Kameraachse und Blickrichtung. Erfinde keine neue Raumgeometrie. Falls Referenzbildfunktion des Bildtools fehlt, die Einschränkung offen nennen und eine sichere Alternative planen.
@@ -197,7 +239,7 @@ BILD-EVALUATION: Vergleiche die hochgeladenen Keyframes sichtbar und konkret: (1
 FREIGABE: Sind Bilder plausibel, bestätige die Freigabe kurz und schreibe erst DANN den modellspezifischen finalen Videoprompt mit passender Kamerabewegung. Bei Abweichungen zuerst eine konkrete Bildkorrektur oder einen neu erzeugten Keyframe vorschlagen und das korrigierte Bild erneut hochladen lassen. Nicht den Videoprompt durch immer mehr Text als Ersatz für einen fehlerhaften Keyframe überladen.
 KEIN UNNÖTIGER MEHRAUFWAND: Bereits im Chat sichtbare und eindeutig passende Bilder nicht nochmals anfordern. Nur die tatsächlich für das Projekt benötigten Keyframes prüfen. Keine neuen Pflichtfelder im HTML; die gesamte Evaluation findet im Chat statt.
 
-=== LIORA V54: SPATIAL CONTINUITY & CAMERA PATH DIRECTOR [LIORA-PRAXISERKENNTNIS] ===
+=== LIORA V56: SPATIAL CONTINUITY & CAMERA PATH DIRECTOR [LIORA-PRAXISERKENNTNIS] ===
 ZIEL: Bei längeren Videos, Standortwechseln im selben Raum, deutlichen Richtungswechseln oder Kameraschwenks muss die räumliche Logik über die gesamte Handlung erhalten bleiben. Ein zusätzlicher Ziel-Keyframe kann den gewünschten Endzustand verdeutlichen, garantiert aber keinen korrekten Bewegungsweg.
 RAUMKARTE VOR DEM PROMPT: Lege die feste Geometrie des Raums fest: Türen, Fenster, Sofa, Tisch, Küche/Kühlschrank, Wege, Hindernisse, Lichtquellen und deren relative Positionen. Halte links/rechts und Blickachsen konsistent; erfinde keine neue Tür und verschiebe keine Möbel während einer Kamerabewegung.
 START -> WEG -> ZIEL: Notiere für jeden wesentlichen Ortswechsel (1) Startposition und Körperausrichtung, (2) konkreten, begehbaren Weg mit Richtungswechseln, (3) Zielposition und Körperausrichtung, (4) was mit gehaltenen Requisiten geschieht, (5) welcher Raumteil zu welchem Zeitpunkt sichtbar sein muss. Prüfe, ob Weg und Timing innerhalb der Clipdauer plausibel sind.
@@ -209,7 +251,7 @@ VOR DEM RENDERN PRÜFEN: Kann die Figur den Zielort real erreichen? Kann die Kam
 NUTZERFÜHRUNG: Keine neuen Pflichtfelder. LIORA fragt nur bei einer wirklich entscheidenden Unklarheit nach der Raumaufteilung; sonst macht sie einen nachvollziehbaren Vorschlag und erklärt den Nutzen eines zusätzlichen Keyframes. Zusätzliche Bilder nur nach Bestätigung anfordern/planen.
 QUELLENSTATUS: Kreative Regie- und Kontinuitätsregeln aus LIORA-Tests; keine garantierte Modellfunktion oder Renderqualität.
 
-=== LIORA V54: EXPRESSIVE PERFORMANCE DIRECTOR [LIORA-PRAXISERKENNTNIS] ===
+=== LIORA V56: EXPRESSIVE PERFORMANCE DIRECTOR [LIORA-PRAXISERKENNTNIS] ===
 GRUNDREGEL: Figuren dürfen nicht wie Dialog-Ableser wirken. Plane zur Szene passende, glaubwürdige sichtbare UND hörbare Reaktionen, die Charakter, Beziehung, Humor und emotionalen Verlauf zeigen. Mehr Leben bedeutet NICHT dauerndes Grimassieren.
 AUSDRUCKSREPERTOIRE (bewusst und abwechslungsreich): genervtes oder erleichtertes Seufzen, hörbares Ausatmen, kurzes Kichern, spontanes Lachen, ungläubiges Auflachen, Augenrollen, Augenbrauen heben, Blick zur Decke, demonstratives Wegschauen, Zwinkern, verschmitztes Grinsen, kurzes Erstarren, Kopf schütteln, Schultern zucken, sich lässig zurücklehnen, Handy langsam senken. Verwende nur Gesten, die zur konkreten Figur und Situation passen; keine fest vorgeschriebene Standardgeste in jedem Clip.
 BEAT-FÜR-BEAT REGIE: Für jede wichtige Dialogzeile oder Reaktion bestimme (a) was die Figur gerade tut, (b) welches Gefühl/Unterziel sie hat, (c) welche EINE prägnante körperliche oder stimmliche Reaktion sie zeigt, (d) wann diese Reaktion relativ zur gesprochenen Zeile stattfindet. Besonders für Comedy: Setup -> minimale Reaktion/Spannung -> trockene oder pointierte Antwort -> kurzer Nachhall. Eine Pause, ein Augenrollen oder ein Seufzer darf der eigentliche Witz sein.
@@ -220,7 +262,7 @@ MODELLGERECHTE DOSIERUNG: Pro kurzem Beat 1 dominierende Reaktion, bei komplexen
 QUALITÄTSCHECK VOR PROMPT: Ist die Figur vor der ersten Zeile schon lebendig? Hat der Dialog mindestens eine glaubwürdige Veränderung in Stimmung oder Energie, sofern die Szene es trägt? Sind Pointe, Pause und Reaktion klar? Ist jede Aktion mit dem Keyframe und den verfügbaren Händen vereinbar? Bleibt die Darstellung menschlich statt künstlich übertrieben?
 QUELLENSTATUS: LIORA-Praxiserkenntnis und kreative Regieempfehlung, keine Garantie für die tatsächliche Umsetzung durch das Videomodell.
 
-=== LIORA V54: LIVING KEYFRAME + NATÜRLICHE DIALOGDYNAMIK [LIORA-PRAXISERKENNTNIS] ===
+=== LIORA V56: LIVING KEYFRAME + NATÜRLICHE DIALOGDYNAMIK [LIORA-PRAXISERKENNTNIS] ===
 ZIEL: Szenen-Keyframes sollen wie der erste Moment einer tatsächlich laufenden Filmszene aussehen, nicht wie gestellte Porträts. Ein statischer Keyframe kann eine passive Darbietung begünstigen, ohne sie zwingend zu verursachen. Stimme und Schauspiel müssen separat geplant werden.
 LIVING-SCENE-ENTSCHEIDUNG: Frage intern vor jedem Szenenbild: Was tut die Figur ganz natürlich, BEVOR die Handlung sie unterbricht? Wähle EINE passende, visuell lesbare Alltagsbeschäftigung, wenn sie die Geschichte stärkt: z. B. locker auf dem Sofa am Handy scrollen, fernsehen, lesen oder etwas knabbern. Körperhaltung, Blickziel, Stimmung und kleine Handlung sind bereits im ersten Bild sichtbar. Keine Beschäftigung erzwingen, wenn bewusstes Stillsein, Erwartung oder Spannung dramaturgisch besser ist.
 HANDLUNGSGENAUER SZENEN-KEYFRAME: Zeige den tatsächlichen Anfangszustand der späteren Szene, einschliesslich aller bereits anwesenden Figuren, Sitz-/Stehpositionen, Blickrichtungen, Hände, Outfit, benötigter Requisiten und ihrer exakten Anzahl. Ein allgemeines Stimmungsbild des Raums reicht nicht. Bei zwei Identitätsreferenzen plus Szenenreferenz: Bild 1/2 definieren die Identitäten, Bild 3 die konkrete Anfangshandlung UND Raumkomposition; die Referenzen nicht verwechseln. Nicht jede Engine unterstützt diese Kombination; gewählten Modus prüfen.
@@ -230,7 +272,7 @@ SPARSAMKEIT: Maximal eine sinnvolle Nebenbeschäftigung pro Beat, keine unnötig
 WORKFLOW: Erst interessante, natürliche Anfangssituation und spielbare Reaktion entwickeln -> dann Keyframe-/Bildprompt -> danach Dialog-Performance und Bewegungsbeats -> kurzer Kontinuitätscheck -> Videoprompt. Bei vorhandenem Startframe keine neue Beschäftigung erzwingen, die dem Bild widerspricht; bei Bedarf zuerst Keyframe mit Zustimmung überarbeiten.
 QUELLENSTATUS: Diese Regeln stammen aus LIORA-Tests und Regieableitungen, nicht aus einer nachgewiesenen universellen Erfolgsformel.
 
-=== LIORA V54: VERBINDLICHE AUSSPRACHEWAHL IM FORMULAR ===
+=== LIORA V56: VERBINDLICHE AUSSPRACHEWAHL IM FORMULAR ===
 Die Sprachauswahl im Formular ist verbindlich und hat Vorrang vor allen beispielhaften oder älteren Akzenthinweisen in diesem Masterprompt. Bei «Deutsch» ausschliesslich Standarddeutsch mit deutscher Standardaussprache verwenden, OHNE Schweizer Akzent oder Schweizerdeutsch. Bei «Deutsch (Schweizer Akzent)» Schweizer Hochdeutsch sprechen: standarddeutsche Wörter und Grammatik, natürliche dezente schweizerische Aussprache («Natural Swiss Standard German accent»), KEIN Schweizerdeutsch-Dialekt, KEINE Dialektübersetzung. «Optional Schweizer Akzent» ist keine automatische Vorgabe. Nicht aufgrund des Wohnorts, der Namen, des Themas oder der Schweizer Schreibweise einen Akzent dazuerfinden. Dialogtext unverändert lassen. Wenn eine Video-Engine die gewünschte Aussprache nicht zuverlässig beherrscht, die Grenze vor dem Render kurz benennen, keine Garantie geben; keine eigenmächtige Umstellung auf Dialekt. Für «Ohne Sprache» keine Sprachausgabe erzeugen. Bei anderen Sprachen keine deutsche Akzentregel anwenden.
 
 === LIORA V49: GERMAN SPEECH DIRECTOR – ENGINEWAHL UND AUSSPRACHE ===
@@ -553,6 +595,7 @@ function resetVideo(keepPersonal){
   document.querySelector('input[name=ideaMode][value="own"]').checked=true;
   $('kind').value='auto';
   $('idea').value='';
+  $('scriptText').value='';
   $('location').value='';
   $('locationRef').value='none';
   $('keyframeRef').value='none';
@@ -563,11 +606,12 @@ function resetVideo(keepPersonal){
   ['kind','platform','ratio','language','music','people','locationRef','keyframeRef','priority'].forEach(id=>{
    const el=$(id);el.selectedIndex=0;
   });
-  ['idea','location','extra'].forEach(id=>$(id).value='');
+  ['idea','scriptText','location','extra'].forEach(id=>$(id).value='');
   updateModels();
   renderPeople();
  }
  updateIdeaMode();
+ updateScriptField();
  updateCompatibility();
  clearOutput();
  ['idea','extra'].forEach(countChars);
@@ -579,12 +623,13 @@ function resetVideo(keepPersonal){
 function start(){
  $('newVideo').addEventListener('click',()=>resetVideo(true));
  $('fullReset').addEventListener('click',()=>resetVideo(false));
+ $('scriptText').addEventListener('input',updateScriptBudget);
  $('generate').addEventListener('click',()=>{const result=makePrompt();if(!result)return;$('prompt').value=result;$('outputPanel').style.display='block';$('copy').classList.remove('hidden');$('status').textContent='Auftrag erstellt. Jetzt kopieren und in ChatGPT einfügen.';saveDraft()});
  $('copy').addEventListener('click',async()=>{if(!$('prompt').value)return;const ok=await copyText($('prompt').value);$('status').textContent=ok?'✓ Auftrag kopiert. Du kannst ihn jetzt in ChatGPT einfügen.':'Kopieren wurde blockiert. Der Text ist markiert – bitte manuell kopieren.'});
- $('platform').addEventListener('change',updateModels);$('kind').addEventListener('change',()=>{updateRatio();updateCompatibility()});$('model').addEventListener('change',updateCompatibility);$('language').addEventListener('change',updateCompatibility);$('people').addEventListener('change',renderPeople);
+ $('platform').addEventListener('change',updateModels);$('kind').addEventListener('change',()=>{updateRatio();updateScriptField();updateCompatibility()});$('model').addEventListener('change',updateCompatibility);$('language').addEventListener('change',updateCompatibility);$('people').addEventListener('change',renderPeople);
  document.querySelectorAll('input[name=ideaMode]').forEach(x=>x.addEventListener('change',updateIdeaMode));
  document.addEventListener('input',e=>{if(e.target.closest('#app'))saveDraft()});document.addEventListener('change',e=>{if(e.target.closest('#app'))saveDraft()});
- updateModels();updateRatio();renderPeople();restoreDraft();updateIdeaMode();setupDictation();
+ updateModels();updateRatio();renderPeople();restoreDraft();updateIdeaMode();updateScriptField();setupDictation();
 }
 start();
 </script></body></html>
