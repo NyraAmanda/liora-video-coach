@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="de-CH"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LIORA · Video Coach V60</title>
+<title>LIORA · Video Coach V65</title>
 <style>
 :root{--ink:#372b46;--purple:#704b93;--muted:#786c82;--mint:#a7e7d2;--line:#e9e0ed;--bg:#faf8fc}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:radial-gradient(ellipse at 0% 0%,#f0e6fb 0,transparent 40%),radial-gradient(ellipse at 100% 20%,#e4fbf2 0,transparent 35%),var(--bg)}
@@ -31,7 +31,7 @@ button{font:inherit;cursor:pointer;border:0;border-radius:13px;padding:14px 19px
 @media(max-width:620px){.hero{padding:28px 23px}.panel{padding:20px}.grid,.choices,.ref-row{grid-template-columns:1fr}.actions button{width:100%}.shell{padding:14px 12px 60px}}
 </style></head><body>
 <main class="shell" id="app">
-<div class="topline"><span class="eyebrow">✦ LIORA · VIDEO COACH · V60</span></div>
+<div class="topline"><span class="eyebrow">✦ LIORA · VIDEO COACH · V65</span></div>
 <header class="hero"><div class="eyebrow">DEINE IDEE. UNSERE REGIE.</div><h1>Mach aus deiner Idee ein Video.</h1><p>Starte mit einer eigenen Idee, lass dir Vorschläge machen oder nutze einen Screenshot als Inspiration. LIORA plant im Chat die Handlung, empfiehlt die Engine und erstellt deine Bild- und Videoprompts.</p></header>
 <section class="panel"><h2>01 · Dein Video</h2>
 <div class="field"><label>Wie möchtest du starten?</label><div class="choices"><label class="choice"><input type="radio" name="ideaMode" value="own" checked> Ich habe eine Idee</label><label class="choice"><input type="radio" name="ideaMode" value="inspire"> LIORA soll Ideen vorschlagen</label><label class="choice"><input type="radio" name="ideaMode" value="reference"> Ich habe ein Video als Inspiration</label></div></div>
@@ -71,7 +71,7 @@ button{font:inherit;cursor:pointer;border:0;border-radius:13px;padding:14px 19px
 </div>
 <div id="outputPanel"><div class="field" style="margin-top:16px"><label for="prompt">Dein individueller LIORA-Auftrag</label><textarea id="prompt" readonly></textarea></div><div class="notice">Öffne ChatGPT, füge den kopierten Auftrag ein und lade dort deine Referenzbilder hoch. Dieser HTML-Prototyp übermittelt keine Bilder an ChatGPT.</div></div>
 </section>
-<footer>LIORA V64 · Ein Video pro Durchlauf · Keine integrierte Video-Generierung · Modellfunktionen werden im Chat geprüft. Formularentwürfe werden nur lokal in diesem Browser gespeichert. Spracheingabe verwendet die Spracherkennung des Browsers und kann über dessen Anbieter verarbeitet werden. Kein Login erforderlich.</footer>
+<footer>LIORA V65 · Ein Video pro Durchlauf · Keine integrierte Video-Generierung · Modellfunktionen werden im Chat geprüft. Formularentwürfe werden nur lokal in diesem Browser gespeichert. Spracheingabe verwendet die Spracherkennung des Browsers und kann über dessen Anbieter verarbeitet werden. Kein Login erforderlich.</footer>
 </main>
 <script>
 'use strict';
@@ -180,7 +180,7 @@ function makePrompt(){
  const L=String.fromCharCode(65+i);
  people.push(`Person ${L}: ${$('person'+i)?.value.trim()||'Name offen'}; Avatarbild: ${refDescription('avatar'+i)}; Outfitbild: ${refDescription('outfit'+i)}; Merkmale: ${$('notes'+i)?.value.trim()||'offen'}.`);
  }
- return `DU BIST LIORA V64 – EINE EMPATHISCHE, KREATIV MUTIGE UND TECHNISCH SORGFÄLTIGE KI-VIDEO-REGISSEURIN.
+ return `DU BIST LIORA V65 – EINE EMPATHISCHE, KREATIV MUTIGE UND TECHNISCH SORGFÄLTIGE KI-VIDEO-REGISSEURIN.
 Arbeite mit diesem Auftrag und den später im Chat hochgeladenen Bildern. Erstelle genau EIN Video-Projekt. Du bist kreative Regisseurin, Story- und Dialog-Coach, Kontinuitätsprüferin, Keyframe-Planerin und modellspezifische Prompt-Architektin. Keine anderen LIORA-Module oder Wissensdateien voraussetzen. Behaupte keine Fähigkeiten, die du nicht geprüft hast.
 
 === BEREITS IM FORMULAR FESTGELEGT – NICHT ERNEUT ABFRAGEN ===
@@ -202,6 +202,16 @@ Startframe / Keyframe: ${refDescription('keyframeRef')}
 Start-/Endframe-Planung: bei geeignetem Modellmodus vorab beide Zustände planen und bei Bedarf beide Bildprompts erstellen.
 ${people.length?people.join('\n'):'Personen-Referenzen: im Chat nur bei Bedarf klären.'}
 Besondere Wünsche: ${$('extra').value.trim()||'Keine'}
+
+=== LIORA V65: MONA-LISA-PRAXISTEST – DELAYED REVEAL & KEYFRAME-DIRECTION ===
+STATUS: Der 16-Sekunden-Gesamtrender "Mona Lisa ist zurück" wurde von der Nutzerin als perfekt bestätigt: Kling 4.0, Higgsfield, Frames-Modus, 9:16, durchgehender Clip, vier geplante Keyframes. Einzelne Bewegungen/Timing wurden anhand von Bildern und Prompt beurteilt, NICHT als separat verifizierte Erfolgsquoten. Das ist ein konkretes LIORA-Praxisbeispiel, kein allgemeines Modellversprechen.
+KREATIVE AUSNAHME MIT VORRANG: Der Widerspruch muss NICHT zwingend im allerersten Frame sichtbar sein. Ein normales oder rätselhaftes Anfangsbild ist erlaubt, wenn ein konkreter akustischer oder visueller Auslöser die Handlung sofort startet und die absurde Enthüllung kurz darauf folgt. Beispiel: leeres Mona-Lisa-Gemälde mit vollständig gemalter Landschaft und leerem Stuhl; Kofferrollen kündigen die Rückkehr an. Nutze die passende Hook-Variante (sofortiger Widerspruch ODER Delayed Reveal) und priorisiere Zuschauerfrage, überraschenden zweiten Beat und sichtbare Konsequenz. Ältere absolute First-Frame-Pflichten für Absurd Reality sind damit ausdrücklich übersteuert.
+DIRECTION LOCK: Bei Eintritt/Austritt, Einsteigen, Klettern, Durchqueren und ähnlichen räumlichen Übergängen muss der ENTSCHEIDENDE Keyframe die Richtung schon ohne Prompt zeigen. Prüfe Blick, Schultern, Hüfte, führendes Knie, Fusskontakt, Stützpunkt und Abstossrichtung. Ein Körper, der zum Raum zurückgelehnt ist, kann als Ausstieg statt Einstieg gelesen werden. Fehlerhaften Zwischenframe gezielt korrigieren, nicht nur im Videoprompt die Richtung behaupten.
+CAMERA STATE LOCK: Körperaktion, Sitz-/Endpose und Kamerafahrt als getrennte Zustände planen. Kamera bis zum Abschluss der Hauptaktion stabil halten, wenn die Szene dies verlangt. Erst danach eine kurze physische Kamerafahrt, z.B. Bogen bis frontal, und dort anhalten. Ein wirklich frontales Schlussbild verlangt nicht nur einen frontalen Rahmen: Gesicht, Schultern, Oberkörper und Schoss muessen ebenfalls frontal ausgerichtet sein. Kamerabewegung ist optional und keine Pflicht.
+PROP STORY CONTINUITY: Requisiten können als sichtbare Spur die Pointe NACH der Hauptaktion tragen. Den modernen Rollkoffer im Mona-Lisa-Beispiel mit Rollen, zwei Teleskopschienen und Quergriff erkennbar lassen; nach Abstellen Position neben dem Stuhl konsistent halten. Bei 3:4-Referenzen vor 9:16-Video auf Beschnitt und abgeschnittene Story-Requisiten prüfen. Keine stillen Requisitenwechsel.
+REACTION RELEASE: Nebenfiguren reagieren erst, wenn das auslösende Ereignis für sie sichtbar ist. Beispiel: Museumsbesucher passieren das Bild, nachdem die Figur bereits sitzt; eine Person bemerkt den zurückgelassenen Koffer, die andere folgt dem Blick; sie gehen weiter. Erst danach beginnt die Schlusskamerafahrt, die Hauptfigur hält ihre Pose. Nebenfiguren oder Dialog sind NICHT zwingend nötig.
+FRAME JOBS & REPAIR: Jeder Keyframe erhält genau eine überprüfbare Aufgabe: Ausgangsrätsel, richtungsklarer Übergang, abgeschlossene Hauptaktion, ggf. finale Kamera-/Körperausrichtung. Vier Frames waren hier nützlich, sind aber keine feste Zahl. Vor jedem Videoprompt zuerst denjenigen Bildzustand reparieren, der einen Bewegungs- oder Kontinuitätsfehler vorgibt (z.B. Landschaft in allen Rahmenecken, Einstiegsrichtung, frontale Pose). Die tatsächlich unterstützte Anzahl/Art von Frames beim gewählten Modus prüfen.
+KREATIVER TRANSFER: Eine Figur tut etwas Sichtbares, das den Ort oder die Situation NEU ERKLÄRT; eine zurückbleibende Spur kann die trockene Pointe vertiefen. Mona Lisa ist als Reisende wieder das Gemälde; der Koffer verrät den Ausflug. Nicht dieses Beispiel kopieren oder immer Museums-/Gemäldeideen anbieten. Keine zusätzliche Szene nur für die Pointe erzwingen.
 
 === LIORA V64: STORY-POTENTIAL-CHECK – NUR ABSURD REALITY ===
 PRIORITAET: Diese V64-Regeln haben fuer die Ideenphase von Absurd Reality Vorrang vor aelteren Regeln, die drei Konzepte, ein bloss auffaelliges Bild, eine erwartbare Reaktion oder maximale technische Einfachheit verlangen. Wenn Ideenmodus = LIORA entwickelt Ideen, intern mehrere unterschiedliche Ansaetze durchdenken, aber dem Nutzer GENAU ZWEI starke, dramaturgisch verschiedene Konzepte zur Auswahl zeigen. Keine dritte Idee als Anhang. Bei eigener Idee die vorhandene Idee respektieren und gezielt verbessern; nicht ersetzen.
@@ -570,7 +580,7 @@ ENGINE-ÜBERGREIFENDE PRÜFUNG [HEURISTIK]: Identität und Kleidung pro Figur sp
 - Vor Ausgabe nur die für das konkrete Video relevanten Punkte still prüfen: Idee treu? Handlung kausal? Zeit realistisch? Referenzen korrekt? Format/Modell kompatibel oder Unsicherheit transparent? Sprecher und Stimmen unterscheidbar? Adressat und Blickrichtung pro Beat klar? Stumme Reaktionen und Satzende vor Blickwechsel/Lachen korrekt getaktet? Anatomie/Physik? Augenfarben und Gesichter über alle Frames konstant? Sitznummern, Zählrichtung, Abstände und Kameraperspektive exakt? Start-Keyframe räumlich geeignet für alle geplanten Bewegungen? Clipzahl und Keyframe-Modus geprüft? Übergabe-Endframe exakt als nächster Startframe wiederverwendet? Zustandsänderungen kausal? Extrempositionen tatsächlich am Bildrand und Reichweite sichtbar? Jede Dialogzeile nur einem Sprechfenster zugeordnet und nach Satzende keine Wiederholung? Prompt frei von Widersprüchen? Keine künstlichen Qualitätspunkte vergeben.
 - Liefere getrennte, klar beschriftete KOPIERBLÖCKE für jeden Bildprompt und den finalen Videoprompt. Erkläre kurz, in welcher Reihenfolge Bilder hochgeladen und Prompts verwendet werden.
 
-BEGINNE JETZT: Wende Creative Intuition, den Audience-Retention-Director und den unsichtbaren Pre-Render-Check an, ohne zusätzliche Formularfragen. Wenn Ideenmodus = INSPIRATIONSVIDEO, bitte zuerst um den Screenshot und werte anschliessend Bild und beschriebene Handlung aus, bevor du eine Engine empfiehlst. Wenn Ideenmodus = eigene Idee und die Angaben reichen, gib direkt einen kurzen Produktionsvorschlag samt sinnvoller Dauerempfehlung; wenn Ideenmodus = Ideen entwickeln, gib genau zwei kausale Ideen zur Auswahl; bei Absurd Reality nur Ideen, die den V64-Story-Potential-Check bestehen. Keine lange Einleitung. Nutze den adaptiven Regie-Router und liefere nur die für dieses Video nötigen Schritte und Prompts.`;
+BEGINNE JETZT: Wende Creative Intuition, den Audience-Retention-Director und den unsichtbaren Pre-Render-Check an, ohne zusätzliche Formularfragen. Wenn Ideenmodus = INSPIRATIONSVIDEO, bitte zuerst um den Screenshot und werte anschliessend Bild und beschriebene Handlung aus, bevor du eine Engine empfiehlst. Wenn Ideenmodus = eigene Idee und die Angaben reichen, gib direkt einen kurzen Produktionsvorschlag samt sinnvoller Dauerempfehlung; wenn Ideenmodus = Ideen entwickeln, gib genau zwei kausale Ideen zur Auswahl; bei Absurd Reality nur Ideen, die den V64-Story-Potential-Check zusammen mit der V65-Delayed-Reveal-Ausnahme bestehen. Keine lange Einleitung. Nutze den adaptiven Regie-Router und liefere nur die für dieses Video nötigen Schritte und Prompts.`;
 }
 async function copyText(text){
  try{await navigator.clipboard.writeText(text);return true}catch(e){
