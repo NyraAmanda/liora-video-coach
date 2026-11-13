@@ -71,7 +71,7 @@ button{font:inherit;cursor:pointer;border:0;border-radius:13px;padding:14px 19px
 </div>
 <div id="outputPanel"><div class="field" style="margin-top:16px"><label for="prompt">Dein individueller LIORA-Auftrag</label><textarea id="prompt" readonly></textarea></div><div class="notice">Öffne ChatGPT, füge den kopierten Auftrag ein und lade dort deine Referenzbilder hoch. Dieser HTML-Prototyp übermittelt keine Bilder an ChatGPT.</div></div>
 </section>
-<footer>LIORA V60 · Ein Video pro Durchlauf · Keine integrierte Video-Generierung · Modellfunktionen werden im Chat geprüft. Formularentwürfe werden nur lokal in diesem Browser gespeichert. Spracheingabe verwendet die Spracherkennung des Browsers und kann über dessen Anbieter verarbeitet werden. Kein Login erforderlich.</footer>
+<footer>LIORA V61 · Ein Video pro Durchlauf · Keine integrierte Video-Generierung · Modellfunktionen werden im Chat geprüft. Formularentwürfe werden nur lokal in diesem Browser gespeichert. Spracheingabe verwendet die Spracherkennung des Browsers und kann über dessen Anbieter verarbeitet werden. Kein Login erforderlich.</footer>
 </main>
 <script>
 'use strict';
@@ -180,7 +180,7 @@ function makePrompt(){
  const L=String.fromCharCode(65+i);
  people.push(`Person ${L}: ${$('person'+i)?.value.trim()||'Name offen'}; Avatarbild: ${refDescription('avatar'+i)}; Outfitbild: ${refDescription('outfit'+i)}; Merkmale: ${$('notes'+i)?.value.trim()||'offen'}.`);
  }
- return `DU BIST LIORA V60 – EINE EMPATHISCHE, KREATIV MUTIGE UND TECHNISCH SORGFÄLTIGE KI-VIDEO-REGISSEURIN.
+ return `DU BIST LIORA V61 – EINE EMPATHISCHE, KREATIV MUTIGE UND TECHNISCH SORGFÄLTIGE KI-VIDEO-REGISSEURIN.
 Arbeite mit diesem Auftrag und den später im Chat hochgeladenen Bildern. Erstelle genau EIN Video-Projekt. Du bist kreative Regisseurin, Story- und Dialog-Coach, Kontinuitätsprüferin, Keyframe-Planerin und modellspezifische Prompt-Architektin. Keine anderen LIORA-Module oder Wissensdateien voraussetzen. Behaupte keine Fähigkeiten, die du nicht geprüft hast.
 
 === BEREITS IM FORMULAR FESTGELEGT – NICHT ERNEUT ABFRAGEN ===
@@ -203,7 +203,7 @@ Start-/Endframe-Planung: bei geeignetem Modellmodus vorab beide Zustände planen
 ${people.length?people.join('\n'):'Personen-Referenzen: im Chat nur bei Bedarf klären.'}
 Besondere Wünsche: ${$('extra').value.trim()||'Keine'}
 
-=== LIORA V60: SIGNATURE REEL DIRECTOR – WOW & REPLAY ===
+=== LIORA V61: SIGNATURE REEL DIRECTOR – WOW & REPLAY ===
 AKTIVIERUNG: Nur wenn Videoart = Signature Reel · Wow & Replay. Ziel: ein überraschender, sofort verständlicher visueller Signature Moment mit einer Grundidee, die andere Creator mit ihrem eigenen Avatar interpretieren könnten. Keine Viralitätsgarantie, keine behauptete Trendvorhersage und keine unbelegte technische Zusage. Die Video-App ist ein Prompt-Konfigurator; die Konzeptarbeit geschieht in diesem Chat, nicht durch eine eigene Video-Engine.
 IDEENMODUS BEACHTEN: Bei "Eigene Idee bewahren" die ausdrücklich beschriebene Idee als verbindlichen Kern behandeln und nicht durch ein fremdes Konzept ersetzen. Wenn noch keine Idee beschrieben ist, höchstens eine kurze Frage nach Thema/gewünschter Wirkung stellen ODER direkt drei bewusst unterschiedliche Ideen anbieten. Bei "LIORA entwickelt Ideen" aus vorhandenen Angaben starten; keine Pflicht-Fragenliste. Bei "Inspirationsvideo" zuerst den dafür vorgesehenen Screenshot-/Referenzablauf durchführen und nur sichtbar belegbare Details als beobachtet bezeichnen.
 KREATIVE KONZEPTPHASE VOR PRODUKTION: Entwickle zunächst drei substanziell unterschiedliche, konkret film- und nachvollziehbare Konzepte; keine blossen Farb-, Outfit- oder Effektvarianten desselben Tricks. Pro Konzept kurz: (1) Hook in den ersten 1–2 Sekunden, (2) Ausgangssituation, (3) EIN klarer Signature Moment / überraschender Wendepunkt, (4) sichtbare Auflösung oder sinnvoller Loop, (5) wie andere Creator das PRINZIP mit eigenem Avatar/Ort nachmachen können, (6) wahrscheinliche technische Risiken, Referenz- und Keyframe-Bedarf. Ideen können unmögliche Realität, Transformation, Reality Glitch, unerwarteten Übergang, visuelle Comedy oder völlig andere originelle Mechaniken nutzen. Keine Standard-Spiegelportale oder Outfitwechsel ohne überzeugenden inhaltlichen Grund.
@@ -569,6 +569,29 @@ function stopDictation(){
  const btn=document.querySelector('[data-dictate="'+session.id+'"]');
  btn.classList.remove('recording');btn.setAttribute('aria-pressed','false');btn.textContent='🎙️ Einsprechen';
 }
+function speechWords(text){return (text.toLocaleLowerCase('de-CH').match(/[\p{L}\p{N}]+/gu)||[])}
+function mergeSpeechSegments(parts){
+ let output='';
+ for(const raw of parts){
+  const part=(raw||'').trim();if(!part)continue;
+  const current=output.trim();
+  if(!current){output=part;continue}
+  const a=speechWords(current),b=speechWords(part);
+  // Browser können denselben Final-Abschnitt mehrfach oder überlappend liefern.
+  // Nur direkt benachbarte, ausreichend lange Übereinstimmungen entfernen.
+  let overlap=0;
+  for(let k=Math.min(a.length,b.length);k>=2;k--){
+   if(a.slice(-k).join('|')===b.slice(0,k).join('|')){overlap=k;break}
+  }
+  if(overlap===b.length&&b.length>=2)continue;
+  if(overlap){
+   const tokens=[...part.matchAll(/[\p{L}\p{N}]+/gu)];
+   const start=tokens[overlap]?.index;
+   if(start!==undefined)output=current+' '+part.slice(start).trim();
+  }else output=current+' '+part;
+ }
+ return output.trim();
+}
 function startDictation(id){
  if(activeDictation){
   const wasSame=activeDictation.id===id;stopDictation();
@@ -579,26 +602,30 @@ function startDictation(id){
  if(field.value.length>=DICTATION_LIMIT){dictationStatus(id,'Maximal 10’000 Zeichen erreicht.');return}
  const recognition=new SpeechAPI();
  recognition.lang='de-CH';recognition.continuous=true;recognition.interimResults=true;
- const session={id,recognition,base:field.value,committed:''};
+ const session={id,recognition,base:field.value,finals:new Map(),lastStable:'',lastPreview:''};
  activeDictation=session;
  const btn=document.querySelector('[data-dictate="'+id+'"]');
  btn.classList.add('recording');btn.setAttribute('aria-pressed','true');btn.textContent='⏹ Aufnahme stoppen';
  dictationStatus(id,'Mikrofon aktiv · Sprich jetzt.');
  recognition.onresult=e=>{
   if(activeDictation!==session)return;
-  let finalText='',interimText='';
-  for(let i=0;i<e.results.length;i++){
-   const part=e.results[i][0]?.transcript||'';
-   if(e.results[i].isFinal)finalText+=part+' ';
-   else interimText+=part;
+  // Result-Indizes sind innerhalb einer Erkennungssitzung stabil. Frühere
+  // Final-Ergebnisse nicht bei jedem onresult-Ereignis erneut anhängen.
+  for(let i=e.resultIndex;i<e.results.length;i++){
+   const result=e.results[i];
+   if(result.isFinal)session.finals.set(i,(result[0]?.transcript||'').trim());
   }
-  const join=txt=>session.base+(session.base&&!/\s$/.test(session.base)?' ':'')+txt;
-  const stable=join(finalText);
-  // Interimtext ist nur eine Vorschau; bestätigter Text wird nicht doppelt angehängt.
-  const preview=join(finalText+interimText);
-  field.value=preview.slice(0,DICTATION_LIMIT);
+  const finals=[...session.finals.entries()].sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+  const stable=mergeSpeechSegments(finals);
+  const interim=[];
+  for(let i=0;i<e.results.length;i++)if(!e.results[i].isFinal)interim.push(e.results[i][0]?.transcript||'');
+  const preview=mergeSpeechSegments([...finals,...interim]);
+  const prefix=session.base+(session.base&&!/\s$/.test(session.base)?' ':'');
+  session.lastStable=stable;
+  session.lastPreview=preview;
+  field.value=(prefix+preview).slice(0,DICTATION_LIMIT);
   countChars(id);field.dispatchEvent(new Event('input',{bubbles:true}));
-  if(stable.length>=DICTATION_LIMIT){field.value=stable.slice(0,DICTATION_LIMIT);countChars(id);stopDictation();dictationStatus(id,'10’000 Zeichen erreicht – Aufnahme gestoppt.')}
+  if((prefix+stable).length>=DICTATION_LIMIT){field.value=(prefix+stable).slice(0,DICTATION_LIMIT);countChars(id);stopDictation();dictationStatus(id,'10’000 Zeichen erreicht – Aufnahme gestoppt.')}
  };
  recognition.onerror=e=>{
   if(activeDictation!==session)return;
