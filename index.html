@@ -31,7 +31,7 @@ button{font:inherit;cursor:pointer;border:0;border-radius:13px;padding:14px 19px
 @media(max-width:620px){.hero{padding:28px 23px}.panel{padding:20px}.grid,.choices,.ref-row{grid-template-columns:1fr}.actions button{width:100%}.shell{padding:14px 12px 60px}}
 </style></head><body>
 <main class="shell" id="app">
-<div class="topline"><span class="eyebrow">✦ LIORA · VIDEO COACH · V79</span></div>
+<div class="topline"><span class="eyebrow">✦ LIORA · VIDEO COACH · V80</span></div>
 <header class="hero"><div class="eyebrow">DEINE IDEE. UNSERE REGIE.</div><h1>Mach aus deiner Idee ein Video.</h1><p>Starte mit einer eigenen Idee, lass dir Vorschläge machen oder nutze einen Screenshot als Inspiration. LIORA plant im Chat die Handlung, empfiehlt die Engine und erstellt deine Bild- und Videoprompts.</p></header>
 <section class="panel"><h2>01 · Dein Video</h2>
 <div class="field"><label>Wie möchtest du starten?</label><div class="choices"><label class="choice"><input type="radio" name="ideaMode" value="own" checked> Ich habe eine Idee</label><label class="choice"><input type="radio" name="ideaMode" value="inspire"> LIORA soll Ideen vorschlagen</label><label class="choice"><input type="radio" name="ideaMode" value="reference"> Ich habe ein Video als Inspiration</label></div></div>
@@ -182,8 +182,10 @@ function makePrompt(){
  const L=String.fromCharCode(65+i);
  people.push(`Person ${L}: ${$('person'+i)?.value.trim()||'Name offen'}; Avatarbild: ${refDescription('avatar'+i)}; Outfitbild: ${refDescription('outfit'+i)}; Merkmale: ${$('notes'+i)?.value.trim()||'offen'}.`);
  }
- return `DU BIST LIORA V79 – EINE EMPATHISCHE, KREATIV MUTIGE UND TECHNISCH SORGFÄLTIGE KI-VIDEO-REGISSEURIN.
-Arbeite mit diesem Auftrag und den später im Chat hochgeladenen Bildern. Erstelle genau EIN Video-Projekt. Du bist kreative Regisseurin, Story- und Dialog-Coach, Kontinuitätsprüferin, Keyframe-Planerin und modellspezifische Prompt-Architektin. Keine anderen LIORA-Module oder Wissensdateien voraussetzen. Behaupte keine Fähigkeiten, die du nicht geprüft hast.
+ return `DU BIST LIORA V80 – EINE ERFAHRENE CREATIVE DIRECTORIN, FILMREGISSEURIN UND STORYTELLING-EXPERTIN MIT DEM ANSPRUCH EINER PROFESSIONELLEN FILMPRODUKTION.
+Du verbindest dramaturgisches Gespür, kreative Originalität und filmisches Handwerk mit fundiertem Wissen über KI-Videogenerierung. Du entwickelst Geschichten, die vom ersten Moment an neugierig machen, visuell verständlich sind und mit einer überraschenden, humorvollen oder emotionalen Auflösung in Erinnerung bleiben.
+Du denkst wie eine Regisseurin, planst wie eine Produzentin und prüfst wie eine Continuity Supervisorin. Berücksichtige Storytelling, Schauspielregie, Kameraführung, Bildkomposition, Schnittanschlüsse, Keyframes und die tatsächlichen Möglichkeiten der gewählten Video-Engine. Ziel ist eine filmisch überzeugende Geschichte, die möglichst bereits im ersten Render funktioniert – ohne eine Erfolgsgarantie zu behaupten.
+Arbeite mit diesem Auftrag und den später im Chat hochgeladenen Bildern. Erstelle genau EIN Video-Projekt. Du bist zugleich Story- und Dialog-Coach, Keyframe-Planerin und modellspezifische Prompt-Architektin. Keine anderen LIORA-Module oder Wissensdateien voraussetzen. Behaupte keine Fähigkeiten oder Prüfungen, die du nicht tatsächlich durchgeführt hast.
 
 === BEREITS IM FORMULAR FESTGELEGT – NICHT ERNEUT ABFRAGEN ===
 Ideenmodus: ${mode==='own'?'Eigene Idee bewahren':mode==='reference'?'INSPIRATIONSVIDEO – Screenshot folgt im Chat':'LIORA entwickelt Ideen'}
