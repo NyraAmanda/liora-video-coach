@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LIORA · VideoCoach</title>
+  <link rel="stylesheet" href="./src/styles.css">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://*.supabase.co; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'"><link rel="stylesheet" href="./access.css"></head>
+<body><section id="customer-access" class="customer-panel" aria-labelledby="customer-title">
+  <p>✦ LIORA VideoCoach</p>
+  <h1 id="customer-title">Willkommen zurück</h1>
+  <p data-description></p>
+  <form>
+    <label>E-Mail-Adresse<input name="email" type="email" autocomplete="email" maxlength="254" required></label>
+    <label>Passwort<input name="password" type="password" autocomplete="current-password" required></label>
+    <button type="submit" class="primary">Anmelden</button>
+  </form>
+  <p role="status"></p>
+  <button type="button" class="ghost" data-role>Zur Administration</button>
+</section>
+<section id="customer-admin" class="customer-panel" aria-labelledby="customer-admin-title" hidden>
+  <h1 id="customer-admin-title">E-Mail-Freigabeliste</h1>
+  <form>
+    <label>E-Mail-Adresse<input name="email" type="email" maxlength="254" required></label>
+    <button type="submit" class="primary">Gesperrt hinzufügen</button>
+  </form>
+  <p role="status"></p>
+  <ul></ul>
+  <button type="button" class="ghost" data-logout>Abmelden</button>
+</section>
+<div id="customer-studio" hidden>
+<header class="masthead">
+  <div class="mast-inner">
+    <a href="./" class="wordmark" aria-label="LIORA Startseite"><span aria-hidden="true">✦</span> LIORA</a>
+    <span class="mast-context">VideoCoach</span><button type="button" class="ghost" data-logout>Abmelden</button><span id="logout-status" role="status"></span>
+  </div>
+</header>
+<main class="shell" id="app">
+  <header class="hero">
+    <div class="hero-photo" aria-hidden="true"><span class="photo-tile tile-7"></span></div>
+    <div class="hero-copy">
+      <p class="eyebrow">DEIN VIDEO-STUDIO</p>
+      <h1>Mach aus einer Idee<br> <em>eine Szene.</em></h1>
+      <p>Wähle ein Format, entwickle deine Idee und erstelle deinen Regieauftrag für ChatGPT.</p>
+    </div>
+  </header>
+
+  <nav class="steps" aria-label="Schritte">
+    <button type="button" data-go="1" aria-current="step"><span>1</span> Format</button>
+    <button type="button" data-go="2"><span>2</span> Idee</button>
+    <button type="button" data-go="3"><span>3</span> Regie</button>
+    <button type="button" data-go="4"><span>4</span> Auftrag</button>
+  </nav>
+
+  <div class="workspace">
+    <div class="work-main">
+      <section class="panel work-step" data-step="1" aria-labelledby="step-1-title">
+        <h2 id="step-1-title" tabindex="-1">Wähle dein Videoformat</h2>
+        <p class="step-intro">Entscheide, welche Art von Szene du entwickeln möchtest.</p>
+        <select id="kind" hidden aria-label="Videoformat"><option value="talk">Talking Head</option><option value="signature">Absurd Reality · Deadpan Comedy</option><option value="standup">Stand-up Comedy</option><option value="couple">Couple Content · Love, Romance & Comedy</option><option value="fairytale">Märchenstunde · Humor 🐸</option><option value="storytelling">Storytelling · Kleine Momente, grosse Geschichten ✨</option><option value="random10">10 Random Dinge · Challenge 🎲</option></select>
+        <div class="format-grid" role="group" aria-label="Videoformate">
+        <button type="button" class="format-card" data-format="talk" aria-pressed="false">
+          <span class="format-photo" aria-hidden="true"><span class="photo-tile tile-0"></span></span>
+          <span class="format-copy"><strong>Talking Head</strong><span>Eine Idee direkt in die Kamera erzählen.</span></span>
+          <span class="format-check" aria-hidden="true">✓</span>
+        </button>
+        <button type="button" class="format-card" data-format="signature" aria-pressed="false">
+          <span class="format-photo" aria-hidden="true"><span class="photo-tile tile-1"></span></span>
+          <span class="format-copy"><strong>Absurd Reality</strong><span>Unerwartete Wendungen mit trockenem Humor.</span></span>
+          <span class="format-check" aria-hidden="true">✓</span>
+        </button>
+        <button type="button" class="format-card" data-format="standup" aria-pressed="false">
+          <span class="format-photo" aria-hidden="true"><span class="photo-tile tile-2"></span></span>
+          <span class="format-copy"><strong>Stand-up Comedy</strong><span>Eine Pointe mit Timing und Präsenz inszenieren.</span></span>
+          <span class="format-check" aria-hidden="true">✓</span>
+        </button>
+        <button type="button" class="format-card" data-format="couple" aria-pressed="false">
+          <span class="format-photo" aria-hidden="true"><span class="photo-tile tile-3"></span></span>
+          <span class="format-copy"><strong>Couple Content</strong><span>Nähe, Dynamik und Humor zu zweit.</span></span>
+          <span class="format-check" aria-hidden="true">✓</span>
+        </button>
+        <button type="button" class="format-card" data-format="fairytale" aria-pressed="false">
+          <span class="format-photo" aria-hidden="true"><span class="photo-tile tile-4"></span></span>
+          <span class="format-copy"><strong>Märchenstunde</strong><span>Bekannte Märchen mit einer neuen Pointe.</span></span>
+          <span class="format-check" aria-hidden="true">✓</span>
+        </button>
+        <button type="button" class="format-card" data-format="storytelling" aria-pressed="false">
+          <span class="format-photo" aria-hidden="true"><span class="photo-tile tile-5"></span></span>
+          <span class="format-copy"><strong>Storytelling</strong><span>Kleine Momente, die etwas verändern.</span></span>
+          <span class="format-check" aria-hidden="true">✓</span>
+        </button>
+        <button type="button" class="format-card" data-format="random10" aria-pressed="false">
+          <span class="format-photo" aria-hidden="true"><span class="photo-tile tile-6"></span></span>
+          <span class="format-copy"><strong>10 Random Dinge</strong><span>Zehn Gegenstände, eine überraschende Story.</span></span>
+          <span class="format-check" aria-hidden="true">✓</span>
+        </button>
+        </div>
+        <div class="step-actions"><span></span><button type="button" class="primary" data-go="2">Weiter zur Idee <span aria-hidden="true">→</span></button></div>
+      </section>
+
+      <section class="panel work-step" data-step="2" aria-labelledby="step-2-title" hidden>
+        <h2 id="step-2-title" tabindex="-1">Entwickle deine Idee</h2>
+        <p class="step-intro">Du kannst mit einem eigenen Einfall, einem Vorschlag oder einer Referenz starten.</p>
+        <div data-status-slot></div>
+<div class="field"><label>Wie möchtest du starten?</label><div class="choices"><label class="choice"><input type="radio" name="ideaMode" value="own" checked> Ich habe eine Idee</label><label class="choice"><input type="radio" name="ideaMode" value="inspire"> LIORA soll Ideen vorschlagen</label><label class="choice"><input type="radio" name="ideaMode" value="reference"> Ich habe ein Video als Inspiration</label></div></div>
+<div id="intelligencePanel" class="notice hidden" style="margin:14px 0 18px">
+<strong>🧠 Content Intelligence V106 · Ideenstrategie</strong>
+<p class="hint">Für Talking Head und Stand-up: mutige Perspektiven, intelligente Selbstironie und echte Überraschungen statt weichgespülter 08/15-Sprüche. Auch Podcast-Themen sind möglich.</p>
+<div class="grid" style="margin-top:12px">
+<div class="field"><label for="ciAudience">Zielgruppe <span class="pill">optional</span></label><input id="ciAudience" maxlength="300" placeholder="z. B. Frauen 25–40, Singles, Eltern"></div>
+<div class="field"><label for="ciGoal">Content-Ziel</label><select id="ciGoal"><option value="comments">Diskussion & Kommentare</option><option value="shares">Wiedererkennung & Shares</option><option value="retention">Neugier & Watchtime</option><option value="balanced">Ausgewogen</option></select></div>
+</div>
+<div class="field"><label for="ciTone">Tonalität</label><select id="ciTone"><option value="authentic">Authentisch, pointiert</option><option value="bold">Frech, provokant ohne künstliche Empörung</option><option value="warm">Warm, nahbar, empathisch</option><option value="dry">Trocken, ironisch</option></select></div>
+<p class="hint">Bei Ideenmodus: zuerst zwei klar unterschiedliche Konzepte mit Hook und Begründung, danach erst Story & Shotplan. Bestehende Produktionsregeln bleiben unverändert.</p>
+</div>
+<div id="referenceHelp" class="notice hidden"><strong>🎬 Video als Inspiration</strong><br>Beschreibe, was im Video passiert und was du daran magst. Den Screenshot lädst du erst nach dem Einfügen des Auftrags direkt in ChatGPT hoch. LIORA analysiert das Bild und deinen beschriebenen Ablauf, empfiehlt danach eine passende Engine und entwickelt deine eigenständige Version.</div>
+<div id="random10Field" class="notice hidden"><strong>🎲 10 Random Dinge · Challenge</strong><p class="hint">Zehn Gegenstände, eine zusammenhängende Geschichte. Alle zehn müssen im fertigen Reel sichtbar sein.</p><div class="field"><label for="randomWorld">Welche Welt?</label><select id="randomWorld"><option value="fairy">Märchenwelt · Humor</option><option value="free">Freie Welt · Avatar / Alltag / Fantasie</option></select></div><div class="field"><label for="randomSource">Wer bestimmt die 10 Gegenstände?</label><select id="randomSource"><option value="liora">LIORA überrascht mich mit 10 kreativen Gegenständen</option><option value="own">Ich gebe alle 10 Gegenstände vor</option></select></div><div class="field hidden" id="randomItemsField"><label for="randomItems">Deine 10 Gegenstände</label><textarea id="randomItems" rows="6" maxlength="3000" placeholder="Einen Gegenstand pro Zeile eingeben, genau 10 insgesamt"></textarea><p class="hint" id="randomItemsCount">0 von 10 Gegenständen</p></div><p class="hint">Bei Märchen dürfen Requisiten verschiedener Märchen und moderne Gegenstände gemischt werden. Die Märchenfigur kennt moderne Technik nicht automatisch.</p></div>
+<div id="storyHelp" class="notice hidden"><strong>✨ Storytelling</strong><br>Zeige in 15–30 Sekunden eine sichtbare Veränderung: verständlicher Kontrast am Anfang, eine freiwillige entscheidende Geste und ein Schlussbild, das dem Anfang eine neue Bedeutung gibt. Ein wiederkehrendes Detail kann die Szenen verbinden. Dialog ist optional.</div><div class="field hidden" id="fairyField"><label for="fairyTale">Welches Märchen?</label><input id="fairySearch" type="search" placeholder="🔎 Märchen suchen (z. B. Rapunzel)" autocomplete="off" aria-label="Märchen suchen" style="margin-bottom:8px"><select id="fairyTale"><option value="recommend">LIORA empfiehlt ein Märchen</option><optgroup label="👑 Weibliche Hauptfigur im Original"><option>Aschenputtel</option><option>Rapunzel</option><option>Schneewittchen</option><option>Rotkäppchen</option><option>Dornröschen</option><option>Frau Holle</option><option>Die Prinzessin auf der Erbse</option><option>Die kleine Meerjungfrau</option><option>Die Schneekönigin</option><option>Die Sterntaler</option><option>Die zertanzten Schuhe</option><option>Die Gänsemagd</option><option>Die sechs Schwäne</option><option>Allerleirauh</option><option>Brüderchen und Schwesterchen</option><option>Die kluge Bauerntochter</option><option>Die zwölf tanzenden Prinzessinnen</option><option>Die drei Spinnerinnen</option><option>Die wilden Schwäne</option><option>Die Schöne und das Biest</option><option>König Drosselbart</option><option>Die sieben Raben</option><option>Das Mädchen ohne Hände</option><option>Die kluge Else</option><option>Einäuglein, Zweiäuglein und Dreiäuglein</option><option>Die Gänsehirtin am Brunnen</option></optgroup><optgroup label="⚔️ Männliche Hauptfigur im Original"><option>Der Froschkönig</option><option>Rumpelstilzchen</option><option>Der gestiefelte Kater</option><option>Des Kaisers neue Kleider</option><option>Das tapfere Schneiderlein</option><option>Tischlein deck dich</option><option>Hans im Glück</option><option>Der goldene Vogel</option><option>Der Eisenhans</option><option>Der starke Hans</option><option>Der Teufel mit den drei goldenen Haaren</option><option>Der Bärenhäuter</option><option>Der arme Müllerbursch und das Kätzchen</option><option>Der Meisterdieb</option><option>Die drei Federn</option><option>Der Königssohn, der sich vor nichts fürchtet</option><option>Der junge Riese</option><option>Daumesdick</option><option>Von einem, der auszog, das Fürchten zu lernen</option><option>Der Gevatter Tod</option><option>Hans mein Igel</option><option>Das blaue Licht</option><option>Der gescheite Hans</option></optgroup><optgroup label="🎭 Mehrere Hauptfiguren / offen"><option>Hänsel und Gretel</option><option>Die Bremer Stadtmusikanten</option><option>Der Wolf und die sieben Geisslein</option><option>Das hässliche Entlein</option><option>Der Fischer und seine Frau</option><option>Die goldene Gans</option><option>Der süsse Brei</option><option>Der Hase und der Igel</option><option>Schneeweisschen und Rosenrot</option><option>Die zwei Brüder</option><option>Die drei Glückskinder</option><option>Jorinde und Joringel</option><option>Die Wichtelmänner</option><option>Die zwölf Brüder</option><option>Die Bienenkönigin</option><option>Der Frieder und das Katherlieschen</option></optgroup><option value="custom">Eigenes Märchen</option></select><div class="field" style="margin-top:12px"><label for="fairyLead">Wer übernimmt die Hauptrolle?</label><select id="fairyLead"><option value="female">Weibliche Hauptfigur</option><option value="male">Männliche Hauptfigur</option><option value="both">Beide Varianten im Chat zur Auswahl</option></select><p class="hint">Das Märchen bleibt dasselbe – LIORA passt Hauptrolle, Anrede, Kostüm und gegebenenfalls Rollenbezeichnungen an. Auch ursprünglich männliche oder weibliche Märchenrollen sind frei besetzbar.</p></div><div id="customFairyField" class="field hidden" style="margin-top:10px"><label for="customFairy">Titel des Märchens</label><input id="customFairy" placeholder="Märchentitel eingeben"></div><p class="hint">Erkennbare Märchenfiguren, eine eigenständige Handlung und eine überraschende, möglichst sichtbare Pointe. LIORA prüft neue Ideen auf Humor, Mimik und unerwartete Wendungen. Die bewährte Märchenregie bleibt erhalten.</p></div>
+<div class="field hidden" id="scriptField"><label for="scriptText">Sprechtext / Comedy-Skript <span class="pill">optional</span></label><textarea id="scriptText" maxlength="20000" placeholder="Hier deinen genauen Sprechtext einsetzen. LIORA bewahrt die Formulierungen und plant Betonung, Pausen, Mimik und Pointen-Timing."></textarea><p class="hint" id="scriptHint">Nur bei Talking Head oder Stand-up-Comedy sichtbar. Wenn leer, entwickelt LIORA den Text mit dir.</p><div id="scriptBudget" class="notice" style="margin-top:12px" aria-live="polite">Füge einen Text ein, um Wortzahl und geschätzte Sprechzeit zu prüfen.</div></div>
+<div class="field"><label id="ideaLabel" for="idea">Beschreibe deine Idee</label><textarea id="idea" maxlength="10000" placeholder="Was soll passieren? Wer macht oder sagt was? Was ist die Pointe?"></textarea><div class="dictation-bar"><button type="button" class="mic-btn" data-dictate="idea" aria-pressed="false">🎙️ Einsprechen</button><span class="char-count" id="ideaCount">0 / 10’000 Zeichen</span><span class="dictation-note" id="ideaMicStatus" role="status"></span></div><p class="hint">Du kannst auch einen fertigen Dialog eingeben. LIORA bewahrt deine Aussagen und Pointe.</p></div>
+        <div class="step-actions"><button type="button" class="ghost" data-go="1">← Format</button><button type="button" class="primary" data-go="3">Weiter zur Regie →</button></div>
+      </section>
+
+      <section class="panel work-step" data-step="3" aria-labelledby="step-3-title" hidden>
+        <h2 id="step-3-title" tabindex="-1">Plane die Regie</h2>
+        <p class="step-intro">Kläre Bild und Besetzung. Das Videomodell kann LIORA für dich empfehlen.</p>
+        <div class="grid">
+<div class="field"><label for="people">Wie viele Personen sind zu sehen?</label><select id="people"><option value="auto">LIORA entscheidet</option><option value="0">Keine</option><option value="1" selected>1 Person</option><option value="2">2 Personen</option><option value="3">3 Personen</option><option value="4">4 Personen</option><option value="5">5 Personen</option></select></div>
+        </div>
+<p class="small">Hier legst du fest, welche Referenzen du bereits hast. Vor der Bildproduktion fragt LIORA im Chat aktiv nach den Charakter- und Outfitbildern. Die Bilder lädst du dort hoch – nicht in diesem Formular.</p>
+<details id="refDetails"><summary>Avatar, Outfits und Ort vorbereiten</summary><div class="inside">
+<div id="personRefs"></div>
+<div class="ref-card"><div class="ref-title">Umgebung / Ort</div><div class="grid"><div><label for="location">Wo spielt die Szene?</label><input id="location" placeholder="z. B. Küche, Café, Studio"></div><div><label for="locationRef">Ortsbild</label><select id="locationRef"><option value="none">Noch kein Bild</option><option value="ready">Bild vorhanden – im Chat hochladen</option><option value="create">LIORA soll ein Bildprompt erstellen</option></select></div></div></div>
+<div class="ref-card"><div class="ref-title">Startframe / Keyframe</div><label for="keyframeRef">Hast du bereits einen Startframe?</label><select id="keyframeRef"><option value="unsure">LIORA soll entscheiden, ob einer nötig ist</option><option value="ready">Ja – im Chat hochladen</option><option value="create">Nein – LIORA soll den Bildprompt erstellen</option></select></div>
+<p class="hint">Bildnummern wie Image 1 = Person A werden erst nach dem Hochladen im Chat anhand der tatsächlichen Upload-Reihenfolge festgelegt. Outfit- und Ortsbilder bekommen eigene Rollen.</p>
+</div></details>
+<details><summary>Besondere Wünsche</summary><div class="inside"><div class="field"><label for="extra">Was ist dir zusätzlich wichtig?</label><textarea id="extra" maxlength="10000" placeholder="z. B. trockener Humor, genaue Sätze, natürliche Bewegung, Loop, Kameraschwenk …"></textarea><div class="dictation-bar"><button type="button" class="mic-btn" data-dictate="extra" aria-pressed="false">🎙️ Einsprechen</button><span class="char-count" id="extraCount">0 / 10’000 Zeichen</span><span class="dictation-note" id="extraMicStatus" role="status"></span></div></div><div class="field"><label for="priority">Priorität</label><select id="priority"><option value="quality">Beste Qualität / gute Umsetzbarkeit</option><option value="credits">Möglichst wenig Test-Credits</option><option value="balanced">Ausgewogen</option></select></div></div></details>
+        <details class="technical"><summary>Plattform, Modell und Ton</summary><div class="inside">
+<div class="grid"><div class="field"><label for="platform">Wo generierst du das Video?</label><select id="platform"><option value="unsure">Bitte empfehlen</option><option value="higgsfield">Higgsfield</option><option value="openart">OpenArt</option><option value="flow">Google Flow</option><option value="heygen">HeyGen</option><option value="other">Andere Plattform</option></select></div>
+<div class="field"><label for="model">Videomodell</label><select id="model"></select><p class="hint" id="modelHint"></p></div></div>
+<div class="grid"><div class="field"><label for="ratio">Bildformat</label><select id="ratio"><option value="9:16">9:16 · Hochformat</option><option value="16:9">16:9 · Querformat</option><option value="1:1">1:1 · Quadrat</option><option value="auto">LIORA empfiehlt</option></select><p class="hint" id="ratioHint"></p></div>
+<div class="field"><label for="language">Sprache im Video</label><select id="language"><option value="Deutsch">Deutsch (Deutschland)</option><option value="Deutsch (Schweizer Akzent)">Deutsch (Schweizer Akzent)</option><option>Englisch</option><option>Ohne Sprache</option><option>Andere / bitte im Chat klären</option></select></div></div>
+<div class="field"><label for="music">Hintergrundmusik</label><select id="music"><option value="none">Keine Musik (Standard)</option><option value="generate">Passende Musik generieren (falls unterstützt)</option><option value="later">Musik später selbst hinzufügen</option></select><p class="hint">Ohne Musik bleibt die Stimme im Vordergrund. Natürliche Umgebungsgeräusche sind möglich.</p></div>
+<div id="compat" class="notice">LIORA prüft im Chat die tatsächlichen Funktionen deiner Plattform und Modellversion. Ungeprüfte Kombinationen werden nicht als garantiert kompatibel ausgegeben.</div>
+        </div></details>
+<details><summary>📚 Wissensbasis & Quellen ansehen <span class="pill">V108 · Modellwissen & Quellen</span></summary><div class="inside"><p class="small">Die Regeln sind im erzeugten LIORA-Auftrag enthalten. Offizielle Anleitungen, LIORA-Praxistests und Empfehlungen werden getrennt bewertet. Die Links sind Nachschlagequellen; diese Offline-Web-App aktualisiert sie nicht automatisch.</p><div class="ref-card"><strong>Kling 4.0</strong><p class="small">Für nativen deutschen Dialog bei Kling gezielt Version 4.0 wählen; Verfügbarkeit beim Anbieter prüfen. Offizielle Modellübersicht plus LIORA-Tests zu Dialog, Emotionen und Timing.</p><a href="https://kling.ai/de/quickstart" target="_blank" rel="noopener noreferrer">Offizieller Kling-Guide ↗</a></div><div class="ref-card"><strong>V108 · Voice Acting &amp; erzählte Dialoge</strong><p class="small">Bei nachgespielten Figuren bleibt die Stimmidentität erhalten. Gesprochene Sprecherhinweise vor Zitaten, eindeutige Adressaten, line-genaue Tonhöhe/Betonung/Mimik und Ein-Stimmen-Test. Nachahmung ist kein zweiter Sprecher. Einmaliger Dialogblock mit LINE_ID-Regie; Stimmvariation ist modellabhängig, Testclip empfohlen.</p></div><div class="ref-card"><strong>Living Keyframe · LIORA-Praxistest</strong><p class="small">Der Szenen-Keyframe zeigt die tatsächliche Anfangshandlung: natürliche Körperhaltung, eine sinnvolle Beschäftigung, richtige Requisiten und klare Positionen. Dialoge bekommen konkrete Reaktionen, Betonungen und Pausen statt monotoner Vorträge. Kein zusätzlicher Formularschritt.</p></div><div class="ref-card"><strong>Seedance 2.5</strong><p class="small">Deutsch: Aussprachekontrolle bei Umlauten, sch-Lauten, Vorsilben und zusammengesetzten Wörtern (LIORA-Praxisbeobachtung). LIORA-Praxistest: zwei Identitätsreferenzen + handlungsgenauer Szenen-Keyframe, Whip-Pan-Dialog, Requisiten- und Sprecherkontinuität. Modusabhängigkeit beachten.</p></div><div class="ref-card"><strong>Gemini Omni 1.2 Flash · Offizielle Quellen &amp; LIORA-Praxistest (18.11.2026)</strong><p class="small"><strong>Besonders geeignet:</strong> Deutschsprachige Talking Heads und Stand-up-Comedy. Im LIORA-Nutzertest funktionierte der deutsche Dialog hervorragend. Für Stand-up: lebendige Mimik, wechselnde Betonung, natürliche Gestik, Publikumsreaktionen und Lacherpausen explizit inszenieren; Lacher bei Bedarf in der Nachbearbeitung ergänzen. Kundenfeedback: 8-Sekunden-Szenen, Deutsch und Übergänge gut; Publikumslacher fehlten.</p><p class="small"><strong>Offiziell dokumentiert:</strong> Text-zu-Video, Bild-zu-Video, bis zu sechs Referenzbilder im entsprechenden Workflow, Start-/Endbild, Bearbeitung und Verlängerung von Clips, Sprache/Geräusche/Musik, verbesserte Lippen-Synchronität und mehrere Sprecher. Videodauer 3–15 Sekunden, bei Start-/Endbild 3–10 Sekunden; 9:16 oder 16:9. 360p/720p für Entwürfe; 1080p/4K können hochskaliert werden. Die tatsächlich verfügbaren Funktionen hängen von Plattform, Tarif und Modus ab. In der Gemini-App sind Video-Uploads zur Bearbeitung in der Schweiz derzeit eingeschränkt.</p><p class="small"><strong>Google-Quellen:</strong> <a href="https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemini-omni-1-2-flash/" target="_blank" rel="noopener noreferrer">Offizielle Modellankündigung ↗</a> · <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/omni-1-2-flash" target="_blank" rel="noopener noreferrer">Funktionen &amp; technische Grenzen ↗</a> · <a href="https://colab.research.google.com/github/google-gemini/cookbook/blob/main/quickstarts/Get_started_Omni.ipynb" target="_blank" rel="noopener noreferrer">Google Cookbook / Referenz-Workflows ↗</a> · <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/video/edit-videos" target="_blank" rel="noopener noreferrer">Video-Bearbeitung ↗</a> · <a href="https://deepmind.google/models/model-cards/gemini-omni-1-2-flash/" target="_blank" rel="noopener noreferrer">Model Card &amp; Grenzen ↗</a> · <a href="https://support.google.com/gemini/answer/16126339?hl=en" target="_blank" rel="noopener noreferrer">Gemini-App-Verfügbarkeit ↗</a></p></div><div class="ref-card"><strong>Omni Flash 1.2 · Kundenfeedback &amp; Stand-up-Audio (18.11.2026)</strong><p class="small"><strong>Kunden-Praxistest:</strong> Deutsch funktionierte gut; mehrere aufgeteilte Szenen mit je etwa 8 Sekunden und sanfte Übergänge funktionierten gut. <strong>Beobachteter Fehler:</strong> Die gewünschten Publikumslacher fehlten. Das beweist nicht, dass das Modell grundsätzlich keine Lacher erzeugen kann.</p><p class="small"><strong>LIORA-Produktionsregel:</strong> Publikumslachen nach konkreter Pointe als separates Audio-Ereignis anfordern: Pointe vollständig sprechen → hörbares natürliches Publikumslachen aus dem Saal → Darstellerin reagiert mit Blick/Mimik und wartet → Lachen klingt ab → nächste Zeile. Keine Dauerschleife, keine Hintergrundmusik. Bei fehlenden Lachern funktionierende Bild- und Sprachclips erhalten; Lacher in der Nachbearbeitung auf die eingeplanten Pausen setzen. Für 8-Sekunden-Clips Sprechzeit, Reaktion und Lacherpause realistisch budgetieren. Mehrere Clips mit durchgängiger Stimme, Bühne, Outfit und natürlichem Anschluss.</p><p class="small"><strong>Quellen:</strong> <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/omni-1-2-flash" target="_blank" rel="noopener noreferrer">Google Cloud: Ton, Dauer, Modellfähigkeiten ↗</a> · <a href="https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemini-omni-1-2-flash/" target="_blank" rel="noopener noreferrer">Google: Referenzen, Video-Editing, Cliplängen ↗</a>. Das Kundenfeedback ist eine eigene Praxisbeobachtung, keine Aussage von Google.</p></div><div class="ref-card"><strong>Skin Reality Director V107 · Nano Banana</strong><p class="small">Bei allen sieben Formaten automatisch: referenztreue Haut-Mikrostruktur, natuerliche Farbunterschiede, vorhandene Sommersprossen, feine Gesichtshaare, zur Szene passende gerichtete Beleuchtung und minimale Retusche. Kein pauschaler langer Negativprompt; Make-up bleibt moeglich. Die A–G-Struktur und adaptive Prompt-Tiefe bleiben erhalten. Als Hypothese im identischen Vorher/Nachher-Bildtest pruefen.</p></div><div class="ref-card"><strong>LIORA Creative Signature V106 · Talking Head &amp; Stand-up (18.11.2026)</strong><p class="small"><strong>Redaktionelle Leitlinie:</strong> Frech, schlagfertig, mutig, selbstironisch und überraschend. Keine weichgespülten Kalendersprüche oder austauschbaren 08/15-Beispiele. Talking Head ist ein Darstellungsformat, keine Tonalität. Humor aus Widersprüchen, konkreten Handlungen, eigener Doppelmoral, Eskalation und unerwarteter Pointe entwickeln. Gelegentlich natürliches Fluchen ist erlaubt. Erste gesprochene Zeile muss bereits Neugier wecken.</p><p class="small"><strong>LIORA-Nutzerfeedback:</strong> Frühere Vorschläge über Gästetassen, Handtücher, Handy suchen oder Essensentscheidungen wirkten zu brav und vorhersehbar. Deshalb Ideen vor der Freigabe auf Eigenständigkeit, Figur, Selbstentlarvung und Überraschung prüfen. Dies ist eine interne Kreativregel aus Feedback, keine externe wissenschaftliche Quelle.</p></div><div class="ref-card"><strong>Veo 3.1 / Google Flow</strong><p class="small">LIORA-Praxisbewertung: Deutsche Aussprache bei Veo 3.1 weniger zuverlässig. Für deutschsprachige Talking Heads und Stand-up bevorzugt Gemini Omni 1.2 Flash oder Kling 4.0 prüfen. Veo bei ausdrücklicher Wahl mit kurzem Sprachtest und ohne Erfolgsversprechen einsetzen. Offizielle Anleitung zu Bildgestaltung, Bewegung, Handlung und Dialog.</p><a href="https://deepmind.google/models/veo/prompt-guide/" target="_blank" rel="noopener noreferrer">Google Veo Prompt Guide ↗</a></div><div class="ref-card"><strong>HeyGen</strong><p class="small">Vorläufiges Modellprofil für Avatar-/Talking-Head-Workflows. Konkrete Modusregeln und Tests noch offen.</p></div><div class="ref-card"><strong>Runway (Vergleich)</strong><p class="small">Offizielle Anleitungen zu Image-to-Video, Motion-Prompting und zeitlicher Szenenführung.</p><a href="https://help.runwayml.com/hc/en-us/articles/39789879462419-Gen-4-Video-Prompting-Guide" target="_blank" rel="noopener noreferrer">Runway Gen-4 Guide ↗</a> · <a href="https://help.runwayml.com/hc/en-us/articles/42460036199443-Text-to-Video-Prompting-Guide" target="_blank" rel="noopener noreferrer">Runway Gen-4.5 Guide ↗</a></div></div></details>
+        <div class="step-actions"><button type="button" class="ghost" data-go="2">← Idee</button><button type="button" class="primary" data-go="4">Weiter zum Auftrag →</button></div>
+      </section>
+
+      <section class="panel work-step" data-step="4" aria-labelledby="step-4-title" hidden>
+        <h2 id="step-4-title" tabindex="-1">Dein Regieauftrag</h2>
+        <p class="step-intro">Erstelle den Auftrag, kopiere ihn und füge ihn in ChatGPT ein. Referenzbilder lädst du dort hoch.</p>
+        <div data-status-slot id="result-status">
+<p id="status" class="hint" role="status"></p>
+        </div>
+<div class="actions"><button id="generate" class="primary">Video-Coach-Auftrag erstellen</button><button id="copy" class="secondary hidden">Prompt kopieren</button></div>
+<div id="outputPanel"><div class="field" style="margin-top:16px"><label for="prompt">Dein individueller LIORA-Auftrag</label><textarea id="prompt" readonly></textarea></div><div class="notice">Öffne ChatGPT, füge den kopierten Auftrag ein und lade dort deine Referenzbilder hoch. Dieser HTML-Prototyp übermittelt keine Bilder an ChatGPT.</div></div>
+<div class="reset-area">
+  <p class="small" style="margin:0 0 10px"><strong>Ein weiteres Video planen?</strong></p>
+  <div class="actions">
+    <button type="button" id="newVideo" class="secondary">↻ Neues Video · Avatar behalten</button>
+    <button type="button" id="fullReset" class="ghost">Komplett neu starten</button>
+  </div>
+  <p class="hint">«Neues Video» behält Personen, Avatar- und Outfitangaben, persönliche Merkmale, besondere Wünsche und deine bevorzugten Einstellungen. Die Videoidee, Szene und Keyframes werden zurückgesetzt. «Komplett neu starten» löscht auch diese Angaben und den lokal gespeicherten Entwurf. Bereits geöffnete ChatGPT-Chats oder hochgeladene Bilder werden nicht verändert.</p>
+</div>
+        <div class="step-actions"><button type="button" class="ghost" data-go="3">← Regie</button></div>
+      </section>
+    </div>
+
+    <aside class="studio-sidebar" aria-label="Format und Hilfe">
+      <section class="selection" aria-labelledby="selection-title">
+        <span class="selection-label">DEIN FORMAT</span>
+        <strong id="selection-title">Talking Head</strong>
+        <span id="selection-description">Eine Idee direkt in die Kamera erzählen.</span>
+      </section>
+      <details class="butler" id="butler" open>
+        <summary><span class="butler-icon" aria-hidden="true">✦</span><span>LIORA-Butler<small>Hilfe für diesen Schritt</small></span></summary>
+        <div class="inside">
+          <p id="butler-tip">Wähle die Karte, die am besten zu deiner Szene passt. Du kannst das Format später wechseln.</p>
+        </div>
+      </details>
+    </aside>
+  </div>
+<footer>LIORA V110 · Ein Video pro Durchlauf · Keine integrierte Video-Generierung · Modellfunktionen werden im Chat geprüft. Formularentwürfe werden nur lokal in diesem Browser gespeichert. Spracheingabe verwendet die Spracherkennung des Browsers und kann über dessen Anbieter verarbeitet werden.</footer>
+</main>
+</div><script type="module" src="./app.js"></script></body></html>

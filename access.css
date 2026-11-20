@@ -1,0 +1,6 @@
+.customer-panel { max-width:640px; margin:6vh auto; padding:28px; background:#fff; border-radius:16px; border:1px solid var(--line); }
+.customer-panel h1 { font:400 3rem var(--serif); margin:.25em 0; }
+.customer-panel label { margin:12px 0; }
+.customer-panel input { display:block; margin-top:4px; }
+.customer-panel li { margin:0 0 12px; overflow-wrap:anywhere; }
+@media (max-width:680px) { .customer-panel { margin:12px; padding:20px; } }
