@@ -55,7 +55,7 @@ h2 { font:400 clamp(36px,4.4vw,51px)/.98 var(--serif); margin:0 0 8px; letter-sp
 .format-card:hover { border-color:#ad87be; transform:translateY(-2px); box-shadow:0 7px 16px #52296320; }
 .format-card[aria-pressed=true] { border-color:#735085; box-shadow:0 0 0 1px #735085; background:#f5edf8; }
 .format-photo { position:relative; display:block; width:100%; aspect-ratio:2/1; overflow:hidden; background:#a287b2; }
-.format-card-image { display:block; width:100%; height:100%; object-fit:cover; object-position:center var(--photo-position,50%); }
+.format-card-image { position:absolute; inset:0; display:block; width:100%; height:100%; object-fit:cover; object-position:center var(--photo-position,50%); }
 .format-photo::after { content:''; position:absolute; inset:0; background:linear-gradient(0deg,#2d143b28,transparent 65%); }
 .format-copy { display:grid; gap:4px; padding:12px 13px 14px; }
 .format-copy strong { font:400 clamp(23px,2.5vw,30px)/1 var(--serif); }
