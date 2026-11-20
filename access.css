@@ -4,3 +4,6 @@
 .customer-panel input { display:block; margin-top:4px; }
 .customer-panel li { margin:0 0 12px; overflow-wrap:anywhere; }
 @media (max-width:680px) { .customer-panel { margin:12px; padding:20px; } }
+
+.customer-panel .remember-session { display:flex; gap:8px; align-items:center; }
+.customer-panel .remember-session input { width:auto; }
