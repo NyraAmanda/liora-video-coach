@@ -1,0 +1,15 @@
+{
+  "id": "./",
+  "name": "LIORA VideoCoach",
+  "short_name": "LIORA",
+  "lang": "de-CH",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#24142d",
+  "theme_color": "#24142d",
+  "icons": [
+    { "src": "./assets/app-icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./assets/app-icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
