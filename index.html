@@ -54,10 +54,12 @@
 <section id="customer-admin" class="customer-panel" aria-labelledby="customer-admin-title" hidden>
   <h1 id="customer-admin-title">E-Mail-Freigabeliste</h1>
   <form>
-    <label>E-Mail-Adresse<input name="email" type="email" maxlength="254" required></label>
-    <button type="submit" class="primary">Gesperrt hinzufügen</button>
+    <label>E-Mail-Adresse hinzufügen<input name="email" type="email" maxlength="254" required></label>
+    <button type="submit" class="primary">Person hinzufügen</button>
   </form>
   <p role="status"></p>
+  <label>Person suchen<input type="search" data-member-search placeholder="E-Mail-Adresse"></label>
+  <p data-member-count aria-live="polite"></p>
   <ul></ul>
   <button type="button" class="ghost" data-logout>Abmelden</button>
 </section>
@@ -222,4 +224,4 @@
   </div>
 <footer>LIORA V110 · Ein Video pro Durchlauf · Keine integrierte Video-Generierung · Modellfunktionen werden im Chat geprüft. Formularentwürfe werden nur lokal in diesem Browser gespeichert. Spracheingabe verwendet die Spracherkennung des Browsers und kann über dessen Anbieter verarbeitet werden.</footer>
 </main>
-</div><script type="module" src="./app.js"></script></body></html>
+</div><script type="module" src="./app.js?v=admin-20261122"></script></body></html>
