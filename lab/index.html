@@ -5,8 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>LIORA Lab · Ideen testen</title>
   <link rel="stylesheet" href="../src/styles.css?v=card-crop-1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://*.supabase.co; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'"><link rel="stylesheet" href="../access.css"></head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://*.supabase.co; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'"><link rel="stylesheet" href="../access.css"><style>
+#customer-access {max-width:980px;background:#fffbf8;border-color:#ead9cf}
+.nyra-hero {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background:#f2e1d6;border-radius:18px;overflow:hidden}
+.nyra-login {min-width:0;padding:clamp(20px,4vw,44px);align-self:center}
+.nyra-hero img {display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.nyra-note {max-width:66ch;margin:32px auto 8px;line-height:1.65}
+.nyra-note h2 {font:400 clamp(1.8rem,4vw,2.5rem) var(--serif);margin-bottom:.35em}
+.nyra-note h3 {margin:1.1em 0 .35em}
+.nyra-note ul {padding-inline-start:1.2rem}
+@media(max-width:680px) {.nyra-hero {grid-template-columns:1fr}.nyra-hero img {aspect-ratio: 4/3;height:auto;object-position:center 43%}.nyra-note {margin-top:24px}}
+</style></head>
 <body data-admin-preview><section id="customer-access" class="customer-panel" aria-labelledby="customer-title">
+  <div class="nyra-hero">
+    <div class="nyra-login">
   <p>✦ LIORA Lab · Ideen testen</p>
   <h1 id="customer-title">Willkommen zurück</h1>
   <p data-description></p>
@@ -17,22 +29,23 @@
   </form>
   <p role="status"></p>
   <button type="button" class="ghost" data-role>Zur Administration</button>
-  <section aria-labelledby="nyra-welcome" style="margin-top:28px;padding-top:20px;border-top:1px solid var(--line)">
+    </div>
+    <img src="./nyra-fingerherz-2.webp" alt="Nyra lächelt und zeigt ein Fingerherz." width="900" height="900" decoding="async">
+  </div>
+  <section class="nyra-note" aria-labelledby="nyra-welcome">
     <h2 id="nyra-welcome">Ein paar Worte von Nyra</h2>
-    <p>Schön, dass du da bist! Ich habe LIORA VideoCoach gebaut, damit du beim Videomachen mehr Zeit für die Geschichte hast und weniger Zeit damit verbringst, denselben Prompt zum siebten Mal umzuschreiben. In den Coach fliessen meine eigenen Produktionserfahrungen und die Rückmeldungen von Kundinnen ein. Damit entwickle ich LIORA weiter.</p>
-    <p>LIORA hilft dir, Ideen auszuarbeiten und daraus klar strukturierte Bild- und Videoprompts für deine gewählten Tools zu erstellen. Wie realistisch ein Bild wird, hängt vom Bildmodell, deinen Referenzen und der Umsetzung ab. Auch die Ideen können von meinen Beispielen abweichen. Mein ChatGPT hat über viele Projekte hinweg Beispiele und Rückmeldungen von mir bekommen. Dein Chat kann mit der Zeit auch mehr über deine Vorlieben erfahren.</p>
+    <p>Schön, dass du da bist! Ich habe LIORA gebaut, damit du mehr Zeit für deine Geschichte hast und weniger Zeit damit verbringst, denselben Prompt zum siebten Mal umzuschreiben. In den Coach fliessen meine Erfahrungen aus der Videoproduktion und die Rückmeldungen von Kundinnen ein.</p>
     <h3>Aus Inspiration wird dein eigenes Video</h3>
-    <p>Vielleicht hast du die Prompts aus deinem Kurs schon alle ausprobiert. Oder du siehst ein Video und denkst: «Die Idee gefällt mir. Wie würde ich das erzählen?» Genau dafür habe ich LIORA gebaut. Lade deine Inspiration als Bild oder Screenshot in deinen Chat hoch oder beschreibe kurz, was dich daran gepackt hat. Vielleicht war es der Einstieg, die Stimmung oder die Pointe.</p>
-    <p>Mit LIORA kannst du daraus eine eigene Geschichte entwickeln. Mit deinen Figuren, deinem Humor und in deiner Sprache. Die Vorlage gibt dir den Anstoss. Was daraus wird, entscheidest du.</p>
+    <p>Du hast die Prompts aus deinem Kurs schon durch oder ein Video gesehen, das dich auf eine Idee bringt? Lade ein Bild oder einen Screenshot in deinen Chat hoch oder beschreibe, was dich daran gepackt hat. LIORA hilft dir, daraus eine eigene Geschichte zu machen. Mit deinen Figuren, deinem Humor und in deiner Sprache.</p>
     <h3>So holst du mehr aus LIORA heraus</h3>
+    <p>Der Coach gibt deinen Bild- und Videoprompts eine klare Struktur. Wie realistisch ein Bild wird, hängt vom Modell, deinen Referenzen und der Umsetzung ab. Auch die Ideen variieren je nach Briefing und danach, welche Beispiele und Rückmeldungen du deinem Chat mitgibst.</p>
     <ul>
-      <li><strong>Wähle das Tool, mit dem du renderst.</strong> Kling und Veo teilen sich keinen Spickzettel. Wenn du von Veo zu Kling wechselst, lass den Prompt für Kling anpassen.</li>
-      <li><strong>Lies den Vorschlag vor dem Rendern einmal durch.</strong> Stimmen Avatar, Outfit und Referenzen? Ergibt die Handlung Sinn? Wenn am Schluss plötzlich jemand zwei Glasschuhe trägt, frag ruhig, woher der zweite kommt. Auch ChatGPT ist manchmal zu schnell beim Happy End.</li>
-      <li><strong>Sag deinem ChatGPT, was dir gefällt und warum.</strong> Im laufenden Chat kann es dein Feedback direkt aufgreifen. Wenn die Erinnerungsfunktion verfügbar und aktiviert ist, kann es ausgewählte Vorlieben auch in späteren Chats berücksichtigen.</li>
+      <li><strong>Wähle das Tool, mit dem du renderst.</strong> Wenn du von Veo zu Kling wechselst, lass den Prompt für Kling anpassen.</li>
+      <li><strong>Prüfe den Vorschlag vor dem Rendern.</strong> Stimmen Avatar, Outfit und Handlung? Wenn plötzlich zwei Glasschuhe auftauchen, frag ruhig, woher der zweite kommt. Auch ChatGPT ist manchmal zu schnell beim Happy End.</li>
+      <li><strong>Sag deinem Chat, was klappt und warum.</strong> Er kann dein Feedback im Gespräch direkt aufgreifen. Bei aktivierter Erinnerungsfunktion kann er ausgewählte Vorlieben auch in späteren Chats berücksichtigen.</li>
     </ul>
-    <p>Ich wünsche dir viel Spass beim Ausprobieren und hoffe, dass du schneller zu einem Video kommst, das du wirklich zeigen willst. In LIORA steckt viel Liebe. Danke, dass du den Coach mit Neugier, Humor und ein bisschen Sorgfalt behandelst.</p>
+    <p>Ich habe LIORA mit viel Liebe gebaut. Ich wünsche dir viel Spass beim Ausprobieren und hoffe, dass du schneller zu einem Video kommst, das du wirklich zeigen willst.</p>
     <p><strong>Alles Liebe<br>Nyra</strong></p>
-    <img src="./nyra-fingerherz-2.webp" alt="Nyra lächelt und zeigt ein Fingerherz." width="900" height="900" loading="lazy" decoding="async" style="display:block;width:min(100%,360px);height:auto;border-radius:16px;margin:20px auto 0">
   </section>
 </section>
 <section id="customer-admin" class="customer-panel" aria-labelledby="customer-admin-title" hidden>
