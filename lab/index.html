@@ -18,6 +18,7 @@
 .nyra-brand {margin:0 0 .45rem;font-size:clamp(16px,2.5vw,22px);line-height:1.2;color:#4a2e43}
 .nyra-brand strong {font-size:clamp(24px,4vw,36px);font-family:var(--serif);font-weight:600}
 #customer-studio .mast-context {font:600 clamp(19px,2.8vw,29px)/1.1 var(--serif)}
+#lab-password-toggle {margin:8px 0 12px; min-height:44px}
 </style></head>
 <body data-admin-preview><section id="customer-access" class="customer-panel" aria-labelledby="customer-title">
   <div class="nyra-hero">
@@ -27,7 +28,9 @@
   <p data-description></p>
   <form>
     <label>E-Mail-Adresse<input name="email" type="email" autocomplete="email" maxlength="254" required></label>
-    <label>Passwort<input name="password" type="password" autocomplete="current-password" required></label>
+    <label for="lab-password">Passwort</label>
+    <input id="lab-password" name="password" type="password" autocomplete="current-password" required>
+    <button id="lab-password-toggle" type="button" class="ghost" aria-controls="lab-password" hidden>Passwort anzeigen</button>
     <button type="submit" class="primary">Anmelden</button>
   </form>
   <p role="status"></p>
@@ -222,4 +225,4 @@
   </div>
 <footer>LIORA V110 · Ein Video pro Durchlauf · Keine integrierte Video-Generierung · Modellfunktionen werden im Chat geprüft. Formularentwürfe werden nur lokal in diesem Browser gespeichert. Spracheingabe verwendet die Spracherkennung des Browsers und kann über dessen Anbieter verarbeitet werden.</footer>
 </main>
-</div><script type="module" src="./app.js"></script></body></html>
+</div><script type="module" src="./app.js"></script><script type="module" src="./password-toggle.js"></script></body></html>
