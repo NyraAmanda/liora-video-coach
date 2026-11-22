@@ -20,16 +20,16 @@ ichzeitig mit der ersten sichtbaren Aktion oder ihrem Ger\xE4usch, damit die Ans
 die Figur die Dinge selbst gew\xE4hlt hat. Passe Sprache, Anzahl und Dauer an die tats\xE4chliche Fassung an. Bei Ohne Sprache erkl\xE4re die Challenge visuell, ohne Dia\
 log. Diese Vorgabe hat Vorrang vor sp\xE4teren Vorschl\xE4gen, die Ansage erst nach einer Reaktion zu bringen.",s="AUSGABESPRACHE: Schreibe den kopierfertigen V\
 ideoprompt f\xFCr jeden Render vollst\xE4ndig auf Englisch, inklusive Zeitfenstern, Kamera, Handlung, Ton und Referenzzuordnung. W\xF6rtlicher Dialog bleibt in der gew\xE4h\
-lten Sprechsprache. Bei Deutsch bleibt also nur der gesprochene Text deutsch. Beratung und Erkl\xE4rungen d\xFCrfen auf Deutsch bleiben.",l="BILDINPUTS PR\xDCFEN: \
+lten Sprechsprache. Bei Deutsch bleibt also nur der gesprochene Text deutsch. Beratung und Erkl\xE4rungen d\xFCrfen auf Deutsch bleiben.",d="BILDINPUTS PR\xDCFEN: \
 Verwende im finalen Videoprompt nur Bildzuordnungen, die im gew\xE4hlten Modus tats\xE4chlich verf\xFCgbar sind. Wenn ein Upload abgelehnt wurde, kl\xE4re zuerst eine umset\
 zbare Referenzvariante. Das Seitenverh\xE4ltnis des fertigen Videos, das Seitenverh\xE4ltnis der Eingabebilder und die Rasteranordnung sind drei verschiedene Dinge. P\
 r\xFCfe vor dem Raster, welche Dateitypen, Bildgr\xF6ssen, Seitenverh\xE4ltnisse, Anzahl Bilder und Eingaberollen der konkrete Modus akzeptiert. Zwei Reihen mit f\xFCnf Fel\
 dern beschreiben den Bildinhalt, kein vorgeschriebenes Dateiformat. Falls ein bestimmtes Seitenverh\xE4ltnis verlangt wird, passe die Leinwand an und erg\xE4nze bei B\
-edarf Randfl\xE4che. Alle Rasterzellen m\xFCssen vollst\xE4ndig sichtbar bleiben.",d=e.platform==="higgsfield"?"HIGGSFIELD: Pr\xFCfe den Modus im gew\xE4hlten Modell.\
+edarf Randfl\xE4che. Alle Rasterzellen m\xFCssen vollst\xE4ndig sichtbar bleiben.",l=e.platform==="higgsfield"?"HIGGSFIELD: Pr\xFCfe den Modus im gew\xE4hlten Modell.\
  Verwende Avatar, Outfit und Raster nur dann als drei getrennte Uploads, wenn Referenzslots daf\xFCr vorhanden sind. Wenn der Modus nur Start- oder Endframes annim\
 mt, verwende das Raster bei der Bildvorbereitung und erstelle daraus bei Bedarf einen echten Szenen-Startframe mit Avatar und Outfit im akzeptierten Format. Das\
  Raster selbst geh\xF6rt nicht in den Startframe-Slot. Wenn der Upload scheitert und der Grund unklar ist, frage nach Modus, Dateidaten und genauer Fehlermeldung.":
-"";return["BESETZUNG UND WELT",t,i,r,a,o,s,l,d].filter(Boolean).join(`
+"";return["BESETZUNG UND WELT",t,i,r,a,o,s,d,l].filter(Boolean).join(`
 `)}var te="=== LIORA \xB7 10 RANDOM DINGE \xB7 EIN RASTER, EIN VIDEOPROMPT ===",ne="VOR DEM RASTER \xB7 LAUFZEIT UND MODUS KL\xC4REN";function re(e,t){if(t.kind!==
 "random10"||!e.startsWith(te)||e.includes(ne))return e;let i=t.model==="omni"?`F\xFCr den gew\xE4hlten Gemini-Omni-Modus rechne mit 8 Sekunden pro generiertem Clip. F\
 \xFCr rund 30 Sekunden plane vier Clips und k\xFCrze den letzten im Schnitt auf etwa 6 Sekunden, falls Omni nur 8-Sekunden-Clips ausgibt.
@@ -49,19 +49,23 @@ ie Kurzfassung kommen. Passe Rastergr\xF6sse, Ortswechsel, Zwischenruf und Dialo
 
 `:"")+r)}var n=e=>document.getElementById(e);var De=[["references","Referenzen"],["frames","Frames"]],q=e=>e==="kling"||e==="seedance";function ie(){let e=n("model"),t=document.createElement("fieldset");t.
 className="field";let i=document.createElement("legend");i.textContent="Bildeingabe f\xFCr das Videomodell";let r=document.createElement("p");r.className="hint",
-r.textContent="W\xE4hle den Modus, der in deinem Videotool verf\xFCgbar ist. Referenzen sind Vorlagen f\xFCr Figur, Outfit oder Objekte. Frames sind konkrete Szenenbilde\
-r.",t.append(i,r);let a="",o=De.map(([l,d])=>{let c=document.createElement("button");return c.type="button",c.textContent=d,c.addEventListener("click",()=>{a=l,
-s(),n("prompt").value="",n("copy").classList.add("hidden"),n("outputPanel").style.display="none"}),t.append(c," "),{value:l,button:c}});function s(){t.hidden=!q(
-e.value);for(let{value:l,button:d}of o)d.className=l===a?"primary":"secondary",d.setAttribute("aria-pressed",String(l===a))}for(let l of["model","platform","new\
-Video","fullReset"])n(l).addEventListener(l.endsWith("Reset")||l==="newVideo"?"click":"change",()=>{a="",queueMicrotask(s)});return n("compat").before(t),queueMicrotask(
-s),()=>q(e.value)?a:""}function $(e,t,i){return!q(t)&&t!=="recommend"?e:[e,"=== VERBINDLICHE BILDEINGABE F\xDCR KLING UND SEEDANCE ===",i==="references"?"Gew\xE4hl\
-t: REFERENZEN. Verwende die Bilder als Motiv- und Identit\xE4tsvorlagen in best\xE4tigten Referenzfeldern. Behandle sie nicht als zeitliche Keyframes. Wenn ein Kamera\
-roll gew\xFCnscht ist, kl\xE4re gegebenenfalls die Umsetzung im Schnitt.":i==="frames"?"Gew\xE4hlt: FRAMES. Plane die tats\xE4chlichen Szenenbilder f\xFCr den Start und,\
- falls ben\xF6tigt und verf\xFCgbar, f\xFCr das Ende. Avatar-, Outfitbilder und Raster dienen bei Bedarf als Vorlagen zur Erstellung dieser Szenenbilder. Lade sie nicht \
-als fertige Start- oder Endframes ein.":"Sobald Kling oder Seedance feststeht, frage vor dem Bild- und Videoprompt nach der Bildeingabe: 1 \u2013 Referenzen oder 2 \u2013\
- Frames. Zeige nur die im konkreten Modus verf\xFCgbaren Optionen. Warte auf die Wahl, wenn beide m\xF6glich sind, und halte sie danach verbindlich fest.","Pr\xFCf\
-e den konkreten Modus und die verf\xFCgbaren Eingabefelder. Wenn der gew\xE4hlte Modus fehlt oder ein Upload abgelehnt wird, kl\xE4re die Alternative mit der Nutzerin vo\
-r dem finalen Videoprompt. Wechsle nie stillschweigend den Modus. Diese Wahl hat Vorrang vor anderslautenden Bildzuordnungen im Auftrag."].join(`
+r.textContent="W\xE4hle den Modus, den Kling oder Seedance auf deiner Plattform tats\xE4chlich anbietet.",t.append(i,r);let a=[["Referenzen","So sollen Figur, O\
+utfit oder Dinge aussehen. Lade daf\xFCr zum Beispiel ein Avatarportr\xE4t oder ein Outfitfoto in ein Referenzfeld hoch. Das Modell nutzt es als Vorlage f\xFCr die Szene\
+."],["Frames","So soll die Szene beginnen oder enden. Lade daf\xFCr ein fertiges Szenenbild hoch, das bereits die Figur im Outfit am gew\xFCnschten Ort zeigt. Ein End\
+bild kannst du erg\xE4nzen, wenn der Modus es unterst\xFCtzt."]];for(let[l,c]of a){let m=document.createElement("p");m.className="hint";let u=document.createElement(
+"strong");u.textContent=l,m.append(u," \u2013 ",c),t.append(m)}let o="",s=De.map(([l,c])=>{let m=document.createElement("button");return m.type="button",m.textContent=
+c,m.addEventListener("click",()=>{o=l,d(),n("prompt").value="",n("copy").classList.add("hidden"),n("outputPanel").style.display="none"}),t.append(m," "),{value:l,
+button:m}});function d(){t.hidden=!q(e.value);for(let{value:l,button:c}of s)c.className=l===o?"primary":"secondary",c.setAttribute("aria-pressed",String(l===o))}
+for(let l of["model","platform","newVideo","fullReset"])n(l).addEventListener(l.endsWith("Reset")||l==="newVideo"?"click":"change",()=>{o="",queueMicrotask(d)});
+return n("compat").before(t),queueMicrotask(d),()=>q(e.value)?o:""}function $(e,t,i){return!q(t)&&t!=="recommend"?e:[e,"=== VERBINDLICHE BILDEINGABE F\xDCR KLING U\
+ND SEEDANCE ===",i==="references"?"Gew\xE4hlt: REFERENZEN. Verwende die Bilder als Motiv- und Identit\xE4tsvorlagen in best\xE4tigten Referenzfeldern. Behandle sie nicht\
+ als zeitliche Keyframes. Wenn ein Kameraroll gew\xFCnscht ist, kl\xE4re gegebenenfalls die Umsetzung im Schnitt.":i==="frames"?"Gew\xE4hlt: FRAMES. Plane die tats\
+\xE4chlichen Szenenbilder f\xFCr den Start und, falls ben\xF6tigt und verf\xFCgbar, f\xFCr das Ende. Avatar-, Outfitbilder und Raster dienen bei Bedarf als Vorlagen zur Erstel\
+lung dieser Szenenbilder. Lade sie nicht als fertige Start- oder Endframes ein.":"Sobald Kling oder Seedance feststeht, frage vor dem Bild- und Videoprompt nach\
+ der Bildeingabe: 1 \u2013 Referenzen oder 2 \u2013 Frames. Zeige nur die im konkreten Modus verf\xFCgbaren Optionen. Warte auf die Wahl, wenn beide m\xF6glich sind, und halte \
+sie danach verbindlich fest.","Pr\xFCfe den konkreten Modus und die verf\xFCgbaren Eingabefelder. Wenn der gew\xE4hlte Modus fehlt oder ein Upload abgelehnt wird, kl\xE4re \
+die Alternative mit der Nutzerin vor dem finalen Videoprompt. Wechsle nie stillschweigend den Modus. Diese Wahl hat Vorrang vor anderslautenden Bildzuordnungen \
+im Auftrag."].join(`
 
 `)}var Re=["W\xE4hle die Karte, die am besten zu deiner Szene passt. Du kannst das Format sp\xE4ter wechseln.","Ein Satz reicht f\xFCr den Anfang: Wer ist zu sehen un\
 d was passiert? Wenn du noch keine Idee hast, lass dir zwei Ans\xE4tze vorschlagen.","Du kannst die Modellwahl LIORA \xFCberlassen. \xD6ffne die Referenzen nur, wenn \
@@ -99,16 +103,16 @@ return!1}}}var E=1e4,U=window.SpeechRecognition||window.webkitSpeechRecognition,
 textContent=t.value.length.toLocaleString("de-CH")+" / 10\u2019000 Zeichen"}function v(e,t){n(e+"MicStatus").textContent=t}function S(){if(!p)return;let e=p;p=null;
 try{e.recognition.stop()}catch{}let t=document.querySelector('[data-dictate="'+e.id+'"]');t.classList.remove("recording"),t.setAttribute("aria-pressed","false"),
 t.textContent="\u{1F399}\uFE0F Einsprechen"}function ce(e){return e.toLocaleLowerCase("de-CH").match(/[\p{L}\p{N}]+/gu)||[]}function ue(e){let t="";for(let i of e){
-let r=(i||"").trim();if(!r)continue;let a=t.trim();if(!a){t=r;continue}let o=ce(a),s=ce(r),l=0;for(let d=Math.min(o.length,s.length);d>=2;d--)if(o.slice(-d).join(
-"|")===s.slice(0,d).join("|")){l=d;break}if(!(l===s.length&&s.length>=2))if(l){let c=[...r.matchAll(/[\p{L}\p{N}]+/gu)][l]?.index;c!==void 0&&(t=a+" "+r.slice(c).
+let r=(i||"").trim();if(!r)continue;let a=t.trim();if(!a){t=r;continue}let o=ce(a),s=ce(r),d=0;for(let l=Math.min(o.length,s.length);l>=2;l--)if(o.slice(-l).join(
+"|")===s.slice(0,l).join("|")){d=l;break}if(!(d===s.length&&s.length>=2))if(d){let c=[...r.matchAll(/[\p{L}\p{N}]+/gu)][d]?.index;c!==void 0&&(t=a+" "+r.slice(c).
 trim())}else t=a+" "+r}return t.trim()}function xe(e){if(p){let o=p.id===e;if(S(),o){v(e,"Aufnahme beendet.");return}}if(!U){v(e,"Spracherkennung wird von diese\
 m Browser nicht unterst\xFCtzt. Bitte Chrome oder Edge verwenden.");return}let t=n(e);if(t.value.length>=E){v(e,"Maximal 10\u2019000 Zeichen erreicht.");return}
 let i=new U;i.lang="de-CH",i.continuous=!0,i.interimResults=!0;let r={id:e,recognition:i,base:t.value,finals:new Map,lastStable:"",lastPreview:""};p=r;let a=document.
 querySelector('[data-dictate="'+e+'"]');a.classList.add("recording"),a.setAttribute("aria-pressed","true"),a.textContent="\u23F9 Aufnahme stoppen",v(e,"Mikrofon\
- aktiv \xB7 Sprich jetzt."),i.onresult=o=>{if(p!==r)return;for(let u=o.resultIndex;u<o.results.length;u++){let h=o.results[u];h.isFinal&&r.finals.set(u,(h[0]?.transcript||
-"").trim())}let s=[...r.finals.entries()].sort((u,h)=>u[0]-h[0]).map(u=>u[1]),l=ue(s),d=[];for(let u=0;u<o.results.length;u++)o.results[u].isFinal||d.push(o.results[u][0]?.
-transcript||"");let c=ue([...s,...d]),g=r.base+(r.base&&!/\s$/.test(r.base)?" ":"");r.lastStable=l,r.lastPreview=c,t.value=(g+c).slice(0,E),w(e),t.dispatchEvent(
-new Event("input",{bubbles:!0})),(g+l).length>=E&&(t.value=(g+l).slice(0,E),w(e),S(),v(e,"10\u2019000 Zeichen erreicht \u2013 Aufnahme gestoppt."))},i.onerror=o=>{
+ aktiv \xB7 Sprich jetzt."),i.onresult=o=>{if(p!==r)return;for(let u=o.resultIndex;u<o.results.length;u++){let f=o.results[u];f.isFinal&&r.finals.set(u,(f[0]?.transcript||
+"").trim())}let s=[...r.finals.entries()].sort((u,f)=>u[0]-f[0]).map(u=>u[1]),d=ue(s),l=[];for(let u=0;u<o.results.length;u++)o.results[u].isFinal||l.push(o.results[u][0]?.
+transcript||"");let c=ue([...s,...l]),m=r.base+(r.base&&!/\s$/.test(r.base)?" ":"");r.lastStable=d,r.lastPreview=c,t.value=(m+c).slice(0,E),w(e),t.dispatchEvent(
+new Event("input",{bubbles:!0})),(m+d).length>=E&&(t.value=(m+d).slice(0,E),w(e),S(),v(e,"10\u2019000 Zeichen erreicht \u2013 Aufnahme gestoppt."))},i.onerror=o=>{
 if(p!==r)return;S(),v(e,{not_allowed:"Mikrofonzugriff nicht erlaubt.","service-not-allowed":"Spracherkennung nicht verf\xFCgbar.","no-speech":"Keine Sprache erk\
 annt.",network:"Netzwerkfehler bei der Spracherkennung."}[o.error]||"Spracherkennung unterbrochen.")},i.onend=()=>{p===r&&(S(),v(e,"Aufnahme beendet. Zum Fortse\
 tzen erneut dr\xFCcken."))};try{i.start()}catch{S(),v(e,"Mikrofon konnte nicht gestartet werden.")}}function me(){["idea","extra"].forEach(e=>{let t=n(e);w(e),t.
@@ -134,10 +138,10 @@ chekontrolle auf der gew\xE4hlten Plattform pr\xFCfen; keine pauschale Empfehlun
 -/Sprachworkflow; deutsche Sprache und Lip-Sync im gew\xE4hlten Modus pr\xFCfen. Die Kling-/Seedance-Regel gilt nicht pauschal f\xFCr HeyGen.")),r==="Deutsch (S\
 chweizer Akzent)"&&(a+=" Sprechweise: Schweizer Hochdeutsch mit nat\xFCrlichem, dezentem Schweizer Akzent; kein Dialekt. Akzent kann je nach Engine abweichen."),
 n("compat").textContent=a}function be(){let e=n("kind").value;if(e!=="talk"&&e!=="standup")return;let t=n("scriptText").value.trim(),i=t?t.split(/\s+/u).filter(
-Boolean).length:0,r=e==="standup"?45:55,a=e==="standup"?125:135,o=e==="standup"?7:4,s=i?Math.ceil(i*60/a+o):0,l=n("scriptBudget");if(!i){l.textContent="30-Sekun\
+Boolean).length:0,r=e==="standup"?45:55,a=e==="standup"?125:135,o=e==="standup"?7:4,s=i?Math.ceil(i*60/a+o):0,d=n("scriptBudget");if(!i){d.textContent="30-Sekun\
 den-Planung: Stand-up ca. 35\u201345 W\xF6rter, Talking Head ca. 45\u201355 W\xF6rter. Pausen, Lachen und nicht gleichzeitig sprechbare Bewegungen reduzieren das verf\xFCgbare Zei\
-tbudget.";return}let d=i>r||s>30;l.textContent=`${i} W\xF6rter \xB7 gesch\xE4tzt ${s} Sekunden inkl. ${o} s Pausen-/Reaktionsreserve \xB7 vorsichtiger Richtwert: b\
-is ${r} W\xF6rter / 30 s. ${d?"\u26A0\uFE0F F\xFCr 30 Sekunden wahrscheinlich zu dicht. Text gemeinsam k\xFCrzen oder auf mehrere Clips verteilen; nicht ungefragt \xE4ndern.":
+tbudget.";return}let l=i>r||s>30;d.textContent=`${i} W\xF6rter \xB7 gesch\xE4tzt ${s} Sekunden inkl. ${o} s Pausen-/Reaktionsreserve \xB7 vorsichtiger Richtwert: b\
+is ${r} W\xF6rter / 30 s. ${l?"\u26A0\uFE0F F\xFCr 30 Sekunden wahrscheinlich zu dicht. Text gemeinsam k\xFCrzen oder auf mehrere Clips verteilen; nicht ungefragt \xE4ndern.":
 "\u2713 Im groben Planungsbereich; genaue Sprechdauer, Aussprache und Performance vor dem Rendern trotzdem pr\xFCfen."} Keine garantierte Kling-Grenze.`}function j(){
 let e=n("kind").value,t=e==="talk"||e==="standup";n("scriptField").classList.toggle("hidden",!t),n("scriptText").disabled=!t,be(),n("scriptHint").textContent=e===
 "standup"?"Optional: Set-up, Pointe und Nachsatz einsetzen. LIORA pr\xFCft Tempo, Pausen, Lacher und Sprechdauer vor dem Rendern.":"Optional: Deinen genauen Tal\
@@ -165,12 +169,12 @@ let i=document.createElement("div"),r=document.createElement("label"),a=document
 kind").value==="random10"&&n("randomWorld").value==="fairy";n("fairyField").classList.toggle("hidden",!e),n("customFairyField").classList.toggle("hidden",!e||n(
 "fairyTale").value!=="custom")}function L(){let e=n("people"),t=n("kind").value==="random10",i=t?"1":e.value,r=i==="auto"?0:Number(i),a=n("personRefs");e.disabled=
 t,e.closest(".field").classList.toggle("hidden",t);let o={};a.querySelectorAll("input[type=text],select").forEach(s=>o[s.id]=s.value),a.replaceChildren();for(let s=0;s<
-r;s++){let l=String.fromCharCode(65+s),d=document.createElement("div");d.className="ref-card",d.innerHTML=`<div class="ref-title">Person ${l}</div><div class="g\
+r;s++){let d=String.fromCharCode(65+s),l=document.createElement("div");l.className="ref-card",l.innerHTML=`<div class="ref-title">Person ${d}</div><div class="g\
 rid"><div><label for="person${s}">Name / Rolle</label><input id="person${s}" type="text" placeholder="z. B. Nyra"></div><div><label for="avatar${s}">Avatarbild<\
 /label><select id="avatar${s}"><option value="none">Noch kein Bild</option><option value="ready">Vorhanden \u2013 im Chat hochladen</option><option value="create">LI\
 ORA soll Bildprompt erstellen</option></select></div><div><label for="outfit${s}">Outfitbild</label><select id="outfit${s}"><option value="none">Noch kein Bild<\
 /option><option value="ready">Vorhanden \u2013 im Chat hochladen</option><option value="create">LIORA soll Outfit vorschlagen</option></select></div><div><label for=\
-"notes${s}">Wichtige Merkmale</label><input id="notes${s}" type="text" placeholder="z. B. Frisur beibehalten"></div></div>`,a.append(d),["person"+s,"notes"+s,"a\
+"notes${s}">Wichtige Merkmale</label><input id="notes${s}" type="text" placeholder="z. B. Frisur beibehalten"></div></div>`,a.append(l),["person"+s,"notes"+s,"a\
 vatar"+s,"outfit"+s].forEach(c=>{o[c]&&(n(c).value=o[c])})}if(i==="auto"){let s=document.createElement("p");s.className="small",s.textContent="LIORA bestimmt di\
 e ben\xF6tigte Personenzahl anhand der Idee. Referenzen werden anschliessend im Chat gekl\xE4rt.",a.append(s)}if(r===0&&i!=="auto"){let s=document.createElement(
 "p");s.className="small",s.textContent="Keine Personen vorgesehen. Du kannst trotzdem eine Ortsreferenz oder einen Startframe vorbereiten.",a.append(s)}se()}function Ce(){
@@ -191,11 +195,11 @@ i"),s=document.createElement("button");s.type="button",s.textContent=a.textConte
 "change",{bubbles:!0})),t.focus()}),o.append(s),i.append(o)}}function we(e,{enableCameraRoll:t=!1}={}){if(t){let r=document.createElement("div");r.className="fi\
 eld";let a=document.createElement("label"),o=document.createElement("input");o.type="checkbox",o.id="cameraRoll",a.append(o," Dynamischer Einstieg: 90\xB0-Kameraro\
 ll");let s=document.createElement("p");s.className="hint",s.textContent="F\xFCr 9:16. Startbild seitlich, Endbild aufrecht.",r.append(a,s),n("compat").before(r);
-let l=()=>{r.hidden=o.disabled=n("ratio").value!=="9:16"};n("ratio").addEventListener("change",l);for(let d of["newVideo","fullReset"])n(d).addEventListener("cl\
-ick",()=>{o.checked=!1,queueMicrotask(l)});queueMicrotask(l)}let i=ie();n("newVideo").addEventListener("click",()=>ge(!0)),n("fullReset").addEventListener("clic\
+let d=()=>{r.hidden=o.disabled=n("ratio").value!=="9:16"};n("ratio").addEventListener("change",d);for(let l of["newVideo","fullReset"])n(l).addEventListener("cl\
+ick",()=>{o.checked=!1,queueMicrotask(d)});queueMicrotask(d)}let i=ie();n("newVideo").addEventListener("click",()=>ge(!0)),n("fullReset").addEventListener("clic\
 k",()=>ge(!1)),n("scriptText").addEventListener("input",be),n("generate").addEventListener("click",async()=>{let r=oe(),a=i();n("cameraRoll")?.checked&&r.ratio===
 "9:16"&&(r.cameraRoll=!0);let o=he(r);if(o.error){if(x(2,{focus:!1}),y(2,!0),n("status").textContent=o.error,o.field==="randomItems"){let s=Array.from(n("random\
-ItemInputs").querySelectorAll("input"));(s.find(l=>!l.value.trim())??s[0]).focus()}else n(o.field).focus();return}x(4,{focus:!1}),y(4);try{let s=e(r,o.randomObjects);
+ItemInputs").querySelectorAll("input"));(s.find(d=>!d.value.trim())??s[0]).focus()}else n(o.field).focus();return}x(4,{focus:!1}),y(4);try{let s=e(r,o.randomObjects);
 typeof s=="string"?n("prompt").value=$(s,r.model,a):(n("generate").disabled=!0,n("status").textContent="Auftrag wird erstellt \u2026",n("prompt").value=$(await s,
 r.model,a))}catch{y(4,!0),n("status").textContent="Auftrag konnte nicht erstellt werden. Bitte erneut versuchen.";return}finally{n("generate").disabled=!1}n("ou\
 tputPanel").style.display="block",n("copy").classList.remove("hidden"),n("status").textContent="Auftrag erstellt. Jetzt kopieren und in ChatGPT einf\xFCgen.",C()}),
@@ -207,40 +211,40 @@ hResults").hidden&&(r.preventDefault(),n("fairySearchResults").querySelector("bu
 "change",()=>{fe(),j(),A(),F(),z(),L()}),n("model").addEventListener("change",A),n("language").addEventListener("change",A),n("people").addEventListener("change",
 L),document.querySelectorAll("input[name=ideaMode]").forEach(r=>r.addEventListener("change",F)),document.addEventListener("input",r=>{r.target.closest("#app")&&
 C()}),document.addEventListener("change",r=>{r.target.closest("#app")&&C()}),Ie(),T(),fe(),L(),le({updateModels:T,updateIdeaMode:F,renderPeople:L,updateCompatibility:A}),
-F(),j(),z(),Se(),me(),ae()}import{edgeUrl as Fe}from"./customer-config.js";var f=document.getElementById("customer-access"),ze=document.getElementById("customer-studio"),m=document.body.hasAttribute(
-"data-admin-preview"),V=m?"liora-video-coach:lab-session":"liora-video-coach:session",D="liora-video-coach:remembered-session",_="liora-video-coach:remembered-e\
-mail",b;function W(e,t){try{return JSON.parse(window[e].getItem(t)||"null")}catch{return null}}function O(){if(!m&&b&&W("localStorage",D)?.token===b)try{localStorage.
+F(),j(),z(),Se(),me(),ae()}import{edgeUrl as Fe}from"./customer-config.js";var g=document.getElementById("customer-access"),ze=document.getElementById("customer-studio"),h=document.body.hasAttribute(
+"data-admin-preview"),V=h?"liora-video-coach:lab-session":"liora-video-coach:session",D="liora-video-coach:remembered-session",_="liora-video-coach:remembered-e\
+mail",b;function W(e,t){try{return JSON.parse(window[e].getItem(t)||"null")}catch{return null}}function O(){if(!h&&b&&W("localStorage",D)?.token===b)try{localStorage.
 removeItem(D)}catch{}b=void 0;try{sessionStorage.removeItem(V)}catch{}}function Oe(e,t,i){let r=JSON.stringify({token:e.token,admin:t,cameraRollSupported:e.cameraRollSupported===
-!0});try{sessionStorage.setItem(V,r)}catch{}if(!m)try{i?localStorage.setItem(D,r):localStorage.removeItem(D)}catch{}}var ye=!1;function Me(e){let t=new URL(e);if(t.
+!0});try{sessionStorage.setItem(V,r)}catch{}if(!h)try{i?localStorage.setItem(D,r):localStorage.removeItem(D)}catch{}}var ye=!1;function Me(e){let t=new URL(e);if(t.
 protocol!=="https:"||!t.hostname.endsWith(".supabase.co")||t.username||t.password||t.search||t.hash||t.pathname!=="/functions/v1/liora-access")throw new Error("\
 Ung\xFCltiger Edge-Link.");return t.href}async function R(e,t={},{recover:i=!1}={}){let r=b,a=await fetch(Me(Fe)+e,{method:"POST",headers:{"content-type":"appli\
 cation/json",...r?{"x-liora-session":r}:{}},body:JSON.stringify(t),credentials:"omit",cache:"no-store",redirect:"error",signal:AbortSignal.timeout(1e4)}),o=await a.
 json();if(!a.ok)throw a.status===401&&r&&(O(),i||location.reload()),Object.assign(new Error(o.error||"Anfrage fehlgeschlagen."),{status:a.status});return o}function Ee(e,t){
 let i=document.createElement("button");return i.type="button",i.className="secondary",i.textContent=e,i.addEventListener("click",t),i}async function Ae(){try{await R(
-"/logout"),O(),location.reload()}catch{if(!b)location.reload();else throw new Error("Abmeldung konnte nicht best\xE4tigt werden. Bitte erneut versuchen.")}}function J(e=m){
-let t=f.querySelector("form"),i=t.elements.namedItem("remember");if(!e&&i)try{let o=localStorage.getItem(_);o&&!t.elements.email.value&&(t.elements.email.value=
-o),i.checked=!!(o||W("localStorage",D))}catch{}f.querySelector("h1").textContent=e?"Administration":"Willkommen zur\xFCck",f.querySelector("[data-description]").
-textContent=e?"Melde dich mit deinem separaten Admin-Passwort an.":"Gib deine freigegebene E-Mail-Adresse und das gemeinsame Passwort ein.";let r=f.querySelector(
-"[data-role]");r.hidden=m,r.textContent=e?"Zum Kundenzugang":"Zur Administration",r.onclick=()=>{t.reset(),J(!e)};let a=f.querySelector("[role=status]");a.textContent=
-"",t.onsubmit=async o=>{o.preventDefault();let s=t.querySelector("button[type=submit]"),l=new FormData(t),d=l.has("remember");s.disabled=!0,r.disabled=!0,a.textContent=
-"";try{let c=await R(e?"/admin/login":"/login",{email:l.get("email"),password:l.get("password")});if(b=c.token,!e&&!m){try{d?localStorage.setItem(_,l.get("email").
-trim()):localStorage.removeItem(_)}catch{}if(d&&window.PasswordCredential&&navigator.credentials)try{let g=new window.PasswordCredential({id:l.get("email").trim(),
-password:l.get("password")});navigator.credentials.store(g).catch(()=>{})}catch{}}e&&!m?await X():Le(c),Oe(c,e,d),t.reset()}catch(c){O(),a.textContent=c.message}finally{
-s.disabled=!1,r.disabled=!1}}}function Le(e){document.body.dataset.accessScope=m?"admin-lab":e.draftScope,f.hidden=!0,ze.hidden=!1,ye||(we(async t=>{let{prompt:i}=await R(
-m?"/admin/prompt":"/prompt",t);return re(i,t)},{enableCameraRoll:e.cameraRollSupported===!0}),ye=!0)}async function X(e){let{members:t}=e??await R("/admin/list"),
+"/logout"),O(),location.reload()}catch{if(!b)location.reload();else throw new Error("Abmeldung konnte nicht best\xE4tigt werden. Bitte erneut versuchen.")}}function J(e=h){
+let t=g.querySelector("form"),i=t.elements.namedItem("remember");if(!e&&i)try{let o=localStorage.getItem(_);o&&!t.elements.email.value&&(t.elements.email.value=
+o),i.checked=!!(o||W("localStorage",D))}catch{}g.querySelector("h1").textContent=e?"Administration":"Willkommen zur\xFCck",g.querySelector("[data-description]").
+textContent=e?"Melde dich mit deinem separaten Admin-Passwort an.":"Gib deine freigegebene E-Mail-Adresse und das gemeinsame Passwort ein.";let r=g.querySelector(
+"[data-role]");r.hidden=h,r.textContent=e?"Zum Kundenzugang":"Zur Administration",r.onclick=()=>{t.reset(),J(!e)};let a=g.querySelector("[role=status]");a.textContent=
+"",t.onsubmit=async o=>{o.preventDefault();let s=t.querySelector("button[type=submit]"),d=new FormData(t),l=d.has("remember");s.disabled=!0,r.disabled=!0,a.textContent=
+"";try{let c=await R(e?"/admin/login":"/login",{email:d.get("email"),password:d.get("password")});if(b=c.token,!e&&!h){try{l?localStorage.setItem(_,d.get("email").
+trim()):localStorage.removeItem(_)}catch{}if(l&&window.PasswordCredential&&navigator.credentials)try{let m=new window.PasswordCredential({id:d.get("email").trim(),
+password:d.get("password")});navigator.credentials.store(m).catch(()=>{})}catch{}}e&&!h?await X():Le(c),Oe(c,e,l),t.reset()}catch(c){O(),a.textContent=c.message}finally{
+s.disabled=!1,r.disabled=!1}}}function Le(e){document.body.dataset.accessScope=h?"admin-lab":e.draftScope,g.hidden=!0,ze.hidden=!1,ye||(we(async t=>{let{prompt:i}=await R(
+h?"/admin/prompt":"/prompt",t);return re(i,t)},{enableCameraRoll:e.cameraRollSupported===!0}),ye=!0)}async function X(e){let{members:t}=e??await R("/admin/list"),
 i=document.getElementById("customer-admin"),r=i.querySelector("[role=status]"),a=i.querySelector("ul"),o=i.querySelector("[data-member-search]"),s=i.querySelector(
-"[data-member-count]"),l=new Intl.DateTimeFormat("de-CH",{dateStyle:"medium",timeStyle:"short",timeZone:"Europe/Zurich"});async function d(u,h){r.textContent="";
-try{return await R("/admin/change",{email:u,action:h}),await X(),!0}catch(k){r.textContent=k.message}}function c(){let u=o.value.trim().toLowerCase(),h=t.filter(
-({email:k})=>k.toLowerCase().includes(u));s.textContent=h.length?`${h.length} von ${t.length} Personen`:u?"Keine passende E-Mail-Adresse gefunden.":"Noch keine \
-Personen hinzugef\xFCgt.",a.replaceChildren();for(let{email:k,enabled:G,lastLoginAt:H}of h){let Q=document.createElement("li"),Y=document.createElement("strong");
+"[data-member-count]"),d=new Intl.DateTimeFormat("de-CH",{dateStyle:"medium",timeStyle:"short",timeZone:"Europe/Zurich"});async function l(u,f){r.textContent="";
+try{return await R("/admin/change",{email:u,action:f}),await X(),!0}catch(k){r.textContent=k.message}}function c(){let u=o.value.trim().toLowerCase(),f=t.filter(
+({email:k})=>k.toLowerCase().includes(u));s.textContent=f.length?`${f.length} von ${t.length} Personen`:u?"Keine passende E-Mail-Adresse gefunden.":"Noch keine \
+Personen hinzugef\xFCgt.",a.replaceChildren();for(let{email:k,enabled:G,lastLoginAt:H}of f){let Q=document.createElement("li"),Y=document.createElement("strong");
 Y.textContent=k;let K=document.createElement("small");K.style.display="block",K.textContent=H===void 0?"Letzter Login \xB7 Erfassung noch nicht aktiv":H?`Letzte\
-r Login \xB7 ${l.format(new Date(H))} (Schweizer Zeit)`:"Letzter Login \xB7 Noch nicht erfasst",Q.append(Y,G?" \xB7 Freigegeben":" \xB7 Gesperrt",K,Ee(G?"Sperre\
-n":"Freigeben",()=>d(k,G?"block":"enable"))," ",Ee("Entfernen",()=>{confirm("Diesen Zugang und seine Sitzungen entfernen?")&&d(k,"remove")})),a.append(Q)}}o.oninput=
-c,c();let g=i.querySelector("form");g.onsubmit=async u=>{u.preventDefault(),await d(new FormData(g).get("email"),"add")&&(g.reset(),r.textContent="Person steht \
-auf der Freigabeliste.")},i.querySelector("[data-logout]").onclick=()=>Ae().catch(u=>{r.textContent=u.message}),f.hidden=!0,i.hidden=!1}ze.querySelector("[data-\
-logout]").onclick=()=>Ae().catch(e=>{let t=document.getElementById("logout-status");t.textContent=e.message});async function Pe(){let e=W("sessionStorage",V)??(m?
-null:W("localStorage",D));if(!e||typeof e.admin!="boolean"||m&&!e.admin||typeof e.token!="string"||!/^[A-Za-z0-9_-]{43}$/.test(e.token)){O(),J();return}f.hidden=
-!0,b=e.token;try{let t=await R(e.admin?"/admin/list":"/session",{},{recover:!0});e.admin&&!m?await X(t):Le({...t,cameraRollSupported:e.cameraRollSupported});try{
-sessionStorage.setItem(V,JSON.stringify(e))}catch{}}catch(t){t.status===401||t.status===403?O():b=void 0,f.hidden=!1,J(e.admin),f.querySelector("[role=status]").
+r Login \xB7 ${d.format(new Date(H))} (Schweizer Zeit)`:"Letzter Login \xB7 Noch nicht erfasst",Q.append(Y,G?" \xB7 Freigegeben":" \xB7 Gesperrt",K,Ee(G?"Sperre\
+n":"Freigeben",()=>l(k,G?"block":"enable"))," ",Ee("Entfernen",()=>{confirm("Diesen Zugang und seine Sitzungen entfernen?")&&l(k,"remove")})),a.append(Q)}}o.oninput=
+c,c();let m=i.querySelector("form");m.onsubmit=async u=>{u.preventDefault(),await l(new FormData(m).get("email"),"add")&&(m.reset(),r.textContent="Person steht \
+auf der Freigabeliste.")},i.querySelector("[data-logout]").onclick=()=>Ae().catch(u=>{r.textContent=u.message}),g.hidden=!0,i.hidden=!1}ze.querySelector("[data-\
+logout]").onclick=()=>Ae().catch(e=>{let t=document.getElementById("logout-status");t.textContent=e.message});async function Pe(){let e=W("sessionStorage",V)??(h?
+null:W("localStorage",D));if(!e||typeof e.admin!="boolean"||h&&!e.admin||typeof e.token!="string"||!/^[A-Za-z0-9_-]{43}$/.test(e.token)){O(),J();return}g.hidden=
+!0,b=e.token;try{let t=await R(e.admin?"/admin/list":"/session",{},{recover:!0});e.admin&&!h?await X(t):Le({...t,cameraRollSupported:e.cameraRollSupported});try{
+sessionStorage.setItem(V,JSON.stringify(e))}catch{}}catch(t){t.status===401||t.status===403?O():b=void 0,g.hidden=!1,J(e.admin),g.querySelector("[role=status]").
 textContent=t.status===401?"Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.":"Die Sitzung konnte nicht gepr\xFCft werden. Lade die Seite neu oder melde d\
 ich erneut an."}}Pe();
