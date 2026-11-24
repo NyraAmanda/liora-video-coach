@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>LIORA · VideoCoach</title>
   <link rel="stylesheet" href="./src/styles.css?v=card-crop-1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://*.supabase.co; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'"><link rel="stylesheet" href="./access.css"><link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#24142d"><style>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; connect-src https://*.supabase.co; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'"><link rel="stylesheet" href="./access.css"><link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#24142d"><style>
 #customer-access {max-width:980px;background:#fffbf8;border-color:#ead9cf}
 .nyra-hero {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background:#f2e1d6;border-radius:18px;overflow:hidden}
 .nyra-login {min-width:0;padding:clamp(20px,4vw,44px);align-self:center}
@@ -105,6 +105,17 @@
 #admin-feedback .admin-member-actions, .feedback-dialog .admin-member-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 #admin-feedback [data-action="remove"] { color: #803546; }
 @media (max-width: 960px) { #admin-feedback { margin-inline: 12px; } }
+#my-figures { max-height: calc(100vh - 32px); overflow: auto; }
+#my-figures label { display: block; margin: 8px 0; }
+#my-figures select, #my-figures input:not([type=file]) { display: block; width: 100%; }
+#my-figures .figure-fields { border: 0; padding: 0; margin: 0 0 10px; min-width: 0; }
+#my-figures .figure-preview { width: 84px; height: 84px; object-fit: cover; border-radius: 12px; margin-bottom: 8px; }
+.figure-options { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-bottom: 10px; }
+.figure-options:empty { margin: 0; }
+.figure-options label { display: inline-flex; align-items: center; gap: 6px; margin: 0; }
+.figure-options input { width: auto; }
+.figure-options img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+@media (max-width: 680px) { #customer-studio .mast-inner { flex-wrap: wrap; } }
 @media(max-width:680px) {.nyra-hero {grid-template-columns:1fr}.nyra-hero img {aspect-ratio: 4/3;height:auto;object-position:center 43%}.nyra-note {margin-top:24px}}
 .nyra-brand {margin:0 0 .45rem;font-size:clamp(16px,2.5vw,22px);line-height:1.2;color:#4a2e43}
 .nyra-brand strong {font-size:clamp(24px,4vw,36px);font-family:var(--serif);font-weight:600}
@@ -191,6 +202,37 @@
   </dialog>
 </section>
 <div id="customer-studio" hidden>
+<dialog id="my-figures" class="feedback-dialog" aria-labelledby="my-figures-title">
+  <form>
+    <h2 id="my-figures-title">Meine Figuren</h2>
+    <p>Erzähl mir, was deine Figuren wiedererkennbar macht. Wähle danach im Briefing aus, wer in dieser Szene mitspielt.</p>
+    <label>Profil auswählen
+      <select data-figure-slot>
+        <option value="0">Hauptavatar</option>
+        <option value="1">Nebenfigur 1</option><option value="2">Nebenfigur 2</option><option value="3">Nebenfigur 3</option>
+        <option value="4">Nebenfigur 4</option><option value="5">Nebenfigur 5</option>
+        <option value="6">Haustier</option>
+      </select>
+    </label>
+    <fieldset class="figure-fields">
+      <label>Name<input name="name" maxlength="80" required></label>
+      <label>Aussehen oder Tierart<textarea name="appearance" rows="2" maxlength="500" placeholder="Woran erkennt man die Figur?"></textarea></label>
+      <label>Persönlichkeit und typische Reaktionen<textarea name="personality" rows="2" maxlength="500" placeholder="Was macht die Figur aus? Wie reagiert sie?"></textarea></label>
+      <label><span data-figure-voice-label>Sprechweise</span><textarea name="voice" rows="2" maxlength="400" placeholder="Tempo, Tonfall, Eigenheiten"></textarea></label>
+      <label>Beziehung zur Hauptfigur<textarea name="relationship" rows="2" maxlength="300" placeholder="Zum Beispiel Freundin, Partner oder Familienkatze"></textarea></label>
+      <label>Profilbild (freiwillig)<input name="photo" type="file" accept="image/jpeg,image/png,image/webp"></label>
+      <p class="small">Das Bild dient zur Orientierung in LIORA. Wenn ChatGPT ein Referenzbild sehen soll, hänge es im Chat an.</p>
+      <img data-figure-preview class="figure-preview" alt="Gespeicherte Profilvorschau" hidden>
+      <div class="admin-member-actions">
+        <button type="submit" class="primary">Profil speichern</button>
+        <button type="button" class="secondary" data-figure-clear-photo>Bild entfernen</button>
+        <button type="button" class="secondary" data-figure-remove disabled>Profil löschen</button>
+      </div>
+    </fieldset>
+    <p role="status" aria-live="polite"></p>
+    <button type="button" class="secondary" data-figures-close>Schließen</button>
+  </form>
+</dialog>
 <dialog id="send-feedback" class="feedback-dialog" aria-labelledby="send-feedback-title">
   <form>
     <h2 id="send-feedback-title">Feedback zur App</h2>
@@ -206,7 +248,7 @@
 <header class="masthead">
   <div class="mast-inner">
     <a href="./" class="wordmark" aria-label="LIORA Startseite"><span aria-hidden="true">✦</span> LIORA</a>
-    <span class="mast-context">VideoCoach</span><button type="button" class="ghost" data-feedback-open>Feedback</button><button type="button" class="ghost" data-logout>Abmelden</button><span id="logout-status" role="status"></span>
+    <span class="mast-context">VideoCoach</span><button type="button" class="ghost" data-figures-open>Meine Figuren</button><button type="button" class="ghost" data-feedback-open>Feedback</button><button type="button" class="ghost" data-logout>Abmelden</button><span id="logout-status" role="status"></span>
   </div>
 </header>
 <main class="shell" id="app">
@@ -309,7 +351,11 @@
         </div>
 <p class="small">Hier legst du fest, welche Referenzen du bereits hast. Vor der Bildproduktion fragt LIORA im Chat aktiv nach den Charakter- und Outfitbildern. Die Bilder lädst du dort hoch – nicht in diesem Formular.</p>
 <details id="refDetails"><summary>Avatar, Outfits und Ort vorbereiten</summary><div class="inside">
-<div id="personRefs"></div><p class="small" style="margin:10px 0 16px;">Dir fehlt eine Idee für Outfit oder Drehort? Such dir auf Pinterest passende Anhaltspunkte für Farben, Material oder Stimmung. <a href="https://www.pinterest.com/search/pins/?q=outfit%20ideas" target="_blank" rel="noopener noreferrer">Outfit-Inspiration</a> · <a href="https://www.pinterest.com/search/pins/?q=interior%20moodboard" target="_blank" rel="noopener noreferrer">Orts-Inspiration</a></p>
+<div id="personRefs"></div><section class="ref-card" aria-labelledby="saved-figures-title">
+  <div class="ref-title" id="saved-figures-title">Gespeicherte Figuren fürs Briefing</div>
+  <div data-figure-options class="figure-options"></div>
+  <button type="button" class="secondary" data-figures-open>Meine Figuren öffnen</button>
+</section><p class="small" style="margin:10px 0 16px;">Dir fehlt eine Idee für Outfit oder Drehort? Such dir auf Pinterest passende Anhaltspunkte für Farben, Material oder Stimmung. <a href="https://www.pinterest.com/search/pins/?q=outfit%20ideas" target="_blank" rel="noopener noreferrer">Outfit-Inspiration</a> · <a href="https://www.pinterest.com/search/pins/?q=interior%20moodboard" target="_blank" rel="noopener noreferrer">Orts-Inspiration</a></p>
 <div class="ref-card"><div class="ref-title">Umgebung / Ort</div><div class="grid"><div><label for="location">Wo spielt die Szene?</label><input id="location" placeholder="z. B. Küche, Café, Studio"></div><div><label for="locationRef">Ortsbild</label><select id="locationRef"><option value="none">Noch kein Bild</option><option value="ready">Bild vorhanden – im Chat hochladen</option><option value="create">LIORA soll ein Bildprompt erstellen</option></select></div></div></div>
 <div class="ref-card"><div class="ref-title">Startframe / Keyframe</div><label for="keyframeRef">Hast du bereits einen Startframe?</label><select id="keyframeRef"><option value="unsure">LIORA soll entscheiden, ob einer nötig ist</option><option value="ready">Ja – im Chat hochladen</option><option value="create">Nein – LIORA soll den Bildprompt erstellen</option></select></div>
 <p class="hint">Bildnummern wie Image 1 = Person A werden erst nach dem Hochladen im Chat anhand der tatsächlichen Upload-Reihenfolge festgelegt. Outfit- und Ortsbilder bekommen eigene Rollen.</p>
@@ -368,4 +414,4 @@
   <a href="https://nyraimpressum.netlify.app/">Impressum</a>
   <a href="https://nyradatenschutz.netlify.app/">Datenschutz</a>
 </footer>
-<script type="module" src="./app.js?v=feedback"></script></body></html>
+<script type="module" src="./app.js?v=figures"></script></body></html>
