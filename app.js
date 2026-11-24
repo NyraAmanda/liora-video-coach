@@ -226,7 +226,7 @@ Ung\xFCltiger Edge-Link.");return t.href}async function R(e,t={},{recover:i=!1}=
 cation/json",...r?{"x-liora-session":r}:{}},body:JSON.stringify(t),credentials:"omit",cache:"no-store",redirect:"error",signal:AbortSignal.timeout(1e4)}),o=await a.
 json();if(!a.ok)throw a.status===401&&r&&(O(),i||location.reload()),Object.assign(new Error(o.error||"Anfrage fehlgeschlagen."),{status:a.status});return o}function Ee(e,t){
 let i=document.createElement("button");return i.type="button",i.className="secondary",i.textContent=e,i.addEventListener("click",t),i}async function Ae(){try{await R(
-"/logout"),O(),location.reload()}catch{if(!b)location.reload();else throw new Error("Abmeldung konnte nicht best\xE4tigt werden. Bitte erneut versuchen.")}}function J(e=h){
+"/logout"),O(),location.reload()}catch{if(!b)location.reload();else throw new Error("Abmeldung konnte nicht best\xE4tigt werden. Bitte erneut versuchen.")}}function J(e=h||location.hash==='#admin-feedback'){
 let t=g.querySelector("form"),i=t.elements.namedItem("remember");if(!e&&i)try{let o=localStorage.getItem(_);o&&!t.elements.email.value&&(t.elements.email.value=
 o),i.checked=!!(o||W("localStorage",L))}catch{}g.querySelector("h1").textContent=e?"Administration":"Willkommen zur\xFCck",g.querySelector("[data-description]").
 textContent=e?"Melde dich mit deinem separaten Admin-Passwort an.":"Gib deine freigegebene E-Mail-Adresse und das gemeinsame Passwort ein.";let r=g.querySelector(
@@ -343,6 +343,7 @@ h?"/admin/prompt":"/prompt",t);return re(i,t)},{enableCameraRoll:e.cameraRollSup
   panel.querySelector("[data-logout]").onclick = () => Ae().catch(error => { status.textContent = error.message; });
   g.hidden = true;
   panel.hidden = false;
+  activateFeedbackAdmin();
 }
 ze.querySelector("[data-\
 logout]").onclick=()=>Ae().catch(e=>{let t=document.getElementById("logout-status");t.textContent=e.message});async function Be(){let e=W("sessionStorage",V)??(h?
@@ -350,4 +351,170 @@ null:W("localStorage",L));if(!e||typeof e.admin!="boolean"||h&&!e.admin||typeof 
 !0,b=e.token;try{let t=await R(e.admin?"/admin/list":"/session",{},{recover:!0});e.admin&&!h?await X(t):De({...t,cameraRollSupported:e.cameraRollSupported});try{
 sessionStorage.setItem(V,JSON.stringify(e))}catch{}}catch(t){t.status===401||t.status===403?O():b=void 0,g.hidden=!1,J(e.admin),g.querySelector("[role=status]").
 textContent=t.status===401?"Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.":"Die Sitzung konnte nicht gepr\xFCft werden. Lade die Seite neu oder melde d\
-ich erneut an."}}Be();
+ich erneut an."}}
+const feedbackPage = document.querySelector('#admin-feedback');
+const feedbackMembers = document.querySelector('#customer-admin');
+const feedbackList = feedbackPage?.querySelector('[data-feedback-list]');
+let feedbackAdminActive = false;
+let feedbackOffset = 0;
+let feedbackLoad = 0;
+
+function activateFeedbackAdmin() {
+  feedbackAdminActive = Boolean(feedbackPage);
+  showFeedbackPage();
+}
+
+function showFeedbackPage() {
+  if (!feedbackAdminActive) return;
+  const show = location.hash === '#admin-feedback';
+  const wasVisible = !feedbackPage.hidden;
+  feedbackMembers.hidden = show;
+  feedbackPage.hidden = !show;
+  if (show && !wasVisible) {
+    feedbackOffset = 0;
+    feedbackPage.querySelector('h1').focus();
+    refreshFeedback();
+  } else if (wasVisible && !show) {
+    feedbackLoad++;
+    feedbackList.replaceChildren();
+    feedbackMembers.querySelector('[href="#admin-feedback"]').focus();
+  }
+}
+
+async function refreshFeedback() {
+  const version = ++feedbackLoad;
+  const status = feedbackPage.querySelector('[role=status]');
+  const previous = feedbackPage.querySelector('[data-feedback-previous]');
+  const next = feedbackPage.querySelector('[data-feedback-next]');
+  previous.disabled = next.disabled = true;
+  feedbackList.replaceChildren();
+  status.textContent = 'Feedback wird geladen …';
+  try {
+    const { entries } = await R('/admin/feedback/list', { offset: feedbackOffset });
+    if (version !== feedbackLoad) return;
+    if (!entries.length && feedbackOffset > 0) {
+      feedbackOffset -= 50;
+      return refreshFeedback();
+    }
+    previous.disabled = feedbackOffset === 0;
+    next.disabled = entries.length <= 50;
+    status.textContent = entries.length ? '' : 'Noch kein Feedback vorhanden.';
+    feedbackList.replaceChildren(...entries.slice(0, 50).map(makeFeedbackRow));
+  } catch (error) {
+    if (version === feedbackLoad) status.textContent = error.message;
+  }
+}
+
+function makeFeedbackRow(entry) {
+  const row = document.createElement('li');
+  const sender = document.createElement('strong');
+  sender.textContent = entry.email;
+  const meta = document.createElement('small');
+  meta.textContent = new Intl.DateTimeFormat('de-CH', {
+    dateStyle: 'medium', timeStyle: 'short', timeZone: 'Europe/Zurich'
+  }).format(new Date(entry.createdAt)) + (entry.done ? ' · Erledigt' : ' · Offen');
+  const message = document.createElement('p');
+  message.className = 'feedback-message';
+  message.textContent = entry.message;
+  const actions = document.createElement('div');
+  actions.className = 'admin-member-actions';
+  const edit = Ee('Bearbeiten', () => {
+    const dialog = feedbackPage.querySelector('dialog');
+    const form = dialog.querySelector('form');
+    form.elements.message.value = entry.message;
+    form.onsubmit = async event => {
+      event.preventDefault();
+      const text = form.elements.message.value.trim();
+      if (!text || !confirm('Änderungen an diesem Feedback speichern?')) return;
+      const submit = form.querySelector('[type=submit]');
+      submit.disabled = true;
+      try {
+        if (await changeFeedback(entry, { action: 'edit', message: text })) dialog.close();
+      } finally {
+        submit.disabled = false;
+      }
+    };
+    dialog.showModal();
+  });
+  const toggle = Ee(entry.done ? 'Wieder öffnen' : 'Als erledigt markieren', async () => {
+    if (!confirm(entry.done ? 'Diesen Eintrag wieder öffnen?' : 'Diesen Eintrag als erledigt markieren?')) return;
+    toggle.disabled = true;
+    try {
+      await changeFeedback(entry, { action: 'status', done: !entry.done });
+    } finally {
+      toggle.disabled = false;
+    }
+  });
+  const remove = Ee('Löschen', async () => {
+    if (!confirm('Diesen Feedback-Eintrag endgültig löschen?')) return;
+    remove.disabled = true;
+    try {
+      await changeFeedback(entry, { action: 'delete' });
+    } finally {
+      remove.disabled = false;
+    }
+  });
+  remove.dataset.action = 'remove';
+  actions.append(edit, toggle, remove);
+  row.append(sender, meta, message, actions);
+  return row;
+}
+
+async function changeFeedback(entry, update) {
+  const status = feedbackPage.querySelector('[role=status]');
+  const dialogStatus = feedbackPage.querySelector('dialog [role=alert]');
+  dialogStatus.textContent = '';
+  try {
+    await R('/admin/feedback/change', { id: entry.id, revision: entry.revision, ...update });
+    await refreshFeedback();
+    return true;
+  } catch (error) {
+    if (error.status === 409) await refreshFeedback();
+    status.textContent = error.message;
+    dialogStatus.textContent = error.message;
+    return false;
+  }
+}
+
+if (feedbackPage) {
+  window.addEventListener('hashchange', showFeedbackPage);
+  feedbackPage.querySelector('[data-feedback-refresh]').onclick = refreshFeedback;
+  feedbackPage.querySelector('[data-feedback-previous]').onclick = () => { feedbackOffset -= 50; refreshFeedback(); };
+  feedbackPage.querySelector('[data-feedback-next]').onclick = () => { feedbackOffset += 50; refreshFeedback(); };
+  feedbackPage.querySelector('[data-feedback-close]').onclick = () => feedbackPage.querySelector('dialog').close();
+  feedbackPage.querySelector('[data-logout]').onclick = () => Ae().catch(error => {
+    feedbackPage.querySelector('[role=status]').textContent = error.message;
+  });
+
+  const dialog = document.querySelector('#send-feedback');
+  const form = dialog.querySelector('form');
+  const status = dialog.querySelector('[role=status]');
+  let submissionId;
+  const open = document.querySelector('[data-feedback-open]');
+  open.hidden = h;
+  open.onclick = () => dialog.showModal();
+  dialog.querySelector('[data-feedback-close]').onclick = () => dialog.close();
+  form.elements.message.oninput = () => { submissionId = undefined; status.textContent = ''; };
+  form.onsubmit = async event => {
+    event.preventDefault();
+    const message = form.elements.message.value.trim();
+    if (!message) { status.textContent = 'Bitte schreibe eine kurze Rückmeldung.'; return; }
+    const submit = form.querySelector('[type=submit]');
+    submit.disabled = true;
+    form.elements.message.readOnly = true;
+    try {
+      submissionId ??= crypto.randomUUID();
+      await R('/feedback', { id: submissionId, message });
+      form.reset();
+      submissionId = undefined;
+      status.textContent = 'Danke für dein Feedback 💜';
+    } catch (error) {
+      status.textContent = error.message;
+    } finally {
+      form.elements.message.readOnly = false;
+      submit.disabled = false;
+    }
+  };
+}
+
+Be();
