@@ -115,7 +115,15 @@
 .figure-options label { display: inline-flex; align-items: center; gap: 6px; margin: 0; }
 .figure-options input { width: auto; }
 .figure-options img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
-@media (max-width: 680px) { #customer-studio .mast-inner { flex-wrap: wrap; } }
+#customer-studio .mast-account-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+#customer-studio .mast-account-actions button { min-height: 44px; }
+#logout-status:empty { display: none; }
+#butler [data-feedback-open] { margin-top: 12px; min-height: 44px; }
+@media (max-width: 680px) {
+  #customer-studio .mast-inner { display: grid; grid-template-columns: 1fr auto; gap: 8px 14px; padding-block: 10px; }
+  #customer-studio .mast-account-actions { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); margin-left: 0; }
+  #logout-status { grid-column: 1 / -1; }
+}
 @media(max-width:680px) {.nyra-hero {grid-template-columns:1fr}.nyra-hero img {aspect-ratio: 4/3;height:auto;object-position:center 43%}.nyra-note {margin-top:24px}}
 .nyra-brand {margin:0 0 .45rem;font-size:clamp(16px,2.5vw,22px);line-height:1.2;color:#4a2e43}
 .nyra-brand strong {font-size:clamp(24px,4vw,36px);font-family:var(--serif);font-weight:600}
@@ -254,7 +262,12 @@
 <header class="masthead">
   <div class="mast-inner">
     <a href="./" class="wordmark" aria-label="LIORA Startseite"><span aria-hidden="true">✦</span> LIORA</a>
-    <span class="mast-context">VideoCoach</span><button type="button" class="ghost" data-figures-open>Meine Figuren</button><button type="button" class="ghost" data-feedback-open>Feedback</button><button type="button" class="ghost" data-logout>Abmelden</button><span id="logout-status" role="status"></span>
+    <span class="mast-context">VideoCoach</span>
+    <div class="mast-account-actions">
+      <button type="button" class="ghost" data-figures-open>Meine Figuren</button>
+      <button type="button" class="ghost" data-logout>Abmelden</button>
+    </div>
+    <span id="logout-status" role="status"></span>
   </div>
 </header>
 <main class="shell" id="app">
@@ -409,6 +422,7 @@
         <summary><span class="butler-icon" aria-hidden="true">✦</span><span>LIORA-Butler<small>Hilfe für diesen Schritt</small></span></summary>
         <div class="inside">
           <p id="butler-tip">Wähle die Karte, die am besten zu deiner Szene passt. Du kannst das Format später wechseln.</p>
+          <button type="button" class="secondary" data-feedback-open>Feedback geben</button>
         </div>
       </details>
     </aside>
