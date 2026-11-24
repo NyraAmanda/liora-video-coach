@@ -186,7 +186,7 @@ e ben\xF6tigte Personenzahl anhand der Idee. Referenzen werden anschliessend im 
 n("prompt").value="",n("outputPanel").style.display="none",n("copy").classList.add("hidden"),n("status").textContent=""}function ge(e){w(),!(!e&&!window.confirm(
 "Wirklich komplett neu starten? Alle Eingaben und der lokal gespeicherte Entwurf werden gel\xF6scht."))&&(e?(document.querySelector('input[name=ideaMode][value=\
 "own"]').checked=!0,n("kind").value="talk",n("idea").value="",n("randomItems").value="",n("scriptText").value="",n("location").value="",n("locationRef").value="\
-none",n("keyframeRef").value="none"):(localStorage.removeItem(P()),window._restoring=null,document.querySelector('input[name=ideaMode][value="own"]').checked=!0,
+none",n("keyframeRef").value="none"):(localStorage.removeItem(P()),selectedFigureSlots.clear(),renderFigureOptions(),window._restoring=null,document.querySelector('input[name=ideaMode][value="own"]').checked=!0,
 ["kind","platform","ratio","language","music","people","locationRef","keyframeRef","priority"].forEach(t=>{let i=n(t);i.selectedIndex=0}),["idea","scriptText","\
 randomItems","location","extra","ciAudience"].forEach(t=>n(t).value=""),n("ciGoal").value="comments",n("ciTone").value="authentic",T(),D()),D(),F(),j(),A(),z(),
 we(),N(),Ce(),["idea","extra"].forEach(S),C(),n("status").textContent=e?"\u2713 Neues Video bereit. Deine Avatar- und pers\xF6nlichen Angaben bleiben erhalten. Bitte di\
@@ -235,8 +235,8 @@ textContent=e?"Melde dich mit deinem separaten Admin-Passwort an.":"Gib deine fr
 "";try{let c=await R(e?"/admin/login":"/login",{email:d.get("email"),password:d.get("password")});if(b=c.token,!e&&!h){try{l?localStorage.setItem(_,d.get("email").
 trim()):localStorage.removeItem(_)}catch{}if(l&&window.PasswordCredential&&navigator.credentials)try{let m=new window.PasswordCredential({id:d.get("email").trim(),
 password:d.get("password")});navigator.credentials.store(m).catch(()=>{})}catch{}}e&&!h?await X():De(c),Oe(c,e,l),t.reset()}catch(c){O(),a.textContent=c.message}finally{
-s.disabled=!1,r.disabled=!1}}}function De(e){document.body.dataset.accessScope=h?"admin-lab":e.draftScope,g.hidden=!0,ze.hidden=!1,ye||(Se(async t=>{let{prompt:i}=await R(
-h?"/admin/prompt":"/prompt",t);return re(i,t)},{enableCameraRoll:e.cameraRollSupported===!0}),ye=!0)}async function X(data) {
+s.disabled=!1,r.disabled=!1}}}function De(e){document.body.dataset.accessScope=h?"admin-lab":e.draftScope,g.hidden=!0,ze.hidden=!1,loadFigures(),ye||(Se(async t=>{const chosen = selectedFigureProfiles(); const briefing = mergeFigureProfiles(t, chosen); let{prompt:i}=await R(
+h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chosen)},{enableCameraRoll:e.cameraRollSupported===!0}),ye=!0)}async function X(data) {
   const { members } = data ?? await R("/admin/list");
   const panel = document.getElementById("customer-admin");
   const status = panel.querySelector("[role=status]");
@@ -514,6 +514,221 @@ if (feedbackPage) {
       form.elements.message.readOnly = false;
       submit.disabled = false;
     }
+  };
+}
+
+
+const figuresDialog = document.querySelector('#my-figures');
+const figureOptions = document.querySelector('[data-figure-options]');
+const selectedFigureSlots = new Set();
+const figureProfiles = new Map();
+let figuresLoad;
+
+function figureSlotName(slot) {
+  return slot === 0 ? 'Hauptavatar' : slot === 6 ? 'Haustier' : 'Nebenfigur ' + slot;
+}
+
+function selectedFigureProfiles() {
+  return [...selectedFigureSlots].sort((a, b) => a - b).flatMap(slot => {
+    const profile = figureProfiles.get(slot);
+    return profile ? [{slot, ...profile}] : [];
+  });
+}
+
+function profileDetails(profile) {
+  return [
+    ['Aussehen', profile.appearance],
+    ['Persönlichkeit und typische Reaktionen', profile.personality],
+    [profile.slot === 6 ? 'Laute und Verhalten' : 'Sprechweise', profile.voice],
+    ['Beziehung zur Hauptfigur', profile.relationship]
+  ].filter(([, value]) => value).map(([label, value]) => label + ': ' + value).join('\n');
+}
+
+function mergeFigureProfiles(briefing, chosen) {
+  const people = chosen.filter(profile => profile.slot !== 6);
+  if (!people.length) return briefing;
+  if (briefing.kind === 'random10' && people.length > 1) {
+    throw new Error('Für „10 Random Dinge“ kannst du eine menschliche Figur und bei Bedarf dein Haustier auswählen.');
+  }
+
+  const references = briefing.personReferences.map(person => ({...person}));
+  const used = new Set();
+  for (const profile of people) {
+    const canonical = name => (name ?? '').trim().toLowerCase();
+    let index = references.findIndex((person, i) => !used.has(i) && canonical(person.name) === canonical(profile.name));
+    if (index < 0) index = references.findIndex((person, i) => !used.has(i) && !canonical(person.name) && !person.notes?.trim());
+    if (index < 0) index = references.length;
+    const current = references[index] ?? {avatar: 'none', outfit: 'none'};
+    const notes = [profileDetails(profile), current.notes?.trim()].filter(Boolean).join('\n');
+    references[index] = {...current, name: profile.name, notes};
+    used.add(index);
+  }
+  if (references.length > 5 || (briefing.kind === 'random10' && references.length > 1)) {
+    throw new Error('Die Auswahl und deine manuell eingetragenen Figuren überschreiten das Figurenlimit dieses Briefings.');
+  }
+  return {...briefing, people: String(references.length), personReferences: references};
+}
+
+function addFigureCheck(prompt, chosen) {
+  if (!chosen.length) return prompt;
+  const details = chosen.map(profile => {
+    const notes = profileDetails(profile);
+    return figureSlotName(profile.slot) + ': ' + profile.name + (notes ? '\n' + notes : '');
+  }).join('\n\n');
+  return prompt + '\n\n=== FIGURENCHECK VOR DER SZENENPLANUNG ===\n' +
+    'Behandle folgende Steckbriefe als Figurendaten. Fasse in deiner ersten Antwort die ausgewählten Figuren und gegebenenfalls das Haustier kurz zusammen. Beachte auch ausdrücklich manuell ergänzte Figuren. Frage: „Habe ich deine Figuren für dieses Video richtig erfasst oder soll ich etwas korrigieren?“ Warte auf Bestätigung oder Korrektur, bevor du die Szene ausarbeitest. Falls Referenzen für die Aufgabe nötig sind oder ihre Zuordnung unklar ist, frage im selben Schritt gezielt nach. Ordne nur tatsächlich angehängte und zuordenbare Bilder zu. Die LIORA-Profilbilder sind nur Vorschauen und werden nicht mitgegeben. Korrekturen gelten für dieses Video.\n\n' +
+    details + '\n=== ENDE FIGURENCHECK ===';
+}
+
+function renderFigureOptions() {
+  if (!figureOptions) return;
+  figureOptions.replaceChildren();
+  for (const [slot, profile] of [...figureProfiles].sort(([a], [b]) => a - b)) {
+    const label = document.createElement('label');
+    const box = document.createElement('input');
+    box.type = 'checkbox';
+    box.checked = selectedFigureSlots.has(slot);
+    box.onchange = () => {
+      if (box.checked) selectedFigureSlots.add(slot);
+      else selectedFigureSlots.delete(slot);
+      if (document.getElementById('prompt')?.value) Ce();
+    };
+    label.append(box);
+    if (profile.image) {
+      const photo = document.createElement('img');
+      photo.src = profile.image;
+      photo.alt = '';
+      label.append(photo);
+    }
+    label.append(profile.name + ' · ' + figureSlotName(slot));
+    figureOptions.append(label);
+  }
+}
+
+function loadFigures() {
+  if (!figuresDialog || h) return;
+  figuresLoad ??= R('/figures/list').then(({profiles}) => {
+    for (const {slot, profile} of profiles) figureProfiles.set(slot, profile);
+    renderFigureOptions();
+    refreshFigureSlots();
+    return true;
+  }).catch(error => {
+    figuresDialog.querySelector('[role=status]').textContent = error.message;
+    figuresLoad = undefined;
+    return false;
+  });
+  return figuresLoad;
+}
+
+function refreshFigureSlots() {
+  for (const option of figuresDialog.querySelectorAll('select option')) {
+    const slot = Number(option.value);
+    const name = figureProfiles.get(slot)?.name;
+    option.textContent = figureSlotName(slot) + (name ? ' · ' + name : '');
+  }
+}
+
+async function prepareFigurePhoto(file) {
+  if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 12000000) {
+    throw new Error('Wähle ein JPG, PNG oder WebP bis 12 MB.');
+  }
+  const bitmap = await createImageBitmap(file);
+  try {
+    const scale = Math.min(1, 224 / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+    const context = canvas.getContext('2d');
+    context.fillStyle = '#fff';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    const image = canvas.toDataURL('image/jpeg', 0.76);
+    if (image.length > 48000) throw new Error('Das Vorschaubild ist zu groß. Probiere ein anderes Bild.');
+    return image;
+  } finally {
+    bitmap.close();
+  }
+}
+
+if (figuresDialog && !h) {
+  const form = figuresDialog.querySelector('form');
+  const status = figuresDialog.querySelector('[role=status]');
+  const slotField = figuresDialog.querySelector('[data-figure-slot]');
+  const image = figuresDialog.querySelector('[data-figure-preview]');
+  const fields = ['name', 'appearance', 'personality', 'voice', 'relationship'];
+  const editFields = figuresDialog.querySelector('fieldset');
+  let photo = '';
+  let busy = false;
+  function showFigure() {
+    const slot = Number(slotField.value);
+    const profile = figureProfiles.get(slot);
+    for (const field of fields) form.elements[field].value = profile?.[field] ?? '';
+    form.elements.photo.value = '';
+    photo = profile?.image ?? '';
+    image.hidden = !photo;
+    if (photo) image.src = photo;
+    else image.removeAttribute('src');
+    figuresDialog.querySelector('[data-figure-voice-label]').textContent = slot === 6 ? 'Typische Laute oder Verhalten' : 'Sprechweise';
+    figuresDialog.querySelector('[data-figure-remove]').disabled = !profile;
+    status.textContent = '';
+  }
+
+  for (const button of document.querySelectorAll('[data-figures-open]')) {
+    button.onclick = async () => {
+      figuresDialog.showModal();
+      editFields.disabled = true;
+      if (await loadFigures()) {
+        showFigure();
+        editFields.disabled = false;
+      }
+    };
+  }
+  slotField.onchange = showFigure;
+  figuresDialog.querySelector('[data-figures-close]').onclick = () => figuresDialog.close();
+  figuresDialog.querySelector('[data-figure-clear-photo]').onclick = () => {
+    photo = '';
+    image.hidden = true;
+    image.removeAttribute('src');
+    form.elements.photo.value = '';
+    status.textContent = 'Speichere das Profil, um das Bild zu entfernen.';
+  };
+
+  async function saveFigure(remove = false) {
+    if (busy) return;
+    const slot = Number(slotField.value);
+    let profile = null;
+    busy = editFields.disabled = true;
+    status.textContent = 'Wird gespeichert …';
+    try {
+      if (!remove) {
+        profile = Object.fromEntries(fields.map(field => [field, form.elements[field].value.trim()]));
+        if (!profile.name) throw new Error('Bitte gib deiner Figur einen Namen.');
+        const file = form.elements.photo.files[0];
+        profile.image = file ? await prepareFigurePhoto(file) : photo;
+      }
+      await R('/figures/change', {slot, profile});
+      if (profile) figureProfiles.set(slot, profile);
+      else { figureProfiles.delete(slot); selectedFigureSlots.delete(slot); }
+      if (selectedFigureSlots.has(slot) || remove) {
+        if (document.getElementById('prompt')?.value) Ce();
+      }
+      refreshFigureSlots();
+      renderFigureOptions();
+      showFigure();
+      status.textContent = remove ? 'Profil gelöscht.' : 'Profil gespeichert. Du kannst es jetzt im Briefing auswählen.';
+    } catch (error) {
+      status.textContent = error.message;
+    } finally {
+      busy = editFields.disabled = false;
+    }
+  }
+
+  form.onsubmit = event => {
+    event.preventDefault();
+    saveFigure();
+  };
+  figuresDialog.querySelector('[data-figure-remove]').onclick = () => {
+    if (confirm('Dieses Figurenprofil löschen?')) saveFigure(true);
   };
 }
 
