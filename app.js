@@ -47,19 +47,47 @@ ie Kurzfassung kommen. Passe Rastergr\xF6sse, Ortswechsel, Zwischenruf und Dialo
 
 `+(t.randomWorld==="fairy"?"M\xE4rchenwahl: "+(t.fairyTale==="custom"?t.customFairy:t.fairyTale)+`
 
-`:"")+r)}var n=e=>document.getElementById(e);var Le=[["references","Referenzen"],["frames","Frames"]],q=e=>e==="kling"||e==="seedance";function ie(){let e=n("model"),t=document.createElement("fieldset");t.
+`:"")+r)}var n=e=>document.getElementById(e);const imageInputLabels = {references:"Referenzen",frames:"Frames"};
+const imageInputsByPlatform = {
+  higgsfield: {kling:["references","frames"],seedance:["references","frames"]},
+  openart: {kling:["references","frames"],seedance:["references","frames"]},
+  flow: {veo:["frames"],omni:["references","frames"]}
+};
+function availableImageInputs(platform, model) {
+  return imageInputsByPlatform[platform]?.[model] ?? [];
+}
+function ie(){let e=n("model"),platform=n("platform"),t=document.createElement("fieldset");t.
 className="field";let i=document.createElement("legend");i.textContent="Bildeingabe f\xFCr das Videomodell";let r=document.createElement("p");r.className="hint",
-r.textContent="W\xE4hle den Modus, den Kling oder Seedance auf deiner Plattform tats\xE4chlich anbietet.",t.append(i,r);let a=[["Referenzen","So sollen Figur, O\
+r.textContent="Wähle die Bildeingabe für deine Szene."; t.append(i,r);let a=[["Referenzen","So sollen Figur, O\
 utfit oder Dinge aussehen. Lade daf\xFCr zum Beispiel ein Avatarportr\xE4t oder ein Outfitfoto in ein Referenzfeld hoch. Das Modell nutzt es als Vorlage. Der Videopro\
 mpt muss deshalb genauer beschreiben, wo die Szene beginnt, wer wo steht und was sich bewegt."],["Frames","So soll die Szene beginnen oder enden. Lade daf\xFCr ein\
  fertiges Szenenbild hoch, das bereits die Figur im Outfit am gew\xFCnschten Ort zeigt. Ein Endbild kannst du erg\xE4nzen, wenn der Modus es unterst\xFCtzt. Der Videopro\
-mpt beschreibt vor allem, wie die Szene von diesem Bild aus weitergeht."]];for(let[l,c]of a){let m=document.createElement("p");m.className="hint";let u=document.
-createElement("strong");u.textContent=l,m.append(u," \u2013 ",c),t.append(m)}let o="",s=Le.map(([l,c])=>{let m=document.createElement("button");return m.type="b\
+mpt beschreibt vor allem, wie die Szene von diesem Bild aus weitergeht."]];const explanations = a.map(([l,c])=>{let m=document.createElement("p");m.className="hint";let u=document.
+createElement("strong");u.textContent=l,m.append(u," \u2013 ",c),t.append(m); return m;});let o="",s=Object.entries(imageInputLabels).map(([l,c])=>{let m=document.createElement("button");return m.type="b\
 utton",m.textContent=c,m.addEventListener("click",()=>{o=l,d(),n("prompt").value="",n("copy").classList.add("hidden"),n("outputPanel").style.display="none"}),t.
-append(m," "),{value:l,button:m}});function d(){t.hidden=!q(e.value);for(let{value:l,button:c}of s)c.className=l===o?"primary":"secondary",c.setAttribute("aria-\
-pressed",String(l===o))}for(let l of["model","platform","newVideo","fullReset"])n(l).addEventListener(l.endsWith("Reset")||l==="newVideo"?"click":"change",()=>{
-o="",queueMicrotask(d)});return n("compat").before(t),queueMicrotask(d),()=>q(e.value)?o:""}function Z(e,t,i){return!q(t)&&t!=="recommend"?e:[e,"=== VERBINDLICH\
-E BILDEINGABE F\xDCR KLING UND SEEDANCE ===",i==="references"?"Gew\xE4hlt: REFERENZEN. Verwende die Bilder als Motiv- und Identit\xE4tsvorlagen in best\xE4tigten Referen\
+append(m," "),{value:l,button:m}});function d(){
+  const modes=availableImageInputs(platform.value,e.value);
+  t.hidden=modes.length!==2;
+  s.forEach(({value,button},index)=>{
+    button.hidden=explanations[index].hidden=!modes.includes(value);
+    button.className=value===o?"primary":"secondary";
+    button.setAttribute("aria-pressed",String(value===o));
+  });
+}
+for(const id of ["model","platform","newVideo","fullReset"]){
+  n(id).addEventListener(id==="model"||id==="platform"?"change":"click",()=>{
+    o="";
+    queueMicrotask(d);
+  });
+}
+n("compat").before(t);
+queueMicrotask(d);
+return ()=>{
+  const modes=availableImageInputs(platform.value,e.value);
+  return modes.length===1?modes[0]:modes.includes(o)?o:"";
+};
+}
+function Z(e,t,i,platform){const modes=availableImageInputs(platform,t); const heading="=== BILDEINGABE FÜR DIE GEWÄHLTE PLATTFORM ==="; if(!modes.length) return [e,heading,"Für diese Plattform und Modellvariante ist keine Bildeingabe vorgegeben. Stelle keine pauschale Auswahlfrage zu Referenzen oder Frames. Kläre bei Bedarf zuerst das konkrete Setup und prüfe die verfügbaren Eingabefelder, bevor du einen Upload einplanst. Diese Regel hat Vorrang vor allgemeinen Bildmodusfragen in diesem Auftrag."].join("\n\n"); return [e,heading,i==="references"?"Gew\xE4hlt: REFERENZEN. Verwende die Bilder als Motiv- und Identit\xE4tsvorlagen in best\xE4tigten Referen\
 zfeldern. Behandle sie nicht als zeitliche Keyframes. Der Videoprompt muss den Ausgangszustand genauer festlegen als bei Frames: Ort, Licht, Kamera, Positionen,\
  Posen und Blickrichtungen. Beschreibe die entscheidenden Aktionen in Reihenfolge mit Ausl\xF6ser, Bewegungsrichtung, Kontakt und sichtbarem Ergebnis. Benenne bei \
 kritischen \xDCbergaben, welche Hand welches Objekt h\xE4lt und wo es nach der Aktion ist. Nenne an Schnitten die Zust\xE4nde, die f\xFCr den Anschluss wichtig sind. Wenn e\
@@ -67,8 +95,7 @@ in Kameraroll gew\xFCnscht ist, kl\xE4re gegebenenfalls die Umsetzung im Schnitt
 tart und, falls ben\xF6tigt und verf\xFCgbar, f\xFCr das Ende. Avatar-, Outfitbilder und Raster dienen bei Bedarf als Vorlagen zur Erstellung dieser Szenenbilder. Lade s\
 ie nicht als fertige Start- oder Endframes ein. Nutze die sichtbare Komposition als Ausgangspunkt. Konzentriere den Videoprompt auf die Bewegung, Reaktion, das \
 Timing, die Kamera und den gew\xFCnschten Endzustand. Beschreibe kritische \xDCbergaben weiterhin konkret und bewahre sichtbare Bilddetails ohne Widerspr\xFCche.":
-"Sobald Kling oder Seedance feststeht, frage vor dem Bild- und Videoprompt nach der Bildeingabe: 1 \u2013 Referenzen oder 2 \u2013 Frames. Zeige nur die im konkreten Modu\
-s verf\xFCgbaren Optionen. Warte auf die Wahl, wenn beide m\xF6glich sind, und halte sie danach verbindlich fest.","Pr\xFCfe den konkreten Modus und die verf\xFCgbare\
+ "Falls die Szene eine Bildeingabe braucht, kläre, welcher der beiden für dieses Setup dokumentierten Wege zur Szene passt: Referenzen oder Frames. Prüfe vorher die konkrete Oberfläche und biete nur die dort tatsächlich verfügbaren Optionen an.","Pr\xFCfe den konkreten Modus und die verf\xFCgbare\
 n Eingabefelder. Wenn der gew\xE4hlte Modus fehlt oder ein Upload abgelehnt wird, kl\xE4re die Alternative mit der Nutzerin vor dem finalen Videoprompt. Wechsle nie s\
 tillschweigend den Modus. Diese Wahl hat Vorrang vor anderslautenden Bildzuordnungen im Auftrag."].join(`
 
@@ -205,8 +232,7 @@ ick",()=>{o.checked=!1,queueMicrotask(d)});queueMicrotask(d)}let i=ie();n("newVi
 k",()=>ge(!1)),n("scriptText").addEventListener("input",be),n("generate").addEventListener("click",async()=>{let r=oe(),a=i();n("cameraRoll")?.checked&&r.ratio===
 "9:16"&&(r.cameraRoll=!0);let o=he(r);if(o.error){if(x(2,{focus:!1}),y(2,!0),n("status").textContent=o.error,o.field==="randomItems"){let s=Array.from(n("random\
 ItemInputs").querySelectorAll("input"));(s.find(d=>!d.value.trim())??s[0]).focus()}else n(o.field).focus();return}x(4,{focus:!1}),y(4);try{let s=e(r,o.randomObjects);
-typeof s=="string"?n("prompt").value=Z(s,r.model,a):(n("generate").disabled=!0,n("status").textContent="Auftrag wird erstellt \u2026",n("prompt").value=Z(await s,
-r.model,a))}catch{y(4,!0),n("status").textContent="Auftrag konnte nicht erstellt werden. Bitte erneut versuchen.";return}finally{n("generate").disabled=!1}n("ou\
+typeof s=="string"?n("prompt").value=Z(s,r.model,a,r.platform):(n("generate").disabled=!0,n("status").textContent="Auftrag wird erstellt \u2026",n("prompt").value=Z(await s,r.model,a,r.platform))}catch{y(4,!0),n("status").textContent="Auftrag konnte nicht erstellt werden. Bitte erneut versuchen.";return}finally{n("generate").disabled=!1}n("ou\
 tputPanel").style.display="block",n("copy").classList.remove("hidden"),n("status").textContent="Auftrag erstellt. Jetzt kopieren und in ChatGPT einf\xFCgen.",C()}),
 n("copy").addEventListener("click",async()=>{if(!n("prompt").value)return;let r=await de(n("prompt").value);y(4),n("status").textContent=r?"\u2713 Auftrag kopiert. D\
 u kannst ihn jetzt in ChatGPT einf\xFCgen.":"Kopieren wurde blockiert. Der Text ist markiert \u2013 bitte manuell kopieren."}),n("fairySearch").addEventListener(
