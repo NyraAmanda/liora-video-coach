@@ -14,6 +14,18 @@
 .nyra-note h2 {font:400 clamp(1.8rem,4vw,2.5rem) var(--serif);margin-bottom:.35em}
 .nyra-note h3 {margin:1.1em 0 .35em}
 .nyra-note ul {padding-inline-start:1.2rem}
+#customer-admin > [data-logout] {
+  position: fixed;
+  inset-block-start: max(12px, env(safe-area-inset-top));
+  inset-inline-end: max(12px, env(safe-area-inset-right));
+  z-index: 10;
+  min-height: 44px;
+  background: #fff;
+  box-shadow: 0 4px 16px rgb(36 20 45 / 18%);
+}
+@media (max-width: 820px) {
+  #customer-admin { margin-top: calc(max(12px, env(safe-area-inset-top)) + 56px); }
+}
 @media(max-width:680px) {.nyra-hero {grid-template-columns:1fr}.nyra-hero img {aspect-ratio: 4/3;height:auto;object-position:center 43%}.nyra-note {margin-top:24px}}
 .nyra-brand {margin:0 0 .45rem;font-size:clamp(16px,2.5vw,22px);line-height:1.2;color:#4a2e43}
 .nyra-brand strong {font-size:clamp(24px,4vw,36px);font-family:var(--serif);font-weight:600}
