@@ -217,6 +217,12 @@
     <fieldset class="figure-fields">
       <label>Name<input name="name" maxlength="80" required></label>
       <label>Aussehen oder Tierart<textarea name="appearance" rows="2" maxlength="500" placeholder="Woran erkennt man die Figur?"></textarea></label>
+      <details>
+        <summary>Aussehen aus einem Bild beschreiben lassen</summary>
+        <p class="small">Hänge das Bild in ChatGPT an, füge den folgenden Prompt ein und kopiere die Beschreibung zurück in das Feld „Aussehen oder Tierart“.</p>
+        <label>Prompt zum Kopieren<textarea readonly rows="4">Beschreibe die Figur oder das Haustier auf meinem Bild auf Deutsch in maximal 450 Zeichen, damit ich die Beschreibung ins LIORA-Profil kopieren kann. Nenne nur klar sichtbare Wiedererkennungsmerkmale: etwa Haare, Augen, Sommersprossen, Brille oder bei Tieren Fellfarbe, Muster und besondere Abzeichen. Lass Unklares weg. Gib nur die Beschreibung aus. Falls mehrere Figuren im Bild sind, frage zuerst, welche ich meine.</textarea></label>
+        <p class="small">Persönlichkeit und Sprechweise ergänzt du selbst.</p>
+      </details>
       <label>Persönlichkeit und typische Reaktionen<textarea name="personality" rows="2" maxlength="500" placeholder="Was macht die Figur aus? Wie reagiert sie?"></textarea></label>
       <label><span data-figure-voice-label>Sprechweise</span><textarea name="voice" rows="2" maxlength="400" placeholder="Tempo, Tonfall, Eigenheiten"></textarea></label>
       <label>Beziehung zur Hauptfigur<textarea name="relationship" rows="2" maxlength="300" placeholder="Zum Beispiel Freundin, Partner oder Familienkatze"></textarea></label>
