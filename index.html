@@ -225,10 +225,11 @@
     <fieldset class="figure-fields">
       <label>Name<input name="name" maxlength="80" required></label>
       <label>Aussehen oder Tierart<textarea name="appearance" rows="2" maxlength="500" placeholder="Woran erkennt man die Figur?"></textarea></label>
+      <p class="small">Für ein möglichst konsistentes Aussehen empfehlen wir dir, deinen Avatar einmal anhand seines Standardporträts beschreiben zu lassen. Prüfe die Beschreibung und speichere sie hier. Für neue Videoprompts reicht der Steckbrief. Outfit und Ort klärst du pro Szene im Chat. Beim Rendern kannst du das Porträt direkt im Videotool als Gesichtsreferenz verwenden.</p>
       <details>
         <summary>Aussehen aus einem Bild beschreiben lassen</summary>
         <p class="small">Hänge das Bild in ChatGPT an, füge den folgenden Prompt ein und kopiere die Beschreibung zurück in das Feld „Aussehen oder Tierart“.</p>
-        <label>Prompt zum Kopieren<textarea readonly rows="4">Beschreibe die Figur oder das Haustier auf meinem Bild auf Deutsch in maximal 450 Zeichen, damit ich die Beschreibung ins LIORA-Profil kopieren kann. Nenne nur klar sichtbare Wiedererkennungsmerkmale: etwa Haare, Augen, Sommersprossen, Brille oder bei Tieren Fellfarbe, Muster und besondere Abzeichen. Lass Unklares weg. Gib nur die Beschreibung aus. Falls mehrere Figuren im Bild sind, frage zuerst, welche ich meine.</textarea></label>
+        <label>Prompt zum Kopieren<textarea readonly rows="4">Beschreibe das wiedererkennbare Aussehen meines Avatars, meiner Figur oder meines Haustiers anhand dieses Bildes auf Deutsch in maximal 450 Zeichen. Nenne sichtbare Merkmale von Gesicht, Augen, Haut und Haaren sowie Besonderheiten wie Sommersprossen. Nenne bei Tieren Tierart, Fellfarbe, Muster und besondere Abzeichen. Lass Outfit, Schmuck, Make-up, Pose, Licht, Hintergrund und unklare Details weg. Frage bei mehreren Figuren, welche gemeint ist. Gib sonst nur die Beschreibung aus.</textarea></label>
         <p class="small">Persönlichkeit und Sprechweise ergänzt du selbst.</p>
       </details>
       <label>Persönlichkeit und typische Reaktionen<textarea name="personality" rows="2" maxlength="500" placeholder="Was macht die Figur aus? Wie reagiert sie?"></textarea></label>
@@ -434,4 +435,4 @@
   <a href="https://nyraimpressum.netlify.app/">Impressum</a>
   <a href="https://nyradatenschutz.netlify.app/">Datenschutz</a>
 </footer>
-<script type="module" src="./app.js?v=figures"></script></body></html>
+<script type="module" src="./app.js?v=figure-reference-workflow"></script></body></html>
