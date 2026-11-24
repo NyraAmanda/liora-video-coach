@@ -241,10 +241,38 @@ i=document.getElementById("customer-admin"),r=i.querySelector("[role=status]"),a
 "[data-member-count]"),d=new Intl.DateTimeFormat("de-CH",{dateStyle:"medium",timeStyle:"short",timeZone:"Europe/Zurich"});async function l(u,f){r.textContent="";
 try{return await R("/admin/change",{email:u,action:f}),await X(),!0}catch(k){r.textContent=k.message}}function c(){let u=o.value.trim().toLowerCase(),f=t.filter(
 ({email:k})=>k.toLowerCase().includes(u));s.textContent=f.length?`${f.length} von ${t.length} Personen`:u?"Keine passende E-Mail-Adresse gefunden.":"Noch keine \
-Personen hinzugef\xFCgt.",a.replaceChildren();for(let{email:k,enabled:G,lastLoginAt:K}of f){let Q=document.createElement("li"),Y=document.createElement("strong");
+Personen hinzugef\xFCgt.",a.replaceChildren();for(let{email:k,enabled:G,lastLoginAt:K,unlimited,trialEligible,trialStartedAt,trialUntil}of f){let Q=document.createElement("li"),Y=document.createElement("strong");
 Y.textContent=k;let H=document.createElement("small");H.style.display="block",H.textContent=K===void 0?"Letzter Login \xB7 Erfassung noch nicht aktiv":K?`Letzte\
 r Login \xB7 ${d.format(new Date(K))} (Schweizer Zeit)`:"Letzter Login \xB7 Noch nicht erfasst",Q.append(Y,G?" \xB7 Freigegeben":" \xB7 Gesperrt",H,Ee(G?"Sperre\
-n":"Freigeben",()=>l(k,G?"block":"enable"))," ",Ee("Entfernen",()=>{confirm("Diesen Zugang und seine Sitzungen entfernen?")&&l(k,"remove")})),a.append(Q)}}o.oninput=
+n":"Freigeben",()=>l(k,G?"block":"enable"))," ",Ee("Entfernen",()=>{confirm("Diesen Zugang und seine Sitzungen entfernen?")&&l(k,"remove")}));if (typeof unlimited === "boolean") {
+  const access = document.createElement("small");
+  access.style.display = "block";
+  access.textContent = unlimited ? "Unbefristeter Zugang" : trialUntil
+    ? (Date.parse(trialUntil) > Date.now() ? "Gratiszugang bis " : "Gratiszugang abgelaufen am ") + d.format(new Date(trialUntil))
+    : trialEligible ? "Ein Gratismonat ab erster Anmeldung" : "Zugang über Stripe-Abo";
+  Q.append(access);
+  const action = (label, operation, question, result) => {
+    const button = Ee(label, async () => {
+      if (button.disabled || !confirm(question)) return;
+      button.disabled = true;
+      try {
+        if (await l(k, operation)) r.textContent = result;
+      } finally {
+        button.disabled = false;
+      }
+    });
+    Q.append(" ", button);
+  };
+  if (G && !unlimited && (trialStartedAt || !trialEligible)) {
+    action("Um einen Monat verlängern", "extendTrial", "Gratiszugang um einen Monat verlängern?", "Gratiszugang wurde um einen Monat verlängert.");
+  }
+  if (unlimited) {
+    action("Unbefristeten Zugang aufheben", "revokeUnlimited", "Unbefristeten Zugang aufheben?", "Unbefristeter Zugang wurde aufgehoben.");
+  } else {
+    action("Unbefristet freigeben", "grantUnlimited", "Unbefristeten Zugang freigeben?", "Unbefristeter Zugang wurde freigegeben.");
+  }
+}
+a.append(Q)}}o.oninput=
 c,c();let m=i.querySelector("form");m.onsubmit=async u=>{u.preventDefault(),await l(new FormData(m).get("email"),"add")&&(m.reset(),r.textContent="Person steht \
 auf der Freigabeliste.")},i.querySelector("[data-logout]").onclick=()=>Ae().catch(u=>{r.textContent=u.message}),g.hidden=!0,i.hidden=!1}ze.querySelector("[data-\
 logout]").onclick=()=>Ae().catch(e=>{let t=document.getElementById("logout-status");t.textContent=e.message});async function Be(){let e=W("sessionStorage",V)??(h?
