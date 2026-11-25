@@ -75,6 +75,8 @@ utton",m.textContent=c,m.addEventListener("click",()=>{o=l,d(),n("prompt").value
 append(m," "),{value:l,button:m}});function d(){
   const modes=availableImageInputs(platform.value,e.value);
   t.hidden=modes.length!==2;
+  document.body.dataset.figureImageInput = modes.length===1 ? modes[0] : modes.includes(o) ? o : "";
+  document.dispatchEvent(new Event("figure-input-change"));
   s.forEach(({value,button},index)=>{
     button.hidden=explanations[index].hidden=!modes.includes(value);
     button.className=value===o?"primary":"secondary";
@@ -624,6 +626,7 @@ function renderFigureOptions() {
     box.onchange = () => {
       if (box.checked) selectedFigureSlots.add(slot);
       else selectedFigureSlots.delete(slot);
+      renderFigureBubble();
       if (document.getElementById('prompt')?.value) Ce();
     };
     label.append(box);
@@ -636,6 +639,7 @@ function renderFigureOptions() {
     label.append(profile.name + ' · ' + figureSlotName(slot));
     figureOptions.append(label);
   }
+  renderFigureBubble();
 }
 
 function loadFigures() {
@@ -764,5 +768,47 @@ if (figuresDialog && !h) {
     if (confirm('Dieses Figurenprofil löschen?')) saveFigure(true);
   };
 }
+
+
+// Small local previews only; these images are never added to the video prompt.
+let figureBubble;
+function renderFigureBubble() {
+  if (!figureBubble) {
+    const style = document.createElement('style');
+    style.textContent = `
+      .figure-bubble{position:fixed;left:max(6px,env(safe-area-inset-left));bottom:calc(100px + env(safe-area-inset-bottom));z-index:30;display:flex;flex-direction:column;gap:7px;pointer-events:none;max-height:45vh;overflow:hidden;padding:4px}
+      .figure-bubble[hidden]{display:none!important}
+      .figure-bubble img{display:block;width:44px;height:44px;object-fit:cover;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 9px #372b4640;background:#f3edf7}
+      body:has(dialog[open]) .figure-bubble{display:none}
+      @media(min-width:1050px){.figure-bubble{left:max(12px,calc((100vw - 1020px)/2 - 62px))}.figure-bubble img{width:50px;height:50px}}
+    `;
+    document.head.append(style);
+    figureBubble = document.createElement('aside');
+    figureBubble.className = 'figure-bubble';
+    figureBubble.setAttribute('aria-label', 'Ausgewählte Referenzfiguren');
+    figureBubble.hidden = true;
+    document.body.append(figureBubble);
+  }
+  const studio = document.getElementById('customer-studio');
+  const show = !h && studio && !studio.hidden && document.body.dataset.figureImageInput === 'references';
+  const chosen = show ? selectedFigureProfiles().filter(profile => profile.image) : [];
+  figureBubble.replaceChildren();
+  for (const profile of chosen) {
+    const image = document.createElement('img');
+    image.src = profile.image;
+    image.alt = profile.name + ' · Referenzvorschau';
+    image.title = profile.name;
+    image.draggable = false;
+    image.addEventListener('error', () => {
+      image.remove();
+      if (!figureBubble.childElementCount) figureBubble.hidden = true;
+    }, {once: true});
+    figureBubble.append(image);
+  }
+  figureBubble.hidden = !chosen.length;
+}
+document.addEventListener('figure-input-change', renderFigureBubble);
+const figureBubbleStudio = document.getElementById('customer-studio');
+if (figureBubbleStudio) new MutationObserver(renderFigureBubble).observe(figureBubbleStudio, {attributes:true,attributeFilter:['hidden']});
 
 Be();
