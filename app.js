@@ -666,22 +666,30 @@ function refreshFigureSlots() {
 }
 
 async function prepareFigurePhoto(file) {
-  if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 12000000) {
-    throw new Error('Wähle ein JPG, PNG oder WebP bis 12 MB.');
-  }
-  const bitmap = await createImageBitmap(file);
+  // Resize before checking the stored preview size; the original stays on the device.
+  let bitmap;
   try {
-    const scale = Math.min(1, 224 / Math.max(bitmap.width, bitmap.height));
-    const canvas = document.createElement('canvas');
-    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
-    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
-    const context = canvas.getContext('2d');
-    context.fillStyle = '#fff';
-    context.fillRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-    const image = canvas.toDataURL('image/jpeg', 0.76);
-    if (image.length > 48000) throw new Error('Das Vorschaubild ist zu groß. Probiere ein anderes Bild.');
-    return image;
+    bitmap = await createImageBitmap(file, {resizeWidth: 224, resizeQuality: 'high'});
+  } catch {
+    throw new Error('Das neue Bild konnte nicht gelesen werden. Bitte als JPG, PNG oder WebP erneut auswählen.');
+  }
+  try {
+    for (const edge of [224, 192, 160, 128]) {
+      const scale = Math.min(1, edge / Math.max(bitmap.width, bitmap.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+      canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+      const context = canvas.getContext('2d');
+      if (!context) throw new Error('Die Bildvorschau konnte auf diesem Gerät nicht erstellt werden.');
+      context.fillStyle = '#fff';
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+      for (const quality of [0.76, 0.6, 0.45]) {
+        const preview = canvas.toDataURL('image/jpeg', quality);
+        if (preview.startsWith('data:image/jpeg;base64,') && preview.length <= 48000) return preview;
+      }
+    }
+    throw new Error('Das neue Bild konnte nicht ausreichend verkleinert werden.');
   } finally {
     bitmap.close();
   }
@@ -734,6 +742,7 @@ if (figuresDialog && !h) {
     if (busy) return;
     const slot = Number(slotField.value);
     let profile = null;
+    let photoWarning = '';
     busy = editFields.disabled = true;
     status.textContent = 'Wird gespeichert …';
     try {
@@ -741,7 +750,16 @@ if (figuresDialog && !h) {
         profile = Object.fromEntries(fields.map(field => [field, form.elements[field].value.trim()]));
         if (!profile.name) throw new Error('Bitte gib deiner Figur einen Namen.');
         const file = form.elements.photo.files[0];
-        profile.image = file ? await prepareFigurePhoto(file) : photo;
+        profile.image = photo;
+        if (file) {
+          try {
+            profile.image = await prepareFigurePhoto(file);
+          } catch (error) {
+            // One image per slot: keep the stored photo when its replacement fails.
+            profile.image = figureProfiles.get(slot)?.image ?? '';
+            photoWarning = error.message;
+          }
+        }
       }
       await R('/figures/change', {slot, profile});
       if (profile) figureProfiles.set(slot, profile);
@@ -752,8 +770,10 @@ if (figuresDialog && !h) {
       refreshFigureSlots();
       renderFigureOptions();
       showFigure();
-      status.textContent = remove ? 'Profil gelöscht.' : 'Profil gespeichert. Du kannst es jetzt im Briefing auswählen.';
-      if (!remove) figuresDialog.close();
+      status.textContent = remove ? 'Profil gelöscht.' : photoWarning
+        ? 'Deine Texte wurden gespeichert. ' + photoWarning + (profile.image ? ' Das bisherige Bild bleibt erhalten.' : ' Es wurde kein Bild gespeichert.')
+        : 'Profil gespeichert. Du kannst es jetzt im Briefing auswählen.';
+      if (!remove && !photoWarning) figuresDialog.close();
     } catch (error) {
       status.textContent = error.message;
     } finally {
