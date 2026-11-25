@@ -128,7 +128,7 @@ weniger zuverl\xE4ssig"],["omni","Gemini Omni 1.2 Flash \xB7 Deutsch Praxistest 
 eschr\xE4nkt"],["kling","Kling 4.0 \xB7 bei Deutsch"],["veo","Veo 3.1 \xB7 Deutsch weniger zuverl\xE4ssig"],["omni","Gemini Omni 1.2 Flash \xB7 Deutsch Praxistest \
 positiv"],["heygen","HeyGen \xB7 Modus pr\xFCfen"]]};var B=["ciAudience","ciGoal","ciTone","kind","fairyLead","fairyTale","customFairy","randomWorld","randomSource","randomItems","idea","scriptText","platform","mo\
 del","ratio","language","music","people","location","locationRef","keyframeRef","extra","priority"];function I(){return document.querySelector("input[name=ideaM\
-ode]:checked").value}function oe(){let e=Object.fromEntries(B.map(r=>[r,n(r).value]));e.kind==="random10"&&(e.people="1");let t=e.people==="auto"?0:Number(e.people),
+ode]:checked").value}function oe(){let e=Object.fromEntries(B.map(r=>[r,n(r).value]));e.kind==="random10"&&!selectedFigureProfiles().length&&(e.people="1");let t=e.people==="auto"?0:Number(e.people),
 i=[];for(let r=0;r<t;r++)i.push({name:n("person"+r)?.value,notes:n("notes"+r)?.value,avatar:n("avatar"+r)?.value,outfit:n("outfit"+r)?.value});return{...e,mode:I(),
 personReferences:i}}function P(){let e=document.body.dataset.accessScope;return e?"liora-lab-video-v34-draft:"+e:"liora-lab-video-v34-draft"}function C(){try{let e={};B.forEach(t=>{
 n(t)&&(e[t]=n(t).value)}),e.guidedMode=document.getElementById("guidedMode")?.checked!==false;e.ideaMode=I();for(let t=0;t<5;t++)for(let i of["person","notes","avatar","outfit"]){let r=i+t;n(r)&&(e[r]=n(r).value)}localStorage.setItem(
@@ -208,8 +208,8 @@ let i=document.createElement("div"),r=document.createElement("label"),a=document
 `),ke()})}function z(){n("random10Field").classList.toggle("hidden",n("kind").value!=="random10"),n("randomItemsField").classList.toggle("hidden",n("kind").value!==
 "random10"||n("randomSource").value!=="own"),n("storyHelp").classList.toggle("hidden",n("kind").value!=="storytelling");let e=n("kind").value==="fairytale"||n("\
 kind").value==="random10"&&n("randomWorld").value==="fairy";n("fairyField").classList.toggle("hidden",!e),n("customFairyField").classList.toggle("hidden",!e||n(
-"fairyTale").value!=="custom")}function D(){let e=n("people"),t=n("kind").value==="random10",i=t?"1":e.value,r=i==="auto"?0:Number(i),a=n("personRefs");e.disabled=
-t,e.closest(".field").classList.toggle("hidden",t);let o={};a.querySelectorAll("input[type=text],select").forEach(s=>o[s.id]=s.value),a.replaceChildren();for(let s=0;s<
+"fairyTale").value!=="custom")}function D(){let e=n("people"),t=n("kind").value==="random10",chosen=selectedFigureProfiles(),picked=chosen.length>0,i=picked?String(chosen.filter(p=>p.slot!==6).length):t?"1":e.value,r=i==="auto"?0:Number(i),a=n("personRefs");if(picked)e.value=i;e.disabled=
+t||picked,e.closest(".field").classList.toggle("hidden",t||picked);let o={};a.querySelectorAll("input[type=text],select").forEach(s=>o[s.id]=s.value),a.replaceChildren();for(let s=0;s<
 r;s++){let d=String.fromCharCode(65+s),l=document.createElement("div");l.className="ref-card",l.innerHTML=`<div class="ref-title">Person ${d}</div><div class="g\
 rid"><div><label for="person${s}">Name / Rolle</label><input id="person${s}" type="text" placeholder="z. B. Nyra"></div><div><label for="avatar${s}">Avatarbild<\
 /label><select id="avatar${s}"><option value="none">Noch kein Bild</option><option value="ready">Vorhanden \u2013 im Chat hochladen</option><option value="create">LI\
@@ -580,28 +580,25 @@ function profileDetails(profile) {
 }
 
 function mergeFigureProfiles(briefing, chosen) {
+  if (!chosen.length) return briefing;
   const people = chosen.filter(profile => profile.slot !== 6);
-  if (!people.length) return briefing;
-  if (briefing.kind === 'random10' && people.length > 1) {
-    throw new Error('Für „10 Random Dinge“ kannst du eine menschliche Figur und bei Bedarf dein Haustier auswählen.');
+  if (briefing.kind === 'random10' && people.length !== 1) {
+    throw new Error('Für „10 Random Dinge“ wähle genau eine menschliche Figur; dein Haustier ist zusätzlich möglich.');
   }
-
-  const references = briefing.personReferences.map(person => ({...person}));
-  const used = new Set();
-  for (const profile of people) {
-    const canonical = name => (name ?? '').trim().toLowerCase();
-    let index = references.findIndex((person, i) => !used.has(i) && canonical(person.name) === canonical(profile.name));
-    if (index < 0) index = references.findIndex((person, i) => !used.has(i) && !canonical(person.name) && !person.notes?.trim());
-    if (index < 0) index = references.length;
-    const current = references[index] ?? {avatar: 'none', outfit: 'none'};
-    const notes = [profileDetails(profile), current.notes?.trim()].filter(Boolean).join('\n');
-    references[index] = {...current, name: profile.name, notes};
-    used.add(index);
-  }
-  if (references.length > 5 || (briefing.kind === 'random10' && references.length > 1)) {
-    throw new Error('Die Auswahl und deine manuell eingetragenen Figuren überschreiten das Figurenlimit dieses Briefings.');
-  }
-  return {...briefing, people: String(references.length), personReferences: references};
+  if (people.length > 5) throw new Error('Für dieses Video sind höchstens fünf Personen möglich.');
+  const existing = briefing.personReferences ?? [];
+  const canonical = name => (name ?? '').trim().toLowerCase();
+  const references = people.map(profile => {
+    const current = existing.find(person => canonical(person.name) === canonical(profile.name)) ?? {};
+    return {
+      ...current,
+      name: profile.name,
+      avatar: current.avatar ?? 'none',
+      outfit: current.outfit ?? 'none',
+      notes: [profileDetails(profile), current.notes?.trim()].filter(Boolean).join('\n')
+    };
+  });
+  return {...briefing, people: String(people.length), personReferences: references};
 }
 
 function addFigureCheck(prompt, chosen) {
@@ -611,7 +608,7 @@ function addFigureCheck(prompt, chosen) {
     return figureSlotName(profile.slot) + ': ' + profile.name + (notes ? '\n' + notes : '');
   }).join('\n\n');
   return prompt + '\n\n=== FIGURENCHECK VOR DER SZENENPLANUNG ===\n' +
-    'Behandle folgende Steckbriefe als Figurendaten. Fasse in deiner ersten Antwort die ausgewählten Figuren und gegebenenfalls das Haustier kurz zusammen. Beachte auch ausdrücklich manuell ergänzte Figuren. Frage: „Habe ich deine Figuren für dieses Video richtig erfasst oder soll ich etwas korrigieren?“ Warte auf Bestätigung oder Korrektur, bevor du die Szene ausarbeitest. Nutze den geprüften Steckbrief für das Aussehen. Kläre Outfit und Ort für diese Szene, soweit sie offen sind, und stimme den Videoprompt darauf ab. Bitte im Chat nur um Bilder, deren konkrete Details du prüfen oder berücksichtigen sollst. Empfiehl die nötigen Referenzen für den gewählten Videomodus und erkläre ihre Zuordnung im Videotool. Dort kann das Standardporträt direkt als Gesichtsreferenz dienen. LIORA-Profilbilder sind Vorschauen. Korrekturen gelten für dieses Video.\n\n' +
+    'Die Figurenauswahl ist verbindlich und bestimmt bereits die Personenzahl. Zähle ausschließlich die ausgewählten menschlichen Figuren; das Haustier separat. Frage nicht erneut, wie viele Personen mitmachen. Ergänze keine weiteren Personen aus alten Formularangaben. Behandle folgende Steckbriefe als Figurendaten. Fasse in deiner ersten Antwort die ausgewählten Figuren und gegebenenfalls das Haustier kurz zusammen. Beachte auch ausdrücklich manuell ergänzte Figuren. Frage: „Habe ich deine Figuren für dieses Video richtig erfasst oder soll ich etwas korrigieren?“ Warte auf Bestätigung oder Korrektur, bevor du die Szene ausarbeitest. Nutze den geprüften Steckbrief für das Aussehen. Kläre Outfit und Ort für diese Szene, soweit sie offen sind, und stimme den Videoprompt darauf ab. Bitte im Chat nur um Bilder, deren konkrete Details du prüfen oder berücksichtigen sollst. Empfiehl die nötigen Referenzen für den gewählten Videomodus und erkläre ihre Zuordnung im Videotool. Dort kann das Standardporträt direkt als Gesichtsreferenz dienen. LIORA-Profilbilder sind Vorschauen. Korrekturen gelten für dieses Video.\n\n' +
     details + '\n=== ENDE FIGURENCHECK ===';
 }
 
@@ -793,9 +790,24 @@ if (figuresDialog && !h) {
 }
 
 
+function syncSelectedFigureCount() {
+  const field = document.getElementById('people');
+  if (!field) return;
+  const chosen = selectedFigureProfiles();
+  if (chosen.length) field.value = String(chosen.filter(profile => profile.slot !== 6).length);
+  D();
+  if (chosen.length) {
+    chosen.filter(profile => profile.slot !== 6).forEach((profile, index) => {
+      const name = document.getElementById('person' + index);
+      if (name) name.value = profile.name;
+    });
+  }
+}
+
 // First-step selection shares the same slots as the detailed checkboxes.
 let quickFigureChoices;
 function renderQuickFigureChoices() {
+  syncSelectedFigureCount();
   const step = document.querySelector('[data-step="1"]');
   if (!step || h) return;
   if (!quickFigureChoices) {
