@@ -1,3 +1,10 @@
+function videoCoachGuidance(){
+ const guided=document.getElementById("guidedMode")?.checked!==false;
+ return "=== VERBINDLICHER BEGLEITMODUS – VORRANG BEI ABLAUFKONFLIKTEN ===\n"+
+ (guided?"GEFÜHRT: Begleite Schritt für Schritt. Nenne die nächste konkrete Handlung und liefere nur die jetzt benötigten Prompts. Warte auf erforderliche Antworten oder Ergebnisse, bevor abhängige Schritte folgen. Nutze vorhandene Angaben und überspringe unnötige Bestätigungen.":
+ "DIREKT: Erstelle aus den vorhandenen Angaben direkt einen vollständigen, zusammenhängenden Produktionsentwurf mit den bereits sinnvoll erstellbaren Prompts, einzeln kopierbar. Keine obligatorischen Zwischenfragen oder Freigabeschleifen. Frage nur nach, wenn entscheidende Informationen fehlen. Kennzeichne Annahmen und noch fehlende Bildreferenzen; erfinde keine Bildprüfung.")+
+ "\nIN BEIDEN MODI: Nutzeridee und bestätigte Details bewahren. Tatsächlich hochgeladene Bilder vor finalen Videoprompts auf erkennbare Widersprüche prüfen. Ohne Bilder keine Sichtprüfung behaupten. Keine Rendergarantie. Bilder oder Videos nur mit entsprechender Nutzerfreigabe generieren.\n=== ENDE BEGLEITMODUS ===\n\n";
+}
 function ee(e){let t="Plane genau eine sichtbare menschliche Hauptfigur und nur eine Avatar-Identit\xE4t. Tiere und Fahrzeuge k\xF6nnen weiterhin zu den Dingen geh\xF6re\
 n.",i=e.randomWorld==="fairy"?"M\xE4rchenwelt: Die Figur kennt moderne Dinge nur aus ihrer eigenen Welt. Sie begutachtet Form, Ger\xE4usch oder Material, deutet die F\
 unktion auf ihre Weise und setzt das Ding f\xFCr ihr konkretes Ziel um. Zeige danach die unerwartete Folge. Beispiel f\xFCrs Prinzip: Dornr\xF6schen zieht eine Auto-Sonn\
@@ -87,7 +94,7 @@ return ()=>{
   return modes.length===1?modes[0]:modes.includes(o)?o:"";
 };
 }
-function Z(e,t,i,platform){const modes=availableImageInputs(platform,t); const heading="=== BILDEINGABE FÜR DIE GEWÄHLTE PLATTFORM ==="; if(!modes.length) return [e,heading,"Für diese Plattform und Modellvariante ist keine Bildeingabe vorgegeben. Stelle keine pauschale Auswahlfrage zu Referenzen oder Frames. Kläre bei Bedarf zuerst das konkrete Setup und prüfe die verfügbaren Eingabefelder, bevor du einen Upload einplanst. Diese Regel hat Vorrang vor allgemeinen Bildmodusfragen in diesem Auftrag."].join("\n\n"); return [e,heading,i==="references"?"Gew\xE4hlt: REFERENZEN. Verwende die Bilder als Motiv- und Identit\xE4tsvorlagen in best\xE4tigten Referen\
+function Z(e,t,i,platform){e=videoCoachGuidance()+e;const modes=availableImageInputs(platform,t); const heading="=== BILDEINGABE FÜR DIE GEWÄHLTE PLATTFORM ==="; if(!modes.length) return [e,heading,"Für diese Plattform und Modellvariante ist keine Bildeingabe vorgegeben. Stelle keine pauschale Auswahlfrage zu Referenzen oder Frames. Kläre bei Bedarf zuerst das konkrete Setup und prüfe die verfügbaren Eingabefelder, bevor du einen Upload einplanst. Diese Regel hat Vorrang vor allgemeinen Bildmodusfragen in diesem Auftrag."].join("\n\n"); return [e,heading,i==="references"?"Gew\xE4hlt: REFERENZEN. Verwende die Bilder als Motiv- und Identit\xE4tsvorlagen in best\xE4tigten Referen\
 zfeldern. Behandle sie nicht als zeitliche Keyframes. Der Videoprompt muss den Ausgangszustand genauer festlegen als bei Frames: Ort, Licht, Kamera, Positionen,\
  Posen und Blickrichtungen. Beschreibe die entscheidenden Aktionen in Reihenfolge mit Ausl\xF6ser, Bewegungsrichtung, Kontakt und sichtbarem Ergebnis. Benenne bei \
 kritischen \xDCbergaben, welche Hand welches Objekt h\xE4lt und wo es nach der Aktion ist. Nenne an Schnitten die Zust\xE4nde, die f\xFCr den Anschluss wichtig sind. Wenn e\
@@ -122,10 +129,10 @@ del","ratio","language","music","people","location","locationRef","keyframeRef",
 ode]:checked").value}function oe(){let e=Object.fromEntries(B.map(r=>[r,n(r).value]));e.kind==="random10"&&(e.people="1");let t=e.people==="auto"?0:Number(e.people),
 i=[];for(let r=0;r<t;r++)i.push({name:n("person"+r)?.value,notes:n("notes"+r)?.value,avatar:n("avatar"+r)?.value,outfit:n("outfit"+r)?.value});return{...e,mode:I(),
 personReferences:i}}function P(){let e=document.body.dataset.accessScope;return e?"liora-lab-video-v34-draft:"+e:"liora-lab-video-v34-draft"}function C(){try{let e={};B.forEach(t=>{
-n(t)&&(e[t]=n(t).value)}),e.ideaMode=I();for(let t=0;t<5;t++)for(let i of["person","notes","avatar","outfit"]){let r=i+t;n(r)&&(e[r]=n(r).value)}localStorage.setItem(
+n(t)&&(e[t]=n(t).value)}),e.guidedMode=document.getElementById("guidedMode")?.checked!==false;e.ideaMode=I();for(let t=0;t<5;t++)for(let i of["person","notes","avatar","outfit"]){let r=i+t;n(r)&&(e[r]=n(r).value)}localStorage.setItem(
 P(),JSON.stringify(e))}catch{}}function se(){if(window._restoring)for(let e=0;e<5;e++)for(let t of["person","notes","avatar","outfit"]){let i=t+e;n(i)&&window._restoring[i]&&
 (n(i).value=window._restoring[i])}}function le({updateModels:e,updateIdeaMode:t,renderPeople:i,updateCompatibility:r}){try{let a=JSON.parse(localStorage.getItem(
-P())||"{}");if(window._restoring=a,a.ideaMode){let o=document.querySelector(`input[name=ideaMode][value="${a.ideaMode}"]`);o&&(o.checked=!0)}["ciAudience","ciGo\
+P())||"{}");if(document.getElementById("guidedMode"))document.getElementById("guidedMode").checked=a.guidedMode!==false;if(window._restoring=a,a.ideaMode){let o=document.querySelector(`input[name=ideaMode][value="${a.ideaMode}"]`);o&&(o.checked=!0)}["ciAudience","ciGo\
 al","ciTone","kind","fairyLead","fairyTale","customFairy","randomWorld","randomSource","randomItems","idea","scriptText","platform"].forEach(o=>{a[o]!==void 0&&
 (o!=="kind"||["talk","standup","signature","couple","fairytale","storytelling","random10"].includes(a[o]))&&(n(o).value=a[o])}),e(),B.filter(o=>!["ciAudience","\
 ciGoal","ciTone","kind","fairyLead","fairyTale","customFairy","randomWorld","randomSource","randomItems","idea","scriptText","platform"].includes(o)).forEach(o=>{
@@ -213,7 +220,7 @@ e ben\xF6tigte Personenzahl anhand der Idee. Referenzen werden anschliessend im 
 n("prompt").value="",n("outputPanel").style.display="none",n("copy").classList.add("hidden"),n("status").textContent=""}function ge(e){w(),!(!e&&!window.confirm(
 "Wirklich komplett neu starten? Alle Eingaben und der lokal gespeicherte Entwurf werden gel\xF6scht."))&&(e?(document.querySelector('input[name=ideaMode][value=\
 "own"]').checked=!0,n("kind").value="talk",n("idea").value="",n("randomItems").value="",n("scriptText").value="",n("location").value="",n("locationRef").value="\
-none",n("keyframeRef").value="none"):(localStorage.removeItem(P()),selectedFigureSlots.clear(),renderFigureOptions(),window._restoring=null,document.querySelector('input[name=ideaMode][value="own"]').checked=!0,
+none",n("keyframeRef").value="none"):(localStorage.removeItem(P()),document.getElementById("guidedMode")&&(document.getElementById("guidedMode").checked=true),selectedFigureSlots.clear(),renderFigureOptions(),window._restoring=null,document.querySelector('input[name=ideaMode][value="own"]').checked=!0,
 ["kind","platform","ratio","language","music","people","locationRef","keyframeRef","priority"].forEach(t=>{let i=n(t);i.selectedIndex=0}),["idea","scriptText","\
 randomItems","location","extra","ciAudience"].forEach(t=>n(t).value=""),n("ciGoal").value="comments",n("ciTone").value="authentic",T(),D()),D(),F(),j(),A(),z(),
 we(),N(),Ce(),["idea","extra"].forEach(S),C(),n("status").textContent=e?"\u2713 Neues Video bereit. Deine Avatar- und pers\xF6nlichen Angaben bleiben erhalten. Bitte di\
