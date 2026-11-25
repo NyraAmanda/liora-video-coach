@@ -1,3 +1,4 @@
+import { initAdminCommunity } from './community.js?v=20261125-1';
 function videoCoachGuidance(){
  const guided=document.getElementById("guidedMode")?.checked!==false;
  return "=== VERBINDLICHER BEGLEITMODUS – VORRANG BEI ABLAUFKONFLIKTEN ===\n"+
@@ -261,7 +262,7 @@ Ung\xFCltiger Edge-Link.");return t.href}async function R(e,t={},{recover:i=!1}=
 cation/json",...r?{"x-liora-session":r}:{}},body:JSON.stringify(t),credentials:"omit",cache:"no-store",redirect:"error",signal:AbortSignal.timeout(1e4)}),o=await a.
 json();if(!a.ok)throw a.status===401&&r&&(O(),i||location.reload()),Object.assign(new Error(o.error||"Anfrage fehlgeschlagen."),{status:a.status,code:o.code});return o}function Ee(e,t){
 let i=document.createElement("button");return i.type="button",i.className="secondary",i.textContent=e,i.addEventListener("click",t),i}async function Ae(){try{await R(
-"/logout"),O(),location.reload()}catch{if(!b)location.reload();else throw new Error("Abmeldung konnte nicht best\xE4tigt werden. Bitte erneut versuchen.")}}function J(e=h||location.hash==='#admin-feedback'){
+"/logout"),O(),location.reload()}catch{if(!b)location.reload();else throw new Error("Abmeldung konnte nicht best\xE4tigt werden. Bitte erneut versuchen.")}}function J(e=h||location.hash==='#admin-feedback'||location.hash==='#admin-community'){
 let t=g.querySelector("form"),i=t.elements.namedItem("remember");if(!e&&i)try{let o=localStorage.getItem(_);o&&!t.elements.email.value&&(t.elements.email.value=
 o),i.checked=!!(o||W("localStorage",L))}catch{}g.querySelector("h1").textContent=e?"Administration":"Willkommen zur\xFCck",g.querySelector("[data-description]").
 textContent=e?"Melde dich mit deinem separaten Admin-Passwort an.":"Gib deine freigegebene E-Mail-Adresse und das gemeinsame Passwort ein.";let r=g.querySelector(
@@ -379,6 +380,7 @@ h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chos
   g.hidden = true;
   panel.hidden = false;
   activateFeedbackAdmin();
+  communityAdmin.activate();
 }
 ze.querySelector("[data-\
 logout]").onclick=()=>Ae().catch(e=>{let t=document.getElementById("logout-status");t.textContent=e.message});async function Be(){let e=W("sessionStorage",V)??(h?
@@ -387,6 +389,7 @@ null:W("localStorage",L));if(!e||typeof e.admin!="boolean"||h&&!e.admin||typeof 
 sessionStorage.setItem(V,JSON.stringify(e))}catch{}}catch(t){t.status===401||t.status===403?O():b=void 0,g.hidden=!1,J(e.admin),g.querySelector("[role=status]").
 textContent=t.status===401?"Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.":"Die Sitzung konnte nicht gepr\xFCft werden. Lade die Seite neu oder melde d\
 ich erneut an."}}
+const communityAdmin = initAdminCommunity({ request: R, logout: Ae });
 const feedbackPage = document.querySelector('#admin-feedback');
 const feedbackMembers = document.querySelector('#customer-admin');
 const feedbackList = feedbackPage?.querySelector('[data-feedback-list]');
@@ -403,7 +406,7 @@ function showFeedbackPage() {
   if (!feedbackAdminActive) return;
   const show = location.hash === '#admin-feedback';
   const wasVisible = !feedbackPage.hidden;
-  feedbackMembers.hidden = show;
+  feedbackMembers.hidden = show || location.hash === '#admin-community';
   feedbackPage.hidden = !show;
   if (show && !wasVisible) {
     feedbackOffset = 0;
