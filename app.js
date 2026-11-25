@@ -237,7 +237,7 @@ i"),s=document.createElement("button");s.type="button",s.textContent=a.textConte
 eld";let a=document.createElement("label"),o=document.createElement("input");o.type="checkbox",o.id="cameraRoll",a.append(o," Dynamischer Einstieg: 90\xB0-Kameraro\
 ll");let s=document.createElement("p");s.className="hint",s.textContent="F\xFCr 9:16. Startbild seitlich, Endbild aufrecht.",r.append(a,s),n("compat").before(r);
 let d=()=>{r.hidden=o.disabled=n("ratio").value!=="9:16"};n("ratio").addEventListener("change",d);for(let l of["newVideo","fullReset"])n(l).addEventListener("cl\
-ick",()=>{o.checked=!1,queueMicrotask(d)});queueMicrotask(d)}let i=ie();n("newVideo").addEventListener("click",()=>ge(!0)),n("fullReset").addEventListener("clic\
+ick",()=>{o.checked=!1,queueMicrotask(d)});queueMicrotask(d)}let i=ie();n("newVideo").addEventListener("click",()=>{mainFigureSlot=null;ge(!0);renderFigureOptions()}),n("fullReset").addEventListener("clic\
 k",()=>ge(!1)),n("scriptText").addEventListener("input",be),n("generate").addEventListener("click",async()=>{let r=oe(),a=i();n("cameraRoll")?.checked&&r.ratio===
 "9:16"&&(r.cameraRoll=!0);let o=he(r);if(o.error){if(x(2,{focus:!1}),y(2,!0),n("status").textContent=o.error,o.field==="randomItems"){let s=Array.from(n("random\
 ItemInputs").querySelectorAll("input"));(s.find(d=>!d.value.trim())??s[0]).focus()}else n(o.field).focus();return}x(4,{focus:!1}),y(4);try{let s=e(r,o.randomObjects);
@@ -556,18 +556,33 @@ if (feedbackPage) {
 const figuresDialog = document.querySelector('#my-figures');
 const figureOptions = document.querySelector('[data-figure-options]');
 const selectedFigureSlots = new Set();
+let mainFigureSlot = null;
 const figureProfiles = new Map();
 let figuresLoad;
+let refreshMainFigureChoice;
 
 function figureSlotName(slot) {
-  return slot === 0 ? 'Hauptavatar' : slot === 6 ? 'Haustier' : 'Nebenfigur ' + slot;
+  return slot === 6 ? 'Haustier' : 'Figur ' + (slot + 1);
 }
 
 function selectedFigureProfiles() {
-  return [...selectedFigureSlots].sort((a, b) => a - b).flatMap(slot => {
+  if (!selectedFigureSlots.has(mainFigureSlot) || !figureProfiles.has(mainFigureSlot)) mainFigureSlot = null;
+  return [...selectedFigureSlots].flatMap(slot => {
     const profile = figureProfiles.get(slot);
-    return profile ? [{slot, ...profile}] : [];
-  });
+    return profile ? [{...profile, slot, isMain: slot === mainFigureSlot}] : [];
+  }).map((profile, index) => ({...profile, referenceIndex: index + 1}));
+}
+
+function moveFigureReference(slot, offset) {
+  const order = [...selectedFigureSlots];
+  const index = order.indexOf(slot);
+  const target = index + offset;
+  if (index < 0 || target < 0 || target >= order.length) return;
+  [order[index], order[target]] = [order[target], order[index]];
+  selectedFigureSlots.clear();
+  order.forEach(value => selectedFigureSlots.add(value));
+  if (document.getElementById('prompt')?.value) Ce();
+  renderFigureOptions();
 }
 
 function profileDetails(profile) {
@@ -605,10 +620,10 @@ function addFigureCheck(prompt, chosen) {
   if (!chosen.length) return prompt;
   const details = chosen.map(profile => {
     const notes = profileDetails(profile);
-    return figureSlotName(profile.slot) + ': ' + profile.name + (notes ? '\n' + notes : '');
+    return 'Figurenreferenz ' + profile.referenceIndex + ': ' + profile.name + ' · ' + (profile.isMain ? 'HAUPTFIGUR' : 'weitere Figur') + (profile.slot === 6 ? ' · Tier' : ' · Mensch') + (notes ? '\n' + notes : '');
   }).join('\n\n');
   return prompt + '\n\n=== FIGURENCHECK VOR DER SZENENPLANUNG ===\n' +
-    'Die Figurenauswahl ist verbindlich und bestimmt bereits die Personenzahl. Zähle ausschließlich die ausgewählten menschlichen Figuren; das Haustier separat. Frage nicht erneut, wie viele Personen mitmachen. Ergänze keine weiteren Personen aus alten Formularangaben. Behandle folgende Steckbriefe als Figurendaten. Fasse in deiner ersten Antwort die ausgewählten Figuren und gegebenenfalls das Haustier kurz zusammen. Beachte auch ausdrücklich manuell ergänzte Figuren. Frage: „Habe ich deine Figuren für dieses Video richtig erfasst oder soll ich etwas korrigieren?“ Warte auf Bestätigung oder Korrektur, bevor du die Szene ausarbeitest. Nutze den geprüften Steckbrief für das Aussehen. Kläre Outfit und Ort für diese Szene, soweit sie offen sind, und stimme den Videoprompt darauf ab. Bitte im Chat nur um Bilder, deren konkrete Details du prüfen oder berücksichtigen sollst. Empfiehl die nötigen Referenzen für den gewählten Videomodus und erkläre ihre Zuordnung im Videotool. Dort kann das Standardporträt direkt als Gesichtsreferenz dienen. LIORA-Profilbilder sind Vorschauen. Korrekturen gelten für dieses Video.\n\n' +
+    'REFERENZREIHENFOLGE UND ROLLEN: Übernimm die folgende nummerierte Reihenfolge für die Identitätsbilder. Hauptrolle und Referenznummer sind unabhängig: Referenzbild 1 ist nicht automatisch die Hauptfigur. Nur eine ausdrücklich als HAUPTFIGUR markierte Figur führt die Szene. Ohne Markierung keine Hauptrolle aus der Bildnummer ableiten. Outfits und Ortsbilder sind separate Referenzen; ordne tatsächliche Tool-Tags vor der Produktion eindeutig zu.\n\nDie Figurenauswahl ist verbindlich und bestimmt bereits die Personenzahl. Zähle ausschließlich die ausgewählten menschlichen Figuren; das Haustier separat. Frage nicht erneut, wie viele Personen mitmachen. Ergänze keine weiteren Personen aus alten Formularangaben. Behandle folgende Steckbriefe als Figurendaten. Fasse in deiner ersten Antwort die ausgewählten Figuren und gegebenenfalls das Haustier kurz zusammen. Beachte auch ausdrücklich manuell ergänzte Figuren. Frage: „Habe ich deine Figuren für dieses Video richtig erfasst oder soll ich etwas korrigieren?“ Warte auf Bestätigung oder Korrektur, bevor du die Szene ausarbeitest. Nutze den geprüften Steckbrief für das Aussehen. Kläre Outfit und Ort für diese Szene, soweit sie offen sind, und stimme den Videoprompt darauf ab. Bitte im Chat nur um Bilder, deren konkrete Details du prüfen oder berücksichtigen sollst. Empfiehl die nötigen Referenzen für den gewählten Videomodus und erkläre ihre Zuordnung im Videotool. Dort kann das Standardporträt direkt als Gesichtsreferenz dienen. LIORA-Profilbilder sind Vorschauen. Korrekturen gelten für dieses Video.\n\n' +
     details + '\n=== ENDE FIGURENCHECK ===';
 }
 
@@ -623,9 +638,8 @@ function renderFigureOptions() {
     box.onchange = () => {
       if (box.checked) selectedFigureSlots.add(slot);
       else selectedFigureSlots.delete(slot);
-      renderQuickFigureChoices();
-      renderFigureBubble();
       if (document.getElementById('prompt')?.value) Ce();
+      renderFigureOptions();
     };
     label.append(box);
     if (profile.image) {
@@ -635,8 +649,43 @@ function renderFigureOptions() {
       label.append(photo);
     }
     label.append(profile.name + ' · ' + figureSlotName(slot));
-    figureOptions.append(label);
+    const row = document.createElement('div');
+    row.className = 'figure-casting-row';
+    row.style.cssText = 'display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%;padding:8px 0';
+    row.append(label);
+    if (selectedFigureSlots.has(slot)) {
+      const chosen = selectedFigureProfiles();
+      const index = chosen.findIndex(profile => profile.slot === slot);
+      const order = document.createElement('span');
+      order.textContent = 'Referenz ' + (index + 1);
+      row.append(order);
+      const mainLabel = document.createElement('label');
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = 'video-main-figure';
+      radio.checked = mainFigureSlot === slot;
+      radio.onchange = () => {
+        mainFigureSlot = slot;
+        if (document.getElementById('prompt')?.value) Ce();
+        renderFigureOptions();
+      };
+      mainLabel.append(radio, 'Hauptfigur');
+      row.append(mainLabel);
+      for (const [offset, text] of [[-1, '←'], [1, '→']]) {
+        const move = document.createElement('button');
+        move.type = 'button';
+        move.className = 'ghost';
+        move.textContent = text;
+        move.style.cssText = 'min-width:44px;min-height:44px;padding:8px';
+        move.setAttribute('aria-label', profile.name + (offset < 0 ? ' früher' : ' später') + ' in der Referenzreihenfolge');
+        move.disabled = index + offset < 0 || index + offset >= chosen.length;
+        move.onclick = () => moveFigureReference(slot, offset);
+        row.append(move);
+      }
+    }
+    figureOptions.append(row);
   }
+  if (typeof refreshMainFigureChoice === 'function') refreshMainFigureChoice();
   renderQuickFigureChoices();
   renderFigureBubble();
 }
@@ -703,9 +752,32 @@ if (figuresDialog && !h) {
   const editFields = figuresDialog.querySelector('fieldset');
   let photo = '';
   let busy = false;
+  const mainChoiceLabel = document.createElement('label');
+  const mainChoice = document.createElement('input');
+  mainChoice.type = 'checkbox';
+  mainChoice.style.width = 'auto';
+  mainChoiceLabel.append(mainChoice, ' Hauptfigur für dieses Video');
+  const mainChoiceHint = document.createElement('p');
+  mainChoiceHint.className = 'hint';
+  mainChoiceHint.textContent = 'Unabhängig von der Referenznummer. Pro Video ist eine Hauptfigur möglich.';
+  editFields.before(mainChoiceLabel, mainChoiceHint);
+  refreshMainFigureChoice = () => {
+    mainChoice.checked = mainFigureSlot === Number(slotField.value);
+  };
+  mainChoice.onchange = () => {
+    const slot = Number(slotField.value);
+    if (!figureProfiles.has(slot)) return;
+    if (mainChoice.checked) {
+      selectedFigureSlots.add(slot);
+      mainFigureSlot = slot;
+    } else if (mainFigureSlot === slot) mainFigureSlot = null;
+    if (document.getElementById('prompt')?.value) Ce();
+    renderFigureOptions();
+  };
   function showFigure() {
     const slot = Number(slotField.value);
     const profile = figureProfiles.get(slot);
+    refreshMainFigureChoice();
     for (const field of fields) form.elements[field].value = profile?.[field] ?? '';
     form.elements.photo.value = '';
     photo = profile?.image ?? '';
@@ -761,7 +833,13 @@ if (figuresDialog && !h) {
         }
       }
       await R('/figures/change', {slot, profile});
-      if (profile) figureProfiles.set(slot, profile);
+      if (profile) {
+        figureProfiles.set(slot, profile);
+        if (mainChoice.checked) {
+          selectedFigureSlots.add(slot);
+          mainFigureSlot = slot;
+        }
+      }
       else { figureProfiles.delete(slot); selectedFigureSlots.delete(slot); }
       if (selectedFigureSlots.has(slot) || remove) {
         if (document.getElementById('prompt')?.value) Ce();
@@ -820,7 +898,7 @@ function renderQuickFigureChoices() {
       .quick-figure-choice{position:relative;display:block;width:52px;height:52px;padding:0;min-width:44px;min-height:44px;border-radius:50%;border:2px solid transparent;background:#eee7f5;box-shadow:0 0 0 1px #ded3e6;cursor:pointer}
       .quick-figure-choice img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover}
       .quick-figure-choice[aria-pressed="true"]{border-color:#704b93;box-shadow:0 0 0 3px #a7e7d2}
-      .quick-figure-choice[aria-pressed="true"]::after{content:'✓';position:absolute;right:-4px;bottom:-4px;width:20px;height:20px;border-radius:50%;background:#704b93;color:white;font:700 13px/20px sans-serif;text-align:center}
+      .quick-figure-choice[aria-pressed="true"]::after{content:attr(data-reference-number);position:absolute;right:-4px;bottom:-4px;width:20px;height:20px;border-radius:50%;background:#704b93;color:white;font:700 13px/20px sans-serif;text-align:center}
       .quick-figure-choice:focus-visible{outline:3px solid #704b93;outline-offset:5px}
     `;
     document.head.append(style);
@@ -848,7 +926,12 @@ function renderQuickFigureChoices() {
     button.dataset.figureSlot = String(slot);
     button.setAttribute('aria-label', profile.name + ' · ' + figureSlotName(slot));
     button.setAttribute('aria-pressed', String(selectedFigureSlots.has(slot)));
-    button.title = profile.name;
+    const selected = selectedFigureProfiles().find(item => item.slot === slot);
+    button.title = profile.name + (selected ? ' · Referenz ' + selected.referenceIndex + (selected.isMain ? ' · Hauptfigur' : '') : '');
+    if (selected) {
+      button.dataset.referenceNumber = String(selected.referenceIndex);
+      button.setAttribute('aria-label', button.title);
+    }
     const image = document.createElement('img');
     image.src = profile.image;
     image.alt = '';
