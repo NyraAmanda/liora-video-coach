@@ -270,7 +270,7 @@ textContent=e?"Melde dich mit deinem separaten Admin-Passwort an.":"Gib deine fr
 "";try{let c=await R(e?"/admin/login":"/login",{email:d.get("email"),password:d.get("password")});if(b=c.token,!e&&!h){try{l?localStorage.setItem(_,d.get("email").
 trim()):localStorage.removeItem(_)}catch{}if(l&&window.PasswordCredential&&navigator.credentials)try{let m=new window.PasswordCredential({id:d.get("email").trim(),
 password:d.get("password")});navigator.credentials.store(m).catch(()=>{})}catch{}}e&&!h?await X():De(c),Oe(c,e,l),t.reset()}catch(c){O(),a.textContent=c.message}finally{
-s.disabled=!1,r.disabled=!1}}}function De(e){document.body.dataset.accessScope=h?"admin-lab":e.draftScope,g.hidden=!0,ze.hidden=!1,loadFigures(),ye||(Se(async t=>{const chosen = selectedFigureProfiles(); const briefing = mergeFigureProfiles(t, chosen); let{prompt:i}=await R(
+s.disabled=!1,r.disabled=!1}}}function De(e){renderCustomerAccessInfo(e);document.body.dataset.accessScope=h?"admin-lab":e.draftScope,g.hidden=!0,ze.hidden=!1,loadFigures(),ye||(Se(async t=>{const chosen = selectedFigureProfiles(); const briefing = mergeFigureProfiles(t, chosen); let{prompt:i}=await R(
 h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chosen)},{enableCameraRoll:e.cameraRollSupported===!0}),ye=!0)}async function X(data) {
   const { members } = data ?? await R("/admin/list");
   const panel = document.getElementById("customer-admin");
@@ -997,6 +997,34 @@ document.addEventListener('figure-input-change', renderFigureBubble);
 const figureBubbleStudio = document.getElementById('customer-studio');
 if (figureBubbleStudio) new MutationObserver(renderFigureBubble).observe(figureBubbleStudio, {attributes:true,attributeFilter:['hidden']});
 
+
+function customerAccessText(data = {}) {
+  if (data.unlimited === true) return 'Unbefristet freigeschaltet.';
+  const until = typeof data.trialUntil === 'string' ? Date.parse(data.trialUntil) : NaN;
+  if (Number.isFinite(until)) {
+    const date = new Intl.DateTimeFormat('de-DE', {day:'2-digit', month:'2-digit', year:'numeric', timeZone:'Europe/Zurich'}).format(new Date(until));
+    return (until > Date.now() ? 'Gratismonat bis ' : 'Dein Gratismonat endete am ') + date +
+      '. Angaben zu einer zusätzlichen Abo-Laufzeit werden derzeit nicht übermittelt.';
+  }
+  return 'Deine Laufzeit wird derzeit nicht übermittelt. Wende dich bei Fragen zu deinem Zugang an den Support.';
+}
+function renderCustomerAccessInfo(data) {
+  const target = document.querySelector('[data-access-summary]');
+  if (target) target.textContent = customerAccessText(data);
+}
+let customerAccessCheckedAt = 0;
+async function refreshCustomerAccessInfo() {
+  if (h || Date.now() - customerAccessCheckedAt < 30000) return;
+  customerAccessCheckedAt = Date.now();
+  try {
+    renderCustomerAccessInfo(await R('/session'));
+  } catch {
+    customerAccessCheckedAt = 0;
+    const target = document.querySelector('[data-access-summary]');
+    if (target) target.textContent = 'Deine Zugangsinformationen konnten gerade nicht geladen werden. Bitte versuche es später erneut.';
+  }
+}
+
 // Native disclosure menu: usable with touch and keyboard, without a second action list.
 const appMenu = document.getElementById('app-menu');
 if (appMenu) {
@@ -1009,6 +1037,7 @@ if (appMenu) {
     panel.style.left = (left - rect.left) + 'px';
   };
   appMenu.addEventListener('toggle', () => {
+    if (appMenu.open) refreshCustomerAccessInfo();
     appMenu.querySelector('summary').setAttribute('aria-label', appMenu.open ? 'Menü schließen' : 'Menü öffnen');
     positionAppMenu();
   });
