@@ -128,6 +128,20 @@
 .nyra-brand {margin:0 0 .45rem;font-size:clamp(16px,2.5vw,22px);line-height:1.2;color:#4a2e43}
 .nyra-brand strong {font-size:clamp(24px,4vw,36px);font-family:var(--serif);font-weight:600}
 #customer-studio .mast-context {font:600 clamp(19px,2.8vw,29px)/1.1 var(--serif)}
+/* Shared navigation beside the LIORA mark. */
+#customer-studio .mast-inner{display:flex!important;align-items:center;flex-wrap:wrap;gap:10px}
+#customer-studio .mast-context{margin-left:auto}
+#customer-studio #logout-status:empty{display:none}
+#customer-studio #logout-status:not(:empty){flex-basis:100%}
+#customer-studio .app-menu{position:relative;margin:0;border:0;overflow:visible;background:transparent;flex:0 0 auto}
+#customer-studio .app-menu>summary{display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:7px;color:#fff;border:1px solid #ffffff70;border-radius:10px;font:700 24px/1 system-ui;list-style:none}
+#customer-studio .app-menu>summary::-webkit-details-marker{display:none}
+#customer-studio .app-menu>summary::after{content:none}
+#customer-studio .app-menu-items{position:absolute;left:0;top:calc(100% + 10px);width:min(270px,calc(100vw - 32px));padding:8px;border:1px solid #e4d9eb;border-radius:14px;background:#fff;box-shadow:0 12px 32px #24142d33;z-index:100}
+#customer-studio .app-menu-items button,#customer-studio .app-menu-items a{display:flex;align-items:center;width:100%;min-height:44px;margin:0;padding:12px 14px;border:0;border-radius:8px;background:transparent;color:#372b46;font:600 15px/1.4 system-ui;text-align:left;text-decoration:none}
+#customer-studio .app-menu-items button:hover,#customer-studio .app-menu-items a:hover{background:#f2e9f8}
+#customer-studio .app-menu-items .app-menu-logout{border-top:1px solid #e9e0ed;border-radius:0;margin-top:6px}
+#customer-studio .app-menu summary:focus-visible,#customer-studio .app-menu-items :focus-visible{outline:3px solid #a7e7d2;outline-offset:2px}
 </style></head>
 <body><section id="customer-access" class="customer-panel" aria-labelledby="customer-title">
   <div class="nyra-hero">
@@ -264,11 +278,16 @@
 <header class="masthead">
   <div class="mast-inner">
     <a href="./" class="wordmark" aria-label="LIORA Startseite"><span aria-hidden="true">✦</span> LIORA</a>
+    <details class="app-menu" id="app-menu">
+      <summary aria-label="Menü öffnen">☰</summary>
+      <nav class="app-menu-items" aria-label="VideoCoach-Menü">
+        <button type="button" data-figures-open>Meine Figuren</button>
+        <a href="./anleitung.html" target="_blank" rel="noopener">Kurzanleitung ↗</a>
+        <button type="button" data-feedback-open>Feedback geben</button>
+        <button type="button" class="app-menu-logout" data-logout>Abmelden</button>
+      </nav>
+    </details>
     <span class="mast-context">VideoCoach</span>
-    <div class="mast-account-actions">
-      <button type="button" class="ghost" data-figures-open>Meine Figuren</button>
-      <button type="button" class="ghost" data-logout>Abmelden</button>
-    </div>
     <span id="logout-status" role="status"></span>
   </div>
 </header>
@@ -375,7 +394,6 @@
 <div id="personRefs"></div><section class="ref-card" aria-labelledby="saved-figures-title">
   <div class="ref-title" id="saved-figures-title">Gespeicherte Figuren fürs Briefing</div>
   <div data-figure-options class="figure-options"></div>
-  <button type="button" class="secondary" data-figures-open>Meine Figuren öffnen</button>
 </section><p class="small" style="margin:10px 0 16px;">Dir fehlt eine Idee für Outfit oder Drehort? Such dir auf Pinterest passende Anhaltspunkte für Farben, Material oder Stimmung. <a href="https://www.pinterest.com/search/pins/?q=outfit%20ideas" target="_blank" rel="noopener noreferrer">Outfit-Inspiration</a> · <a href="https://www.pinterest.com/search/pins/?q=interior%20moodboard" target="_blank" rel="noopener noreferrer">Orts-Inspiration</a></p>
 <div class="ref-card"><div class="ref-title">Umgebung / Ort</div><div class="grid"><div><label for="location">Wo spielt die Szene?</label><input id="location" placeholder="z. B. Küche, Café, Studio"></div><div><label for="locationRef">Ortsbild</label><select id="locationRef"><option value="none">Noch kein Bild</option><option value="ready">Bild vorhanden – im Chat hochladen</option><option value="create">LIORA soll ein Bildprompt erstellen</option></select></div></div></div>
 <div class="ref-card"><div class="ref-title">Startframe / Keyframe</div><label for="keyframeRef">Hast du bereits einen Startframe?</label><select id="keyframeRef"><option value="unsure">LIORA soll entscheiden, ob einer nötig ist</option><option value="ready">Ja – im Chat hochladen</option><option value="create">Nein – LIORA soll den Bildprompt erstellen</option></select></div>
@@ -432,8 +450,6 @@
         <summary><span class="butler-icon" aria-hidden="true">✦</span><span>LIORA-Butler<small>Hilfe für diesen Schritt</small></span></summary>
         <div class="inside">
           <p id="butler-tip">Wähle die Karte, die am besten zu deiner Szene passt. Du kannst das Format später wechseln.</p>
-          <p><a href="./anleitung.html" target="_blank" rel="noopener" class="butler-guide-link" style="display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:12px 16px;border-radius:12px;background:#f2e9f8;color:#62447e;font-weight:700;text-decoration:none">Kurzanleitung öffnen ↗</a></p>
-          <button type="button" class="secondary" data-feedback-open>Feedback geben</button>
         </div>
       </details>
 
@@ -446,4 +462,4 @@
   <a href="https://nyraimpressum.netlify.app/">Impressum</a>
   <a href="https://nyradatenschutz.netlify.app/">Datenschutz</a>
 </footer>
-<script type="module" src="./app.js?v=feedback-email-7ca95f8a"></script></body></html>
+<script type="module" src="./app.js?v=logo-menu-20261125"></script></body></html>
