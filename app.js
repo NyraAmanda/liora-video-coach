@@ -443,7 +443,10 @@ async function refreshFeedback() {
 function makeFeedbackRow(entry) {
   const row = document.createElement('li');
   const sender = document.createElement('strong');
-  sender.textContent = entry.email;
+  sender.className = 'feedback-sender-email';
+  sender.style.cssText = 'display:block;color:#372b46;font-size:15px;line-height:1.5;overflow-wrap:anywhere;margin-bottom:6px';
+  const senderEmail = typeof entry.email === 'string' ? entry.email.trim() : '';
+  sender.textContent = senderEmail ? 'E-Mail: ' + senderEmail : 'E-Mail-Adresse nicht übermittelt';
   const meta = document.createElement('small');
   meta.textContent = new Intl.DateTimeFormat('de-CH', {
     dateStyle: 'medium', timeStyle: 'short', timeZone: 'Europe/Zurich'
