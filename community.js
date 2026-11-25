@@ -26,7 +26,7 @@ export function initAdminCommunity({ request, logout }) {
   function applySettings(data = {}) { for (const name of ['topic','focus','deadline','link','note']) if (typeof data[name] === 'string') $(name).value = data[name]; }
   function open(d) {
     if (busy || (dirty() && !confirm('Ungespeicherte Änderungen verwerfen und diesen Beitrag öffnen?'))) return;
-    applySettings(d.settings); $('title').value = d.title; $('body').value = d.body; current = d; baseline = text(); $('result').hidden = false; $('variant').textContent = 'Gespeicherter Beitrag'; status('Entwurf geöffnet.');
+    applySettings(d.settings); updateHint(); $('title').value = d.title; $('body').value = d.body; current = d; baseline = text(); $('result').hidden = false; $('variant').textContent = 'Gespeicherter Beitrag'; status('Entwurf geöffnet.');
   }
   function generate(next = false) {
     if (!ready || busy || !$('form').reportValidity()) return;
