@@ -997,4 +997,35 @@ document.addEventListener('figure-input-change', renderFigureBubble);
 const figureBubbleStudio = document.getElementById('customer-studio');
 if (figureBubbleStudio) new MutationObserver(renderFigureBubble).observe(figureBubbleStudio, {attributes:true,attributeFilter:['hidden']});
 
+// Native disclosure menu: usable with touch and keyboard, without a second action list.
+const appMenu = document.getElementById('app-menu');
+if (appMenu) {
+  const positionAppMenu = () => {
+    if (!appMenu.open) return;
+    const rect = appMenu.getBoundingClientRect();
+    const panel = appMenu.querySelector('.app-menu-items');
+    const width = panel.getBoundingClientRect().width;
+    const left = Math.max(12, Math.min(rect.left, window.innerWidth - width - 12));
+    panel.style.left = (left - rect.left) + 'px';
+  };
+  appMenu.addEventListener('toggle', () => {
+    appMenu.querySelector('summary').setAttribute('aria-label', appMenu.open ? 'Menü schließen' : 'Menü öffnen');
+    positionAppMenu();
+  });
+  window.addEventListener('resize', positionAppMenu);
+  appMenu.addEventListener('click', event => {
+    if (event.target.closest('.app-menu-items button, .app-menu-items a')) appMenu.open = false;
+  }, true);
+  document.addEventListener('click', event => {
+    if (appMenu.open && !appMenu.contains(event.target)) appMenu.open = false;
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && appMenu.open) {
+      appMenu.open = false;
+      appMenu.querySelector('summary').focus();
+      event.preventDefault();
+    }
+  });
+}
+
 Be();
