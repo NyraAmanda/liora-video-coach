@@ -999,8 +999,8 @@ if (figureBubbleStudio) new MutationObserver(renderFigureBubble).observe(figureB
 
 
 function customerAccessText(data = {}) {
+  if (data.unlimited === true) return 'VIP-Zugang · unbefristet';
   if (data.paidUntil && Date.parse(data.paidUntil) > Date.now()) return 'Dein App-Abo ist bezahlt bis ' + new Intl.DateTimeFormat('de-DE',{day:'2-digit',month:'2-digit',year:'numeric',timeZone:'Europe/Zurich'}).format(new Date(data.paidUntil)) + (data.cancelAtPeriodEnd ? '. Die Kündigung ist vorgemerkt.' : '.');
-  if (data.unlimited === true) return 'Unbefristet freigeschaltet.';
   const until = typeof data.trialUntil === 'string' ? Date.parse(data.trialUntil) : NaN;
   if (Number.isFinite(until)) {
     const date = new Intl.DateTimeFormat('de-DE', {day:'2-digit', month:'2-digit', year:'numeric', timeZone:'Europe/Zurich'}).format(new Date(until));
@@ -1083,14 +1083,14 @@ function showBillingAccessError(error) {
   note.textContent='Deine Zugangszeit ist vorbei. Wenn du weiter kreativ sein möchtest, kannst du hier dein Abo auswählen. 💜';
   note.classList.add('billing-expired');
  } else if(error.code === 'ACCESS_BLOCKED') {
-  choice.open=false;
+  choice.open=false;choice.hidden=true;
   note.textContent='Dein Zugang ist derzeit gesperrt. Bitte wende dich an den Support, damit wir das klären können.';
   note.classList.remove('billing-expired');
  }
  syncBillingLinks();
 }
 document.querySelector('#customer-access input[name="email"]')?.addEventListener('input',()=>{
- billingCustomerEmail='';syncBillingLinks();
+ billingCustomerEmail='';const choice=document.querySelector('[data-login-billing]');if(choice)choice.hidden=false;syncBillingLinks();
 });
 syncBillingLinks();
 
