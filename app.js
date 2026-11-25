@@ -263,12 +263,11 @@ cation/json",...r?{"x-liora-session":r}:{}},body:JSON.stringify(t),credentials:"
 json();if(!a.ok)throw a.status===401&&r&&(O(),i||location.reload()),Object.assign(new Error(o.error||"Anfrage fehlgeschlagen."),{status:a.status,code:o.code});return o}function Ee(e,t){
 let i=document.createElement("button");return i.type="button",i.className="secondary",i.textContent=e,i.addEventListener("click",t),i}async function Ae(){try{await R(
 "/logout"),O(),location.reload()}catch{if(!b)location.reload();else throw new Error("Abmeldung konnte nicht best\xE4tigt werden. Bitte erneut versuchen.")}}function J(e=h||location.hash==='#admin-feedback'||location.hash==='#admin-community'){
-let t=g.querySelector("form"),i=t.elements.namedItem("remember");if(!e&&i)try{let o=localStorage.getItem(_);o&&!t.elements.email.value&&(t.elements.email.value=
-o),i.checked=!!(o||W("localStorage",L))}catch{}g.querySelector("h1").textContent=e?"Administration":"Willkommen zur\xFCck",g.querySelector("[data-description]").
+let t=g.querySelector("form"),i=t.elements.namedItem("remember");if(!h&&i)try{const saved=localStorage.getItem(e?"liora-video-coach:admin-email":_);const remembered=W("localStorage",L);if(saved&&!t.elements.email.value)t.elements.email.value=saved;i.checked=localStorage.getItem(e?"liora-video-coach:remember-admin":"liora-video-coach:remember-customer")==="true"||!!(remembered&&remembered.admin===e);}catch{}t.id=e?"videocoach-admin-login":"videocoach-customer-login";t.setAttribute("autocomplete","on");g.querySelector("h1").textContent=e?"Administration":"Willkommen zur\xFCck",g.querySelector("[data-description]").
 textContent=e?"Melde dich mit deinem separaten Admin-Passwort an.":"Gib deine freigegebene E-Mail-Adresse und das gemeinsame Passwort ein.";let r=g.querySelector(
 "[data-role]");r.hidden=h,r.textContent=e?"Zum Kundenzugang":"Zur Administration",r.onclick=()=>{t.reset(),J(!e)};let a=g.querySelector("[role=status]");a.textContent=
 "",t.onsubmit=async o=>{o.preventDefault();let s=t.querySelector("button[type=submit]"),d=new FormData(t),l=d.has("remember");s.disabled=!0,r.disabled=!0,a.textContent=
-"";try{let c=await R(e?"/admin/login":"/login",{email:d.get("email"),password:d.get("password")});if(!e){billingCustomerEmail=String(d.get("email")||"").trim();syncBillingLinks();}if(b=c.token,!e&&!h){try{l?localStorage.setItem(_,d.get("email").
+"";try{let c=await R(e?"/admin/login":"/login",{email:d.get("email"),password:d.get("password")});if(!e){billingCustomerEmail=String(d.get("email")||"").trim();syncBillingLinks();}if(!h)try{localStorage.setItem(e?"liora-video-coach:remember-admin":"liora-video-coach:remember-customer",String(l));if(e){l?localStorage.setItem("liora-video-coach:admin-email",String(d.get("email")||"").trim()):localStorage.removeItem("liora-video-coach:admin-email");}}catch{}if(b=c.token,!e&&!h){try{l?localStorage.setItem(_,d.get("email").
 trim()):localStorage.removeItem(_)}catch{}if(l&&window.PasswordCredential&&navigator.credentials)try{let m=new window.PasswordCredential({id:d.get("email").trim(),
 password:d.get("password")});navigator.credentials.store(m).catch(()=>{})}catch{}}e&&!h?await X():De(c),Oe(c,e,l),t.reset()}catch(c){O(),a.textContent=c.message;showBillingAccessError(c)}finally{
 s.disabled=!1,r.disabled=!1}}}function De(e){billingCustomerEmail=e.email||billingCustomerEmail;syncBillingLinks();renderCustomerAccessInfo(e);document.body.dataset.accessScope=h?"admin-lab":e.draftScope,g.hidden=!0,ze.hidden=!1,loadFigures(),ye||(Se(async t=>{const chosen = selectedFigureProfiles(); const briefing = mergeFigureProfiles(t, chosen); let{prompt:i}=await R(
@@ -400,6 +399,46 @@ let feedbackLoad = 0;
 function activateFeedbackAdmin() {
   feedbackAdminActive = Boolean(feedbackPage);
   showFeedbackPage();
+  startFeedbackNotice();
+}
+
+let feedbackNoticeTimer;
+let feedbackNoticeLoading = false;
+function feedbackSeenAt() {
+  try { return Number(localStorage.getItem('liora-video-coach:feedback-seen-at')) || 0; } catch { return 0; }
+}
+function markFeedbackSeen(entries) {
+  const latest = Math.max(feedbackSeenAt(), ...entries.map(entry => Date.parse(entry.createdAt) || 0));
+  try { localStorage.setItem('liora-video-coach:feedback-seen-at', String(latest)); } catch {}
+  document.querySelectorAll('[data-feedback-notice]').forEach(el => { el.hidden = true; });
+}
+async function refreshFeedbackNotice() {
+  if (!feedbackAdminActive || !b || document.hidden || feedbackNoticeLoading) return;
+  feedbackNoticeLoading = true;
+  try {
+    const { entries } = await R('/admin/feedback/list', { offset: 0 });
+    if (!feedbackAdminActive || !b) return;
+    const count = entries.filter(entry => (Date.parse(entry.createdAt) || 0) > feedbackSeenAt()).length;
+    document.querySelectorAll('[data-feedback-notice]').forEach(el => {
+      el.hidden = !count;
+      el.textContent = count ? `${count}${entries.length > 50 ? '+' : ''} neue Rückmeldung${count === 1 ? '' : 'en'} · Feedback öffnen` : '';
+    });
+  } catch { /* Existing feedback management remains available if the notice cannot refresh. */ }
+  finally { feedbackNoticeLoading = false; }
+}
+function startFeedbackNotice() {
+  if (feedbackNoticeTimer) return;
+  const link = document.createElement('a');
+  link.href = '#admin-feedback';
+  link.dataset.feedbackNotice = '';
+  link.hidden = true;
+  link.setAttribute('role', 'status');
+  link.className = 'feedback-notice';
+  feedbackMembers.querySelector('header').append(link);
+  refreshFeedbackNotice();
+  feedbackNoticeTimer = setInterval(refreshFeedbackNotice, 60000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshFeedbackNotice(); });
+  window.addEventListener('hashchange', refreshFeedbackNotice);
 }
 
 function showFeedbackPage() {
@@ -438,6 +477,7 @@ async function refreshFeedback() {
     next.disabled = entries.length <= 50;
     status.textContent = entries.length ? '' : 'Noch kein Feedback vorhanden.';
     feedbackList.replaceChildren(...entries.slice(0, 50).map(makeFeedbackRow));
+    markFeedbackSeen(entries.slice(0, 50));
   } catch (error) {
     if (version === feedbackLoad) status.textContent = error.message;
   }
