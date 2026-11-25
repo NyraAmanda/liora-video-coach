@@ -1062,7 +1062,7 @@ let billingCustomerEmail = '';
 function billingLinkUrl(base, email, kind) {
  const url = new URL(base);
  const value = String(email || '').trim().toLowerCase();
- if (/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value)) url.searchParams.set(kind === 'portal' ? 'prefilled_email' : 'locked_prefilled_email', value);
+ if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) url.searchParams.set(kind === 'portal' ? 'prefilled_email' : 'locked_prefilled_email', value);
  if (kind !== 'portal') url.searchParams.set('locale', 'de');
  return url.href;
 }
