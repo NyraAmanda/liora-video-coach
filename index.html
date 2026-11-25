@@ -178,7 +178,43 @@ function renderPeople(){
  restorePersonFields();
 }
 function draftKey(){return 'liora-video-v34-draft'}
+
+const categoryDraftFields=['ciAudience','ciGoal','ciTone','fairyLead','fairyTale','customFairy','randomWorld','randomSource','randomItems','idea','scriptText','location','locationRef','keyframeRef','extra','priority'];
+let activeDraftCategory=null;
+let categoryDraftDefaults={};
+let categoryDrafts={};
+function captureCategoryDraft(){
+ const draft={ideaMode:getMode()};
+ categoryDraftFields.forEach(id=>{if($(id))draft[id]=$(id).value});
+ return draft;
+}
+function saveCategoryDrafts(){
+ if(!activeDraftCategory)return;
+ categoryDrafts[activeDraftCategory]=captureCategoryDraft();
+ try{localStorage.setItem(draftKey()+'-categories',JSON.stringify(categoryDrafts))}catch(e){}
+}
+function setupCategoryDrafts(){
+ categoryDraftDefaults=captureCategoryDraft();
+ try{categoryDrafts=JSON.parse(localStorage.getItem(draftKey()+'-categories')||'{}')||{}}catch(e){categoryDrafts={}}
+}
+function switchCategoryDraft(){
+ if(activeDictation)stopDictation();
+ saveCategoryDrafts();
+ const next=$('kind').value;
+ const draft=categoryDrafts[next]||categoryDraftDefaults;
+ categoryDraftFields.forEach(id=>{if($(id))$(id).value=draft[id]??categoryDraftDefaults[id]??''});
+ const radio=document.querySelector('input[name=ideaMode][value="'+(draft.ideaMode||'own')+'"]');
+ if(radio)radio.checked=true;
+ activeDraftCategory=next;
+ clearOutput();
+ updateRatio();updateScriptField();updateCompatibility();updateIdeaMode();updateFairy();
+ ['idea','extra'].forEach(countChars);
+ $('randomItemsCount').textContent=$('randomItems').value.split(/[\\n;,]+/u).map(x=>x.trim()).filter(Boolean).length+' von 10 Gegenständen';
+ saveDraft();
+}
+
 function saveDraft(){
+ saveCategoryDrafts();
  try{const obj={};fields.forEach(id=>{if($(id))obj[id]=$(id).value});obj.guidedMode=$('guidedMode').checked;obj.ideaMode=getMode();for(let i=0;i<5;i++)for(const key of ['person','notes','avatar','outfit']){const id=key+i;if($(id))obj[id]=$(id).value}localStorage.setItem(draftKey(),JSON.stringify(obj))}catch(e){}
 }
 function restorePersonFields(){if(!window._restoring)return;for(let i=0;i<5;i++)for(const key of ['person','notes','avatar','outfit']){const id=key+i;if($(id)&&window._restoring[id])$(id).value=window._restoring[id]}}
@@ -1212,6 +1248,7 @@ function resetVideo(keepPersonal){
   $('keyframeRef').value='none';
  }else{
   localStorage.removeItem(draftKey());
+  categoryDrafts={};try{localStorage.removeItem(draftKey()+'-categories')}catch(e){}
   $('guidedMode').checked=true;
   window._restoring=null;
   document.querySelector('input[name=ideaMode][value="own"]').checked=true;
@@ -1228,6 +1265,7 @@ function resetVideo(keepPersonal){
  updateFairy();
  clearOutput();
  ['idea','extra'].forEach(countChars);
+ activeDraftCategory=$('kind').value;
  saveDraft();
  $('status').textContent=keepPersonal?'✓ Neues Video bereit. Deine Avatar- und persönlichen Angaben bleiben erhalten. Bitte die Outfitangaben für die neue Szene prüfen.':'✓ Alles zurückgesetzt. Du kannst ganz neu beginnen.';
  $('idea').focus();
@@ -1262,10 +1300,10 @@ function filterFairyCatalogue(){
  updateFairy();
 }
 $('fairySearch').addEventListener('input',filterFairyCatalogue);
- $('randomWorld').addEventListener('change',updateFairy);$('randomSource').addEventListener('change',updateFairy);$('randomItems').addEventListener('input',()=>{$('randomItemsCount').textContent=$('randomItems').value.split(/[\n;,]+/u).map(x=>x.trim()).filter(Boolean).length+' von 10 Gegenständen';});$('fairyTale').addEventListener('change',updateFairy);$('platform').addEventListener('change',updateModels);$('kind').addEventListener('change',()=>{updateRatio();updateScriptField();updateCompatibility();updateIdeaMode();updateFairy()});$('model').addEventListener('change',updateCompatibility);$('language').addEventListener('change',updateCompatibility);$('people').addEventListener('change',renderPeople);
+ $('randomWorld').addEventListener('change',updateFairy);$('randomSource').addEventListener('change',updateFairy);$('randomItems').addEventListener('input',()=>{$('randomItemsCount').textContent=$('randomItems').value.split(/[\n;,]+/u).map(x=>x.trim()).filter(Boolean).length+' von 10 Gegenständen';});$('fairyTale').addEventListener('change',updateFairy);$('platform').addEventListener('change',updateModels);$('kind').addEventListener('change',()=>{switchCategoryDraft()});$('model').addEventListener('change',updateCompatibility);$('language').addEventListener('change',updateCompatibility);$('people').addEventListener('change',renderPeople);
  document.querySelectorAll('input[name=ideaMode]').forEach(x=>x.addEventListener('change',updateIdeaMode));
  document.addEventListener('input',e=>{if(e.target.closest('#app'))saveDraft()});document.addEventListener('change',e=>{if(e.target.closest('#app'))saveDraft()});
- updateModels();updateRatio();renderPeople();restoreDraft();updateIdeaMode();updateScriptField();updateFairy();setupDictation();
+ updateModels();updateRatio();renderPeople();setupCategoryDrafts();restoreDraft();activeDraftCategory=$('kind').value;saveCategoryDrafts();updateIdeaMode();updateScriptField();updateFairy();setupDictation();
 }
 start();
 </script></body></html>
