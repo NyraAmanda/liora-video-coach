@@ -130,7 +130,7 @@ positiv"],["heygen","HeyGen \xB7 Modus pr\xFCfen"]]};var B=["ciAudience","ciGoal
 del","ratio","language","music","people","location","locationRef","keyframeRef","extra","priority"];function I(){return document.querySelector("input[name=ideaM\
 ode]:checked").value}function oe(){let e=Object.fromEntries(B.map(r=>[r,n(r).value]));e.kind==="random10"&&!selectedFigureProfiles().length&&(e.people="1");let t=e.people==="auto"?0:Number(e.people),
 i=[];for(let r=0;r<t;r++)i.push({name:n("person"+r)?.value,notes:n("notes"+r)?.value,avatar:n("avatar"+r)?.value,outfit:n("outfit"+r)?.value});return{...e,mode:I(),
-personReferences:i}}function P(){let e=document.body.dataset.accessScope;return e?"liora-lab-video-v34-draft:"+e:"liora-lab-video-v34-draft"}function C(){try{let e={};B.forEach(t=>{
+personReferences:i}}function P(){let e=document.body.dataset.accessScope;return e?"liora-lab-video-v34-draft:"+e:"liora-lab-video-v34-draft"}function C(){saveCategoryDrafts();try{let e={};B.forEach(t=>{
 n(t)&&(e[t]=n(t).value)}),e.guidedMode=document.getElementById("guidedMode")?.checked!==false;e.ideaMode=I();for(let t=0;t<5;t++)for(let i of["person","notes","avatar","outfit"]){let r=i+t;n(r)&&(e[r]=n(r).value)}localStorage.setItem(
 P(),JSON.stringify(e))}catch{}}function se(){if(window._restoring)for(let e=0;e<5;e++)for(let t of["person","notes","avatar","outfit"]){let i=t+e;n(i)&&window._restoring[i]&&
 (n(i).value=window._restoring[i])}}function le({updateModels:e,updateIdeaMode:t,renderPeople:i,updateCompatibility:r}){try{let a=JSON.parse(localStorage.getItem(
@@ -221,11 +221,11 @@ e ben\xF6tigte Personenzahl anhand der Idee. Referenzen werden anschliessend im 
 "p");s.className="small",s.textContent="Keine Personen vorgesehen. Du kannst trotzdem eine Ortsreferenz oder einen Startframe vorbereiten.",a.append(s)}se()}function Ce(){
 n("prompt").value="",n("outputPanel").style.display="none",n("copy").classList.add("hidden"),n("status").textContent=""}function ge(e){w(),!(!e&&!window.confirm(
 "Wirklich komplett neu starten? Alle Eingaben und der lokal gespeicherte Entwurf werden gel\xF6scht."))&&(e?(document.querySelector('input[name=ideaMode][value=\
-"own"]').checked=!0,n("kind").value="talk",n("idea").value="",n("randomItems").value="",n("scriptText").value="",n("location").value="",n("locationRef").value="\
-none",n("keyframeRef").value="none"):(localStorage.removeItem(P()),document.getElementById("guidedMode")&&(document.getElementById("guidedMode").checked=true),selectedFigureSlots.clear(),renderFigureOptions(),window._restoring=null,document.querySelector('input[name=ideaMode][value="own"]').checked=!0,
+"own"]').checked=!0,n("idea").value="",n("randomItems").value="",n("scriptText").value="",n("location").value="",n("locationRef").value="\
+none",n("keyframeRef").value="none"):(localStorage.removeItem(P()),resetCategoryDrafts(),document.getElementById("guidedMode")&&(document.getElementById("guidedMode").checked=true),selectedFigureSlots.clear(),renderFigureOptions(),window._restoring=null,document.querySelector('input[name=ideaMode][value="own"]').checked=!0,
 ["kind","platform","ratio","language","music","people","locationRef","keyframeRef","priority"].forEach(t=>{let i=n(t);i.selectedIndex=0}),["idea","scriptText","\
 randomItems","location","extra","ciAudience"].forEach(t=>n(t).value=""),n("ciGoal").value="comments",n("ciTone").value="authentic",T(),D()),D(),F(),j(),A(),z(),
-we(),N(),Ce(),["idea","extra"].forEach(S),C(),n("status").textContent=e?"\u2713 Neues Video bereit. Deine Avatar- und pers\xF6nlichen Angaben bleiben erhalten. Bitte di\
+we(),N(),Ce(),["idea","extra"].forEach(S),activeDraftCategory=n("kind").value,C(),n("status").textContent=e?"\u2713 Neues Video bereit. Deine Avatar- und pers\xF6nlichen Angaben bleiben erhalten. Bitte di\
 e Outfitangaben f\xFCr die neue Szene pr\xFCfen.":"\u2713 Alles zur\xFCckgesetzt. Du kannst ganz neu beginnen.",M(),x(2),y(2),n("idea").focus())}function pe(e){
 return e.toLocaleLowerCase("de-CH").replace(/ae/g,"\xE4").replace(/oe/g,"\xF6").replace(/ue/g,"\xFC").normalize("NFD").replace(/\p{M}/gu,"").replace(/ß/g,"ss").
 trim()}function N(){n("fairySearch").value="",n("fairySearchResults").replaceChildren(),n("fairySearchResults").hidden=!0,n("fairySearchStatus").textContent=""}
@@ -248,10 +248,10 @@ u kannst ihn jetzt in ChatGPT einf\xFCgen.":"Kopieren wurde blockiert. Der Text 
 "input",ve),n("fairySearch").addEventListener("search",ve),n("fairySearch").addEventListener("keydown",r=>{r.key==="Escape"&&N(),r.key==="Enter"&&!n("fairySearc\
 hResults").hidden&&(r.preventDefault(),n("fairySearchResults").querySelector("button").click())}),n("fairyTale").addEventListener("change",N),n("randomWorld").addEventListener(
 "change",z),n("randomSource").addEventListener("change",z),n("fairyTale").addEventListener("change",z),n("platform").addEventListener("change",T),n("kind").addEventListener(
-"change",()=>{fe(),j(),A(),F(),z(),D()}),n("model").addEventListener("change",A),n("language").addEventListener("change",A),n("people").addEventListener("change",
+"change",switchCategoryDraft),n("model").addEventListener("change",A),n("language").addEventListener("change",A),n("people").addEventListener("change",
 D),document.querySelectorAll("input[name=ideaMode]").forEach(r=>r.addEventListener("change",F)),document.addEventListener("input",r=>{r.target.closest("#app")&&
-C()}),document.addEventListener("change",r=>{r.target.closest("#app")&&C()}),Ie(),T(),fe(),D(),le({updateModels:T,updateIdeaMode:F,renderPeople:D,updateCompatibility:A}),
-F(),j(),z(),we(),me(),ae()}import{edgeUrl as Fe}from"./customer-config.js";var g=document.getElementById("customer-access"),ze=document.getElementById("customer-studio"),h=document.body.hasAttribute(
+C()}),document.addEventListener("change",r=>{r.target.closest("#app")&&C()}),Ie(),T(),fe(),D(),setupCategoryDrafts(),le({updateModels:T,updateIdeaMode:F,renderPeople:D,updateCompatibility:A}),
+activeDraftCategory=n("kind").value,saveCategoryDrafts(),F(),j(),z(),we(),me(),ae()}import{edgeUrl as Fe}from"./customer-config.js";var g=document.getElementById("customer-access"),ze=document.getElementById("customer-studio"),h=document.body.hasAttribute(
 "data-admin-preview"),V=h?"liora-video-coach:lab-session":"liora-video-coach:session",L="liora-video-coach:remembered-session",_="liora-video-coach:remembered-e\
 mail",b;function W(e,t){try{return JSON.parse(window[e].getItem(t)||"null")}catch{return null}}function O(){if(!h&&b&&W("localStorage",L)?.token===b)try{localStorage.
 removeItem(L)}catch{}b=void 0;try{sessionStorage.removeItem(V)}catch{}}function Oe(e,t,i){let r=JSON.stringify({token:e.token,admin:t,cameraRollSupported:e.cameraRollSupported===
@@ -999,7 +999,7 @@ if (figureBubbleStudio) new MutationObserver(renderFigureBubble).observe(figureB
 
 
 function customerAccessText(data = {}) {
-  if (data.unlimited === true) return 'VIP-Zugang · unbefristet';
+  if (data.unlimited === true) return 'Nyra-Pass · unbefristeter Zugang ohne Abo';
   if (data.paidUntil && Date.parse(data.paidUntil) > Date.now()) return 'Dein App-Abo ist bezahlt bis ' + new Intl.DateTimeFormat('de-DE',{day:'2-digit',month:'2-digit',year:'numeric',timeZone:'Europe/Zurich'}).format(new Date(data.paidUntil)) + (data.cancelAtPeriodEnd ? '. Die Kündigung ist vorgemerkt.' : '.');
   const until = typeof data.trialUntil === 'string' ? Date.parse(data.trialUntil) : NaN;
   if (Number.isFinite(until)) {
@@ -1093,5 +1093,41 @@ document.querySelector('#customer-access input[name="email"]')?.addEventListener
  billingCustomerEmail='';const choice=document.querySelector('[data-login-billing]');if(choice)choice.hidden=false;syncBillingLinks();
 });
 syncBillingLinks();
+
+const categoryDraftFields=['ciAudience','ciGoal','ciTone','fairyLead','fairyTale','customFairy','randomWorld','randomSource','randomItems','idea','scriptText','location','locationRef','keyframeRef','extra','priority'];
+let activeDraftCategory=null, categoryDraftDefaults={}, categoryDrafts={};
+function captureCategoryDraft(){
+ const draft={ideaMode:I()};
+ for(const id of categoryDraftFields)if(n(id))draft[id]=n(id).value;
+ return draft;
+}
+function saveCategoryDrafts(){
+ if(!activeDraftCategory)return;
+ categoryDrafts[activeDraftCategory]=captureCategoryDraft();
+ try{localStorage.setItem(P()+':categories',JSON.stringify(categoryDrafts))}catch{}
+}
+function setupCategoryDrafts(){
+ categoryDraftDefaults=captureCategoryDraft();
+ activeDraftCategory=null;
+ try{const saved=JSON.parse(localStorage.getItem(P()+':categories')||'{}');categoryDrafts=saved&&typeof saved==='object'&&!Array.isArray(saved)?saved:{}}catch{categoryDrafts={}}
+}
+function switchCategoryDraft(){
+ w();
+ saveCategoryDrafts();
+ const next=n('kind').value;
+ const draft=Object.hasOwn(categoryDrafts,next)?categoryDrafts[next]:categoryDraftDefaults;
+ for(const id of categoryDraftFields)if(n(id))n(id).value=draft[id]??categoryDraftDefaults[id]??'';
+ const mode=['own','inspire','reference'].includes(draft.ideaMode)?draft.ideaMode:'own';
+ const radio=document.querySelector('input[name=ideaMode][value="'+mode+'"]');
+ if(radio)radio.checked=true;
+ activeDraftCategory=next;
+ Ce();fe();j();A();F();z();D();we();N();
+ ['idea','extra'].forEach(S);
+ C();
+}
+function resetCategoryDrafts(){
+ categoryDrafts={};activeDraftCategory=null;
+ try{localStorage.removeItem(P()+':categories')}catch{}
+}
 
 Be();
