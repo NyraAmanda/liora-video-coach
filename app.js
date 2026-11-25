@@ -626,6 +626,7 @@ function renderFigureOptions() {
     box.onchange = () => {
       if (box.checked) selectedFigureSlots.add(slot);
       else selectedFigureSlots.delete(slot);
+      renderQuickFigureChoices();
       renderFigureBubble();
       if (document.getElementById('prompt')?.value) Ce();
     };
@@ -639,6 +640,7 @@ function renderFigureOptions() {
     label.append(profile.name + ' · ' + figureSlotName(slot));
     figureOptions.append(label);
   }
+  renderQuickFigureChoices();
   renderFigureBubble();
 }
 
@@ -791,6 +793,71 @@ if (figuresDialog && !h) {
 }
 
 
+// First-step selection shares the same slots as the detailed checkboxes.
+let quickFigureChoices;
+function renderQuickFigureChoices() {
+  const step = document.querySelector('[data-step="1"]');
+  if (!step || h) return;
+  if (!quickFigureChoices) {
+    const style = document.createElement('style');
+    style.textContent = `
+      .quick-figure-choices{margin:0 0 18px}
+      .quick-figure-choices[hidden]{display:none!important}
+      .quick-figure-choices p{margin:0 0 8px;font-size:13px;color:var(--muted)}
+      .quick-figure-choices .quick-figure-list{display:flex;flex-wrap:wrap;gap:10px;padding:4px}
+      .quick-figure-choice{position:relative;display:block;width:52px;height:52px;padding:0;min-width:44px;min-height:44px;border-radius:50%;border:2px solid transparent;background:#eee7f5;box-shadow:0 0 0 1px #ded3e6;cursor:pointer}
+      .quick-figure-choice img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover}
+      .quick-figure-choice[aria-pressed="true"]{border-color:#704b93;box-shadow:0 0 0 3px #a7e7d2}
+      .quick-figure-choice[aria-pressed="true"]::after{content:'✓';position:absolute;right:-4px;bottom:-4px;width:20px;height:20px;border-radius:50%;background:#704b93;color:white;font:700 13px/20px sans-serif;text-align:center}
+      .quick-figure-choice:focus-visible{outline:3px solid #704b93;outline-offset:5px}
+    `;
+    document.head.append(style);
+    quickFigureChoices = document.createElement('div');
+    quickFigureChoices.className = 'quick-figure-choices';
+    quickFigureChoices.hidden = true;
+    quickFigureChoices.setAttribute('role', 'group');
+    quickFigureChoices.setAttribute('aria-label', 'Figuren für dieses Video auswählen');
+    const hint = document.createElement('p');
+    hint.textContent = 'Wer spielt mit? Tippe auf ein Profilbild.';
+    const list = document.createElement('div');
+    list.className = 'quick-figure-list';
+    quickFigureChoices.append(hint, list);
+    const heading = step.querySelector('h2');
+    if (heading) heading.after(quickFigureChoices);
+    else step.prepend(quickFigureChoices);
+  }
+  const list = quickFigureChoices.querySelector('.quick-figure-list');
+  list.replaceChildren();
+  for (const [slot, profile] of [...figureProfiles].sort(([a], [b]) => a - b)) {
+    if (!profile.image) continue;
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'quick-figure-choice';
+    button.dataset.figureSlot = String(slot);
+    button.setAttribute('aria-label', profile.name + ' · ' + figureSlotName(slot));
+    button.setAttribute('aria-pressed', String(selectedFigureSlots.has(slot)));
+    button.title = profile.name;
+    const image = document.createElement('img');
+    image.src = profile.image;
+    image.alt = '';
+    image.draggable = false;
+    image.addEventListener('error', () => {
+      button.remove();
+      quickFigureChoices.hidden = !list.childElementCount;
+    }, {once: true});
+    button.append(image);
+    button.onclick = () => {
+      if (selectedFigureSlots.has(slot)) selectedFigureSlots.delete(slot);
+      else selectedFigureSlots.add(slot);
+      if (document.getElementById('prompt')?.value) Ce();
+      renderFigureOptions();
+      quickFigureChoices.querySelector('[data-figure-slot="' + slot + '"]')?.focus({preventScroll:true});
+    };
+    list.append(button);
+  }
+  quickFigureChoices.hidden = !list.childElementCount;
+}
+
 // Small local previews only; these images are never added to the video prompt.
 let figureBubble;
 function renderFigureBubble() {
@@ -811,7 +878,7 @@ function renderFigureBubble() {
     document.body.append(figureBubble);
   }
   const studio = document.getElementById('customer-studio');
-  const show = !h && studio && !studio.hidden && document.body.dataset.figureImageInput === 'references';
+  const show = !h && studio && !studio.hidden;
   const chosen = show ? selectedFigureProfiles().filter(profile => profile.image) : [];
   figureBubble.replaceChildren();
   for (const profile of chosen) {
