@@ -142,7 +142,7 @@
 #customer-studio .app-menu-items button:hover,#customer-studio .app-menu-items a:hover{background:#f2e9f8}
 #customer-studio .app-menu-items .app-menu-logout{border-top:1px solid #e9e0ed;border-radius:0;margin-top:6px}
 #customer-studio .app-menu summary:focus-visible,#customer-studio .app-menu-items :focus-visible{outline:3px solid #a7e7d2;outline-offset:2px}
-</style></head>
+.billing-links{display:grid;gap:8px;margin-top:12px}.billing-links a{display:block;padding:11px 13px;border-radius:10px;background:#eee6f3;color:#4d2a64;text-decoration:none;font-size:14px;font-weight:600;line-height:1.4}.billing-links a:hover{background:#e1d3eb}.billing-links a:focus-visible{outline:3px solid #9dd9c5;outline-offset:2px}.billing-choice{margin:22px 0 8px;padding:16px;border:1px solid #e1d5e8;border-radius:14px;background:#fbf8fd}.billing-choice summary{cursor:pointer;font-weight:600;color:#4d2a64}.billing-choice p,.billing-note{font-size:13px;line-height:1.5}.billing-expired{padding:12px;border-radius:10px;background:#f2eafa;color:#4d2a64}.billing-links[hidden]{display:none!important}</style></head>
 <body><section id="customer-access" class="customer-panel" aria-labelledby="customer-title">
   <div class="nyra-hero">
     <div class="nyra-login">
@@ -155,6 +155,7 @@
     <label class="remember-session"><input type="checkbox" name="remember"> Auf diesem Gerät angemeldet bleiben</label><button type="submit" class="primary">Anmelden</button>
   </form>
   <p role="status"></p>
+  <details class="billing-choice" data-login-billing><summary>Abo &amp; Zugang · Noch kein aktiver Zugang?</summary><p data-login-billing-note>Wähle dein App-Abo oder verwalte ein bestehendes. Der Gratismonat aus der Academy startet ohne Abo; hier schließt du ein kostenpflichtiges Abo ab.</p><div class="billing-links"><a data-billing-link="monthly" href="https://buy.stripe.com/4gM8wP0inbitby88Iw7AI00" target="_blank" rel="noopener noreferrer">Monatlich · 9,90 €</a><a data-billing-link="annual" href="https://buy.stripe.com/cNifZh1mrcmx31C0c07AI01" target="_blank" rel="noopener noreferrer">Jährlich · 89 €</a><a data-billing-link="portal" href="https://billing.stripe.com/p/login/4gM8wP0inbitby88Iw7AI00" target="_blank" rel="noopener noreferrer">Bestehendes Abo verwalten ↗</a></div><p>Verwende bei Stripe dieselbe E-Mail-Adresse wie für deinen VideoCoach-Zugang. Nach der Zahlungsbestätigung kannst du dich anmelden.</p></details>
   <button type="button" class="ghost" data-role>Zur Administration</button>
     </div>
     <img src="./assets/nyra-fingerherz.webp" alt="Nyra lächelt und zeigt ein Fingerherz." width="900" height="900" decoding="async">
@@ -284,9 +285,9 @@
         <button type="button" data-figures-open>Meine Figuren</button>
         <a href="./anleitung.html" target="_blank" rel="noopener">Kurzanleitung ↗</a>
         <button type="button" data-feedback-open>Feedback geben</button>
-        <section class="app-menu-access" aria-label="Dein App-Zugang" style="border-top:1px solid #e9e0ed;margin-top:6px;padding:12px 14px;color:#372b46">
-          <strong style="display:block;font-size:14px">Dein App-Zugang</strong>
-          <p data-access-summary role="status" aria-live="polite" style="margin:5px 0 0;font-size:13px;line-height:1.5;white-space:normal">Laufzeit wird geladen …</p>
+        <section class="app-menu-access" aria-label="Abo & Zugang" style="border-top:1px solid #e9e0ed;margin-top:6px;padding:12px 14px;color:#372b46">
+          <strong style="display:block;font-size:14px">Abo &amp; Zugang</strong>
+          <p data-access-summary role="status" aria-live="polite" style="margin:5px 0 0;font-size:13px;line-height:1.5;white-space:normal">Laufzeit wird geladen …</p><div class="billing-links"><a data-billing-link="monthly" href="https://buy.stripe.com/4gM8wP0inbitby88Iw7AI00" target="_blank" rel="noopener noreferrer">Monatlich · 9,90 €</a><a data-billing-link="annual" href="https://buy.stripe.com/cNifZh1mrcmx31C0c07AI01" target="_blank" rel="noopener noreferrer">Jährlich · 89 €</a><a data-billing-link="portal" href="https://billing.stripe.com/p/login/4gM8wP0inbitby88Iw7AI00" target="_blank" rel="noopener noreferrer">Bestehendes Abo verwalten ↗</a></div><p class="billing-note">Die Academy bleibt unabhängig vom App-Abo. Bereits ein Abo? Bitte verwalte es, statt ein zweites abzuschließen.</p>
         </section>
         <button type="button" class="app-menu-logout" data-logout>Abmelden</button>
       </nav>
@@ -466,4 +467,4 @@
   <a href="https://nyraimpressum.netlify.app/">Impressum</a>
   <a href="https://nyradatenschutz.netlify.app/">Datenschutz</a>
 </footer>
-<script type="module" src="./app.js?v=account-info-20261125"></script></body></html>
+<script type="module" src="./app.js?v=billing-menu-20261125"></script></body></html>
