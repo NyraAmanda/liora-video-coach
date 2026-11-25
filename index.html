@@ -399,8 +399,15 @@
         <div data-status-slot id="result-status">
 <p id="status" class="hint" role="status"></p>
         </div>
+<div class="field">
+<label class="choice" style="display:flex;align-items:center;gap:12px"><input type="checkbox" id="guidedMode" checked style="width:20px;height:20px;flex:0 0 auto"> Schritt für Schritt begleiten</label>
+<details><summary>Was ist der Unterschied?</summary><div class="inside hint">
+<p><strong>Mit Häkchen:</strong> VideoCoach führt dich Schritt für Schritt durch die Umsetzung und wartet jeweils auf deine Antwort oder dein Ergebnis.</p>
+<p><strong>Ohne Häkchen:</strong> VideoCoach erstellt aus deinen Angaben direkt einen vollständigen Entwurf mit den passenden Prompts. Nur wenn etwas Entscheidendes fehlt, fragt VideoCoach nach.</p>
+</div></details>
+</div>
 <div class="actions"><button id="generate" class="primary">Video-Coach-Auftrag erstellen</button><button id="copy" class="secondary hidden">Prompt kopieren</button></div>
-<div id="outputPanel"><div class="field" style="margin-top:16px"><label for="prompt">Dein individueller LIORA-Auftrag</label><textarea id="prompt" readonly></textarea></div><div class="notice">Öffne ChatGPT, füge den kopierten Auftrag ein und lade dort deine Referenzbilder hoch. Dieser HTML-Prototyp übermittelt keine Bilder an ChatGPT.</div></div>
+<div id="outputPanel"><div class="field" style="margin-top:16px"><label for="prompt">Dein individueller VideoCoach-Auftrag</label><textarea id="prompt" readonly></textarea></div><div class="notice">Öffne ChatGPT, füge den kopierten Auftrag ein und lade dort deine Referenzbilder hoch. Dieser HTML-Prototyp übermittelt keine Bilder an ChatGPT.</div></div>
 <div class="reset-area">
   <p class="small" style="margin:0 0 10px"><strong>Ein weiteres Video planen?</strong></p>
   <div class="actions">
@@ -435,4 +442,4 @@
   <a href="https://nyraimpressum.netlify.app/">Impressum</a>
   <a href="https://nyradatenschutz.netlify.app/">Datenschutz</a>
 </footer>
-<script type="module" src="./app.js?v=platform-image-inputs"></script></body></html>
+<script type="module" src="./app.js?v=guided-mode-1"></script></body></html>
