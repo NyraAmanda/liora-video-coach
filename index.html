@@ -33,6 +33,11 @@ button{font:inherit;cursor:pointer;border:0;border-radius:13px;padding:14px 19px
 <main class="shell" id="app">
 <div class="topline"><span class="eyebrow">✦ LIORA · VIDEO COACH · V110</span></div>
 <header class="hero"><div class="eyebrow">DEINE IDEE. UNSERE REGIE.</div><h1>Mach aus deiner Idee ein Video.</h1><p>Starte mit einer eigenen Idee, lass dir Vorschläge machen oder nutze einen Screenshot als Inspiration. LIORA plant im Chat die Handlung, empfiehlt die Engine und erstellt deine Bild- und Videoprompts.</p></header>
+<section class="panel" aria-labelledby="guidanceTitle">
+<h2 id="guidanceTitle">Deine Begleitung im Chat</h2>
+<label class="choice" style="display:flex;align-items:center;gap:12px"><input type="checkbox" id="guidedMode" checked aria-describedby="guidanceInfo" style="width:20px;height:20px;flex:0 0 auto"> Schritt für Schritt begleiten</label>
+<details id="guidanceInfo"><summary>Was bedeutet diese Auswahl?</summary><div class="inside hint"><p><strong>Mit Häkchen:</strong> LIORA zeigt dir, was als Nächstes zu tun ist, hilft bei der Bildauswahl und wartet auf dein Ergebnis, bevor es weitergeht.</p><p><strong>Ohne Häkchen:</strong> Du steuerst den Ablauf und erhältst auf Wunsch mehrere Prompts direkt zusammen – mit weniger Zwischenfragen.</p><p><strong>In beiden Varianten:</strong> LIORA prüft die im Chat hochgeladenen Bilder und deine Prompts auf erkennbare Widersprüche und gibt konkrete Korrekturen. Das fertige Video kann vom Videomodell abweichend umgesetzt werden.</p></div></details>
+</section>
 <section class="panel"><h2>01 · Dein Video</h2>
 <div class="field"><label>Wie möchtest du starten?</label><div class="choices"><label class="choice"><input type="radio" name="ideaMode" value="own" checked> Ich habe eine Idee</label><label class="choice"><input type="radio" name="ideaMode" value="inspire"> LIORA soll Ideen vorschlagen</label><label class="choice"><input type="radio" name="ideaMode" value="reference"> Ich habe ein Video als Inspiration</label></div></div>
 <div id="intelligencePanel" class="notice hidden" style="margin:14px 0 18px">
@@ -174,11 +179,12 @@ function renderPeople(){
 }
 function draftKey(){return 'liora-video-v34-draft'}
 function saveDraft(){
- try{const obj={};fields.forEach(id=>{if($(id))obj[id]=$(id).value});obj.ideaMode=getMode();for(let i=0;i<5;i++)for(const key of ['person','notes','avatar','outfit']){const id=key+i;if($(id))obj[id]=$(id).value}localStorage.setItem(draftKey(),JSON.stringify(obj))}catch(e){}
+ try{const obj={};fields.forEach(id=>{if($(id))obj[id]=$(id).value});obj.guidedMode=$('guidedMode').checked;obj.ideaMode=getMode();for(let i=0;i<5;i++)for(const key of ['person','notes','avatar','outfit']){const id=key+i;if($(id))obj[id]=$(id).value}localStorage.setItem(draftKey(),JSON.stringify(obj))}catch(e){}
 }
 function restorePersonFields(){if(!window._restoring)return;for(let i=0;i<5;i++)for(const key of ['person','notes','avatar','outfit']){const id=key+i;if($(id)&&window._restoring[id])$(id).value=window._restoring[id]}}
 function restoreDraft(){
  try{const o=JSON.parse(localStorage.getItem(draftKey())||'{}');window._restoring=o;
+ $('guidedMode').checked=o.guidedMode!==false;
  if(o.ideaMode){const radio=document.querySelector(`input[name=ideaMode][value="${o.ideaMode}"]`);if(radio)radio.checked=true}
  ['ciAudience','ciGoal','ciTone','kind','fairyLead','fairyTale','customFairy','randomWorld','randomSource','randomItems','idea','scriptText','platform'].forEach(id=>{if(o[id]!==undefined && (id!=='kind'||['talk','standup','signature','couple','fairytale','storytelling','random10'].includes(o[id])))$(id).value=o[id]});
  updateModels();
@@ -229,6 +235,13 @@ ${catalogue}
 === ENDE V99 CONTENT INTELLIGENCE ===`;
 }
 
+function guidanceInstructions(){
+ const common='IN BEIDEN MODI: Nutze vorhandene Angaben und Freigaben, keine doppelten Fragen. Vor dem finalen Videoprompt die tatsächlich im Chat hochgeladenen Bilder miteinander und mit dem Prompt vergleichen: Identität, Outfit, Requisitenfarbe/-anzahl, Raum, Licht, Blick-/Bewegungsrichtung und Schnittanschluss. Start und Ende dürfen sich nur durch geplante Zustandsänderungen unterscheiden; sie müssen nicht identisch sein. Bestätigte unveränderliche Details in JEDEM eigenständig verwendbaren Folgeprompt wiederholen. Erkennbare Widersprüche konkret benennen, betroffenes Bild zuordnen und eine gezielte Korrekturanweisung geben; erst nach notwendiger Bildkorrektur weitergehen. Ohne hochgeladene Bilder keine Sichtprüfung behaupten. Prompt vor Ausgabe intern auf Handlung, Kamera, Dialog, Dauer und Widersprüche prüfen, behebbare Fehler korrigieren und erneut prüfen; keine endlosen Optimierungsschleifen. Nutzeridee nicht eigenmächtig ändern. Keine automatischen Testclip-/Sprachtest-Empfehlungen: stattdessen Bild-/Promptprüfung; Tests nur auf ausdrücklichen Wunsch. Keine Rendergarantie und keine Behauptung, alle Fehler erkannt zu haben.';
+ return '=== VERBINDLICHER BEGLEITMODUS – VORRANG BEI ABLAUFKONFLIKTEN ===\n'+($('guidedMode').checked
+ ? 'SCHRITT FÜR SCHRITT: Übernimm die Orientierung. Nenne kurz den aktuellen Schritt, erkläre die nächste konkrete Handlung und liefere nur die jetzt benötigte Aufgabe bzw. den zugehörigen Prompt. Bei Bildauswahl sage genau, welches Bild wofür gebraucht wird und wo es hochzuladen/einzusetzen ist. Warte auf die erforderliche Antwort oder das Ergebnis, bevor du abhängige Schritte ausgibst. Bereits vorhandene Angaben/geeignete Bilder nutzen, unnötige Bestätigungen überspringen. Bei Mehrclip-Projekten zunächst nur die für den aktuellen Clip benötigten Prompts liefern; nach dessen Ergebnis gezielt fortfahren.'
+ : 'DIREKT UND FLEXIBEL: Folge der gewünschten Reihenfolge der Nutzerin. Bei ausreichenden Angaben direkt den angeforderten Prompt liefern; auf Wunsch mehrere Prompts gesammelt und einzeln kopierbar. Keine obligatorischen Erklärungs-, Warte- oder Bestätigungsschritte ohne sachlichen Bedarf. Nur bei entscheidender fehlender Information nachfragen. Erforderliche Referenz-/Bildprüfungen bleiben verbindlich.')
+ +'\n'+common+'\n=== ENDE BEGLEITMODUS ===';
+}
 function makePrompt(){
  const mode=getMode(),kind=kindNames[$('kind').value],platform=platformNames[$('platform').value],model=modelNames[$('model').value];
  const idea=$('idea').value.trim();if(mode==='own'&&!idea&&!['signature','couple','fairytale','storytelling','random10'].includes($('kind').value)&&!(['talk','standup'].includes($('kind').value)&&$('scriptText').value.trim())){$('status').textContent='Bitte beschreibe zuerst kurz deine Idee.';$('idea').focus();return null}
@@ -239,7 +252,7 @@ function makePrompt(){
  const L=String.fromCharCode(65+i);
  people.push(`Person ${L}: ${$('person'+i)?.value.trim()||'Name offen'}; Avatarbild: ${refDescription('avatar'+i)}; Outfitbild: ${refDescription('outfit'+i)}; Merkmale: ${$('notes'+i)?.value.trim()||'offen'}.`);
  }
- return `DU BIST LIORA V101 – EINE ERFAHRENE CREATIVE DIRECTORIN, FILMREGISSEURIN UND STORYTELLING-EXPERTIN MIT DEM ANSPRUCH EINER PROFESSIONELLEN FILMPRODUKTION.
+ return `${guidanceInstructions()}\n\nDU BIST LIORA V101 – EINE ERFAHRENE CREATIVE DIRECTORIN, FILMREGISSEURIN UND STORYTELLING-EXPERTIN MIT DEM ANSPRUCH EINER PROFESSIONELLEN FILMPRODUKTION.
 Du verbindest dramaturgisches Gespür, kreative Originalität und filmisches Handwerk mit fundiertem Wissen über KI-Videogenerierung. Du entwickelst Geschichten, die vom ersten Moment an neugierig machen, visuell verständlich sind und mit einer überraschenden, humorvollen oder emotionalen Auflösung in Erinnerung bleiben.
 Du denkst wie eine Regisseurin, planst wie eine Produzentin und prüfst wie eine Continuity Supervisorin. Berücksichtige Storytelling, Schauspielregie, Kameraführung, Bildkomposition, Schnittanschlüsse, Keyframes und die tatsächlichen Möglichkeiten der gewählten Video-Engine. Ziel ist eine filmisch überzeugende Geschichte, die möglichst bereits im ersten Render funktioniert – ohne eine Erfolgsgarantie zu behaupten.
 KENNZEICHNUNG ALLER KI-VIDEOS (ALLE FORMATE): Plane für das fertige Video die dauerhaft sichtbare Beschriftung «KI-generiert» als separate, editierbare Textebene in der Nachbearbeitung. Position unten links innerhalb der sicheren Bildzone mit genügend Abstand zum Rand und zu Plattform-Bedienelementen; klein, weiss, dezent, mit leichter Schatten-/Kontrastunterstützung. In jedem Clip gleiche Position und Gestaltung, ohne Gesichter oder wichtige Handlungen zu verdecken. Den Text NICHT in die generierten Szenenbilder oder Start-/Keyframes einrendern lassen und NICHT allein auf KI-generierte Schrift im Videoprompt vertrauen, da Text fehlerhaft erscheinen kann. AM ENDE DER GESAMTEN VIDEOPRODUKTION (nach den eigentlichen Bild-/Videoprompts und der Caption, falls gewünscht) erstelle zusätzlich direkt im Chat mit der verfügbaren Bildgenerierung einen separat nutzbaren Sticker als PNG mit vollständig transparentem Hintergrund. Stickerinhalt exakt «KI-generiert», klare weisse Schrift, schlicht, neutral, ohne Symbole, Rahmen, Fläche oder zusätzliche Wörter; ausreichend Abstand zum Bildrand. Nicht nur einen Sticker-Prompt ausgeben: die tatsächliche Bilderstellung auslösen, sofern ein Bildwerkzeug verfügbar ist. Wenn kein Bildwerkzeug verfügbar ist, ehrlich darauf hinweisen und einen kopierbaren Sticker-Bildprompt als Ersatz anbieten. Den Sticker nicht in Keyframes, Szenenbilder oder Videoprompts integrieren. Kurz erklären, dass der Sticker als Overlay unten links in der Nachbearbeitung platziert und über die gesamte Videolänge eingeblendet wird. Dies ist eine Produktions-Kennzeichnung, keine Zusage zur automatischen technischen Einbettung und ersetzt keine gegebenenfalls erforderliche Plattform-KI-Kennzeichnung.
@@ -1187,6 +1200,7 @@ function resetVideo(keepPersonal){
   $('keyframeRef').value='none';
  }else{
   localStorage.removeItem(draftKey());
+  $('guidedMode').checked=true;
   window._restoring=null;
   document.querySelector('input[name=ideaMode][value="own"]').checked=true;
   ['kind','platform','ratio','language','music','people','locationRef','keyframeRef','priority'].forEach(id=>{
