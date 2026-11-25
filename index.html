@@ -214,6 +214,7 @@
   <form>
     <h2 id="my-figures-title">Meine Figuren</h2>
     <p>Erzähl mir, was deine Figuren wiedererkennbar macht. Wähle danach im Briefing aus, wer in dieser Szene mitspielt.</p>
+    <p class="small"><strong>Wichtig:</strong> Profilbilder und Bubbles dienen nur zur Orientierung und Auswahl in der App. Sie werden nicht automatisch an ChatGPT oder ein Videotool übertragen. Wenn das Bild für die Planung, Prüfung oder Bilderstellung benötigt wird, lade es zusätzlich direkt im Chat hoch. LIORA sagt dir, welche Referenzen für deine Szene gebraucht werden.</p>
     <label>Profil auswählen
       <select data-figure-slot>
         <option value="0">Hauptavatar</option>
@@ -225,7 +226,7 @@
     <fieldset class="figure-fields">
       <label>Name<input name="name" maxlength="80" required></label>
       <label>Aussehen oder Tierart<textarea name="appearance" rows="2" maxlength="500" placeholder="Woran erkennt man die Figur?"></textarea></label>
-      <p class="small">Für ein möglichst konsistentes Aussehen empfehlen wir dir, deinen Avatar einmal anhand seines Standardporträts beschreiben zu lassen. Prüfe die Beschreibung und speichere sie hier. Für neue Videoprompts reicht der Steckbrief. Outfit und Ort klärst du pro Szene im Chat. Beim Rendern kannst du das Porträt direkt im Videotool als Gesichtsreferenz verwenden.</p>
+      <p class="small">Für ein möglichst konsistentes Aussehen empfehlen wir dir, deinen Avatar einmal anhand seines Standardporträts beschreiben zu lassen. Prüfe die Beschreibung und speichere sie hier. Der Steckbrief wird als Text in den Masterprompt übernommen; das Profilbild selbst wird nicht mitgeschickt. Outfit und Ort klärst du pro Szene im Chat. Lade benötigte Bilder dort zusätzlich hoch. Beim Rendern fügst du die passenden Referenzen auch im Videotool hinzu, sofern der gewählte Modus sie unterstützt.</p>
       <details>
         <summary>Aussehen aus einem Bild beschreiben lassen</summary>
         <p class="small">Hänge das Bild in ChatGPT an, füge den folgenden Prompt ein und kopiere die Beschreibung zurück in das Feld „Aussehen oder Tierart“.</p>
@@ -236,7 +237,7 @@
       <label><span data-figure-voice-label>Sprechweise</span><textarea name="voice" rows="2" maxlength="400" placeholder="Tempo, Tonfall, Eigenheiten"></textarea></label>
       <label>Beziehung zur Hauptfigur<textarea name="relationship" rows="2" maxlength="300" placeholder="Zum Beispiel Freundin, Partner oder Familienkatze"></textarea></label>
       <label>Profilbild (freiwillig)<input name="photo" type="file" accept="image/jpeg,image/png,image/webp"></label>
-      <p class="small">Das Bild dient zur Orientierung in LIORA. Wenn ChatGPT ein Referenzbild sehen soll, hänge es im Chat an.</p>
+      <p class="small">Nur als Vorschau in der App. Wenn ChatGPT dieses Bild berücksichtigen soll, lade es zusätzlich im Chat hoch – das Profilbild wird nicht automatisch übertragen.</p>
       <img data-figure-preview class="figure-preview" alt="Gespeicherte Profilvorschau" hidden>
       <div class="admin-member-actions">
         <button type="submit" class="primary">Profil speichern</button>
