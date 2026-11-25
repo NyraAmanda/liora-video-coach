@@ -400,6 +400,13 @@
 <p id="status" class="hint" role="status"></p>
         </div>
 
+<div class="field">
+<label class="choice" style="display:flex;align-items:center;gap:12px"><input type="checkbox" id="guidedMode" checked style="width:20px;height:20px;flex:0 0 auto"> Schritt für Schritt begleiten</label>
+<details><summary>Was ist der Unterschied?</summary><div class="inside hint">
+<p><strong>Mit Häkchen:</strong> VideoCoach führt dich Schritt für Schritt durch die Umsetzung und wartet jeweils auf deine Antwort oder dein Ergebnis.</p>
+<p><strong>Ohne Häkchen:</strong> VideoCoach erstellt aus deinen Angaben direkt einen vollständigen Entwurf mit den passenden Prompts. Nur wenn etwas Entscheidendes fehlt, fragt VideoCoach nach.</p>
+</div></details>
+</div>
 <div class="actions"><button id="generate" class="primary">Video-Coach-Auftrag erstellen</button><button id="copy" class="secondary hidden">Prompt kopieren</button></div>
 <div id="outputPanel"><div class="field" style="margin-top:16px"><label for="prompt">Dein individueller VideoCoach-Auftrag</label><textarea id="prompt" readonly></textarea></div><div class="notice">Öffne ChatGPT, füge den kopierten Auftrag ein und lade dort deine Referenzbilder hoch. Dieser HTML-Prototyp übermittelt keine Bilder an ChatGPT.</div></div>
 <div class="reset-area">
@@ -427,13 +434,7 @@
           <button type="button" class="secondary" data-feedback-open>Feedback geben</button>
         </div>
       </details>
-<div class="field" id="guidanceControl" style="margin-top:14px">
-<label class="choice" style="display:flex;align-items:center;gap:12px"><input type="checkbox" id="guidedMode" checked style="width:20px;height:20px;flex:0 0 auto"> Schritt für Schritt begleiten</label>
-<details><summary>Was ist der Unterschied?</summary><div class="inside hint">
-<p><strong>Mit Häkchen:</strong> VideoCoach führt dich Schritt für Schritt durch die Umsetzung und wartet jeweils auf deine Antwort oder dein Ergebnis.</p>
-<p><strong>Ohne Häkchen:</strong> VideoCoach erstellt aus deinen Angaben direkt einen vollständigen Entwurf mit den passenden Prompts. Nur wenn etwas Entscheidendes fehlt, fragt VideoCoach nach.</p>
-</div></details>
-</div>
+
     </aside>
   </div>
 <footer>LIORA V110 · Ein Video pro Durchlauf · Keine integrierte Video-Generierung · Modellfunktionen werden im Chat geprüft. Formularentwürfe werden nur lokal in diesem Browser gespeichert. Spracheingabe verwendet die Spracherkennung des Browsers und kann über dessen Anbieter verarbeitet werden.</footer>
