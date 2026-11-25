@@ -259,7 +259,7 @@ removeItem(L)}catch{}b=void 0;try{sessionStorage.removeItem(V)}catch{}}function 
 protocol!=="https:"||!t.hostname.endsWith(".supabase.co")||t.username||t.password||t.search||t.hash||t.pathname!=="/functions/v1/liora-access")throw new Error("\
 Ung\xFCltiger Edge-Link.");return t.href}async function R(e,t={},{recover:i=!1}={}){let r=b,a=await fetch(Me(Fe)+e,{method:"POST",headers:{"content-type":"appli\
 cation/json",...r?{"x-liora-session":r}:{}},body:JSON.stringify(t),credentials:"omit",cache:"no-store",redirect:"error",signal:AbortSignal.timeout(1e4)}),o=await a.
-json();if(!a.ok)throw a.status===401&&r&&(O(),i||location.reload()),Object.assign(new Error(o.error||"Anfrage fehlgeschlagen."),{status:a.status});return o}function Ee(e,t){
+json();if(!a.ok)throw a.status===401&&r&&(O(),i||location.reload()),Object.assign(new Error(o.error||"Anfrage fehlgeschlagen."),{status:a.status,code:o.code});return o}function Ee(e,t){
 let i=document.createElement("button");return i.type="button",i.className="secondary",i.textContent=e,i.addEventListener("click",t),i}async function Ae(){try{await R(
 "/logout"),O(),location.reload()}catch{if(!b)location.reload();else throw new Error("Abmeldung konnte nicht best\xE4tigt werden. Bitte erneut versuchen.")}}function J(e=h||location.hash==='#admin-feedback'){
 let t=g.querySelector("form"),i=t.elements.namedItem("remember");if(!e&&i)try{let o=localStorage.getItem(_);o&&!t.elements.email.value&&(t.elements.email.value=
@@ -267,10 +267,10 @@ o),i.checked=!!(o||W("localStorage",L))}catch{}g.querySelector("h1").textContent
 textContent=e?"Melde dich mit deinem separaten Admin-Passwort an.":"Gib deine freigegebene E-Mail-Adresse und das gemeinsame Passwort ein.";let r=g.querySelector(
 "[data-role]");r.hidden=h,r.textContent=e?"Zum Kundenzugang":"Zur Administration",r.onclick=()=>{t.reset(),J(!e)};let a=g.querySelector("[role=status]");a.textContent=
 "",t.onsubmit=async o=>{o.preventDefault();let s=t.querySelector("button[type=submit]"),d=new FormData(t),l=d.has("remember");s.disabled=!0,r.disabled=!0,a.textContent=
-"";try{let c=await R(e?"/admin/login":"/login",{email:d.get("email"),password:d.get("password")});if(b=c.token,!e&&!h){try{l?localStorage.setItem(_,d.get("email").
+"";try{let c=await R(e?"/admin/login":"/login",{email:d.get("email"),password:d.get("password")});if(!e){billingCustomerEmail=String(d.get("email")||"").trim();syncBillingLinks();}if(b=c.token,!e&&!h){try{l?localStorage.setItem(_,d.get("email").
 trim()):localStorage.removeItem(_)}catch{}if(l&&window.PasswordCredential&&navigator.credentials)try{let m=new window.PasswordCredential({id:d.get("email").trim(),
-password:d.get("password")});navigator.credentials.store(m).catch(()=>{})}catch{}}e&&!h?await X():De(c),Oe(c,e,l),t.reset()}catch(c){O(),a.textContent=c.message}finally{
-s.disabled=!1,r.disabled=!1}}}function De(e){renderCustomerAccessInfo(e);document.body.dataset.accessScope=h?"admin-lab":e.draftScope,g.hidden=!0,ze.hidden=!1,loadFigures(),ye||(Se(async t=>{const chosen = selectedFigureProfiles(); const briefing = mergeFigureProfiles(t, chosen); let{prompt:i}=await R(
+password:d.get("password")});navigator.credentials.store(m).catch(()=>{})}catch{}}e&&!h?await X():De(c),Oe(c,e,l),t.reset()}catch(c){O(),a.textContent=c.message;showBillingAccessError(c)}finally{
+s.disabled=!1,r.disabled=!1}}}function De(e){billingCustomerEmail=e.email||billingCustomerEmail;syncBillingLinks();renderCustomerAccessInfo(e);document.body.dataset.accessScope=h?"admin-lab":e.draftScope,g.hidden=!0,ze.hidden=!1,loadFigures(),ye||(Se(async t=>{const chosen = selectedFigureProfiles(); const briefing = mergeFigureProfiles(t, chosen); let{prompt:i}=await R(
 h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chosen)},{enableCameraRoll:e.cameraRollSupported===!0}),ye=!0)}async function X(data) {
   const { members } = data ?? await R("/admin/list");
   const panel = document.getElementById("customer-admin");
@@ -999,12 +999,13 @@ if (figureBubbleStudio) new MutationObserver(renderFigureBubble).observe(figureB
 
 
 function customerAccessText(data = {}) {
+  if (data.paidUntil && Date.parse(data.paidUntil) > Date.now()) return 'Dein App-Abo ist bezahlt bis ' + new Intl.DateTimeFormat('de-DE',{day:'2-digit',month:'2-digit',year:'numeric',timeZone:'Europe/Zurich'}).format(new Date(data.paidUntil)) + (data.cancelAtPeriodEnd ? '. Die Kündigung ist vorgemerkt.' : '.');
   if (data.unlimited === true) return 'Unbefristet freigeschaltet.';
   const until = typeof data.trialUntil === 'string' ? Date.parse(data.trialUntil) : NaN;
   if (Number.isFinite(until)) {
     const date = new Intl.DateTimeFormat('de-DE', {day:'2-digit', month:'2-digit', year:'numeric', timeZone:'Europe/Zurich'}).format(new Date(until));
     return (until > Date.now() ? 'Gratismonat bis ' : 'Dein Gratismonat endete am ') + date +
-      '. Angaben zu einer zusätzlichen Abo-Laufzeit werden derzeit nicht übermittelt.';
+      '.';
   }
   return 'Deine Laufzeit wird derzeit nicht übermittelt. Wende dich bei Fragen zu deinem Zugang an den Support.';
 }
@@ -1056,5 +1057,41 @@ if (appMenu) {
     }
   });
 }
+
+let billingCustomerEmail = '';
+function billingLinkUrl(base, email, kind) {
+ const url = new URL(base);
+ const value = String(email || '').trim().toLowerCase();
+ if (/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value)) url.searchParams.set(kind === 'portal' ? 'prefilled_email' : 'locked_prefilled_email', value);
+ if (kind !== 'portal') url.searchParams.set('locale', 'de');
+ return url.href;
+}
+function syncBillingLinks() {
+ const emailField=document.querySelector('#customer-access input[name="email"]');
+ const email=billingCustomerEmail || emailField?.value || '';
+ document.querySelectorAll('[data-billing-link]').forEach(link=>{
+  link.dataset.baseUrl ||= link.href;
+  link.href=billingLinkUrl(link.dataset.baseUrl,email,link.dataset.billingLink);
+ });
+}
+function showBillingAccessError(error) {
+ const choice=document.querySelector('[data-login-billing]');
+ const note=document.querySelector('[data-login-billing-note]');
+ if(!choice || !note) return;
+ if(error.code === 'ACCESS_EXPIRED') {
+  choice.open=true;
+  note.textContent='Deine Zugangszeit ist vorbei. Wenn du weiter kreativ sein möchtest, kannst du hier dein Abo auswählen. 💜';
+  note.classList.add('billing-expired');
+ } else if(error.code === 'ACCESS_BLOCKED') {
+  choice.open=false;
+  note.textContent='Dein Zugang ist derzeit gesperrt. Bitte wende dich an den Support, damit wir das klären können.';
+  note.classList.remove('billing-expired');
+ }
+ syncBillingLinks();
+}
+document.querySelector('#customer-access input[name="email"]')?.addEventListener('input',()=>{
+ billingCustomerEmail='';syncBillingLinks();
+});
+syncBillingLinks();
 
 Be();
