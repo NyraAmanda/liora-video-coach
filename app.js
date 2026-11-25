@@ -753,6 +753,7 @@ if (figuresDialog && !h) {
       renderFigureOptions();
       showFigure();
       status.textContent = remove ? 'Profil gelöscht.' : 'Profil gespeichert. Du kannst es jetzt im Briefing auswählen.';
+      if (!remove) figuresDialog.close();
     } catch (error) {
       status.textContent = error.message;
     } finally {
