@@ -620,6 +620,32 @@ const figureProfiles = new Map();
 let figuresLoad;
 let refreshMainFigureChoice;
 
+let figureSelectionScope = null;
+function saveFigureSelection() {
+  if (h || figureSelectionScope !== P()) return;
+  try {
+    localStorage.setItem(P() + ':figure-selection', JSON.stringify({
+      slots: [...selectedFigureSlots].filter(slot => figureProfiles.has(slot)),
+      main: selectedFigureSlots.has(mainFigureSlot) && figureProfiles.has(mainFigureSlot) ? mainFigureSlot : null
+    }));
+  } catch {}
+}
+function restoreFigureSelection() {
+  selectedFigureSlots.clear();
+  mainFigureSlot = null;
+  try {
+    const saved = JSON.parse(localStorage.getItem(P() + ':figure-selection') || 'null');
+    if (Array.isArray(saved?.slots)) {
+      for (const slot of saved.slots) {
+        if (Number.isInteger(slot) && figureProfiles.has(slot)) selectedFigureSlots.add(slot);
+      }
+      if (selectedFigureSlots.has(saved.main)) mainFigureSlot = saved.main;
+    }
+  } catch {}
+  figureSelectionScope = P();
+}
+
+
 function figureSlotName(slot) {
   return slot === 6 ? 'Haustier' : 'Figur ' + (slot + 1);
 }
@@ -747,12 +773,14 @@ function renderFigureOptions() {
   if (typeof refreshMainFigureChoice === 'function') refreshMainFigureChoice();
   renderQuickFigureChoices();
   renderFigureBubble();
+  saveFigureSelection();
 }
 
 function loadFigures() {
   if (!figuresDialog || h) return;
   figuresLoad ??= R('/figures/list').then(({profiles}) => {
     for (const {slot, profile} of profiles) figureProfiles.set(slot, profile);
+    restoreFigureSelection();
     renderFigureOptions();
     refreshFigureSlots();
     return true;
