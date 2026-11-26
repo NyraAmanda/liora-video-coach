@@ -390,7 +390,7 @@
         <h2 id="step-2-title" tabindex="-1">Entwickle deine Idee</h2>
         <p class="step-intro">Du kannst mit einem eigenen Einfall, einem Vorschlag oder einer Referenz starten.</p>
         <div data-status-slot></div>
-<div class="field"><label>Wie möchtest du starten?</label><div class="choices"><label class="choice"><input type="radio" name="ideaMode" value="own" checked> Ich habe eine Idee</label><label class="choice"><input type="radio" name="ideaMode" value="inspire"> LIORA soll Ideen vorschlagen</label><label class="choice"><input type="radio" name="ideaMode" value="reference"> Ich habe ein Video als Inspiration</label></div></div>
+<div class="field" id="idea-start-options"><label>Wie möchtest du starten?</label><div class="choices"><label class="choice"><input type="radio" name="ideaMode" value="own" checked> Ich habe eine Idee</label><label class="choice"><input type="radio" name="ideaMode" value="inspire"> LIORA soll Ideen vorschlagen</label><label class="choice"><input type="radio" name="ideaMode" value="reference"> Ich habe ein Video als Inspiration</label></div></div>
 <div id="intelligencePanel" class="notice hidden" style="margin:14px 0 18px">
 <strong>🧠 Content Intelligence V106 · Ideenstrategie</strong>
 <p class="hint">Für Talking Head und Stand-up: mutige Perspektiven, intelligente Selbstironie und echte Überraschungen statt weichgespülter 08/15-Sprüche. Auch Podcast-Themen sind möglich.</p>
@@ -422,7 +422,7 @@
   <div class="ref-title" id="saved-figures-title">Gespeicherte Figuren fürs Briefing</div>
   <div data-figure-options class="figure-options"></div>
 </section><p class="small" style="margin:10px 0 16px;">Dir fehlt eine Idee für Outfit oder Drehort? Such dir auf Pinterest passende Anhaltspunkte für Farben, Material oder Stimmung. <a href="https://www.pinterest.com/search/pins/?q=outfit%20ideas" target="_blank" rel="noopener noreferrer">Outfit-Inspiration</a> · <a href="https://www.pinterest.com/search/pins/?q=interior%20moodboard" target="_blank" rel="noopener noreferrer">Orts-Inspiration</a></p>
-<div class="ref-card"><div class="ref-title">Umgebung / Ort</div><div class="grid"><div><label for="location">Wo spielt die Szene?</label><input id="location" placeholder="z. B. Küche, Café, Studio"></div><div><label for="locationRef">Ortsbild</label><select id="locationRef"><option value="none">Noch kein Bild</option><option value="ready">Bild vorhanden – im Chat hochladen</option><option value="create">LIORA soll ein Bildprompt erstellen</option></select></div></div></div>
+<p id="remix-location-note" class="notice hidden">Der Ort wird aus deinem Referenzvideo übernommen. Einen anderen Ort kannst du unter „Besondere Wünsche“ angeben.</p><div class="ref-card" id="location-options"><div class="ref-title">Umgebung / Ort</div><div class="grid"><div><label for="location">Wo spielt die Szene?</label><input id="location" placeholder="z. B. Küche, Café, Studio"></div><div><label for="locationRef">Ortsbild</label><select id="locationRef"><option value="none">Noch kein Bild</option><option value="ready">Bild vorhanden – im Chat hochladen</option><option value="create">LIORA soll ein Bildprompt erstellen</option></select></div></div></div>
 <div class="ref-card"><div class="ref-title">Startframe / Keyframe</div><label for="keyframeRef">Hast du bereits einen Startframe?</label><select id="keyframeRef"><option value="unsure">LIORA soll entscheiden, ob einer nötig ist</option><option value="ready">Ja – im Chat hochladen</option><option value="create">Nein – LIORA soll den Bildprompt erstellen</option></select></div>
 <p class="hint">Bildnummern wie Image 1 = Person A werden erst nach dem Hochladen im Chat anhand der tatsächlichen Upload-Reihenfolge festgelegt. Outfit- und Ortsbilder bekommen eigene Rollen.</p>
 </div></details>
@@ -489,4 +489,4 @@
   <a href="https://nyraimpressum.netlify.app/">Impressum</a>
   <a href="https://nyradatenschutz.netlify.app/">Datenschutz</a>
 </footer>
-<script type="module" src="./app.js?v=final-prompt-review-20261126-1"></script></body></html>
+<script type="module" src="./app.js?v=remix-video-entry-20261126-1"></script></body></html>
