@@ -401,6 +401,14 @@
 <div class="field"><label for="ciTone">Tonalität</label><select id="ciTone"><option value="authentic">Authentisch, pointiert</option><option value="bold">Frech, provokant ohne künstliche Empörung</option><option value="warm">Warm, nahbar, empathisch</option><option value="dry">Trocken, ironisch</option></select></div>
 <p class="hint">Bei Ideenmodus: zuerst zwei klar unterschiedliche Konzepte mit Hook und Begründung, danach erst Story & Shotplan. Bestehende Produktionsregeln bleiben unverändert.</p>
 </div>
+<div id="remix-approach-options" class="field hidden">
+<label for="remixApproach">Wie nah möchtest du an der Vorlage bleiben?</label>
+<select id="remixApproach">
+<option value="similar" selected>Ähnliche Umsetzung</option>
+<option value="principle">Neues aus dem Prinzip</option>
+</select>
+<p class="hint"><strong>Ähnliche Umsetzung:</strong> Grundidee, Thema und Humor bleiben erhalten; Figuren und Details werden angepasst.<br><strong>Neues aus dem Prinzip:</strong> Die Mechanik wird auf ein anderes Thema übertragen und daraus eine neue Geschichte entwickelt.</p>
+</div>
 <div id="trendHelp" class="notice hidden">VideoRemix übernimmt die Idee beziehungsweise das Konzept eines Videos und entwickelt daraus eine eigene Umsetzung mit deinem Avatar. Das Original wird nicht kopiert. Beschreibe kurz deine Videovorlage oder deinen Änderungswunsch. Lade den Clip oder die Bildschirmaufnahme nach dem Einfügen des Masterprompts direkt in ChatGPT hoch, sofern dein Konto den Upload unterstützt.</div>
 <div id="referenceHelp" class="notice hidden"><strong>🎬 Video als Inspiration</strong><br>Beschreibe, was im Video passiert und was du daran magst. Den Screenshot lädst du erst nach dem Einfügen des Auftrags direkt in ChatGPT hoch. LIORA analysiert das Bild und deinen beschriebenen Ablauf, empfiehlt danach eine passende Engine und entwickelt deine eigenständige Version.</div>
 <div id="random10Field" class="notice hidden"><strong>🎲 10 Random Dinge · Challenge</strong><p class="hint">Avatar und Outfit vorgeben, Ort optional. Für alle zehn Dinge plant LIORA rund 30 Sekunden und prüft zuerst Kling 4.0, wenn du eine Empfehlung möchtest. Bei kürzeren Modi kannst du alle zehn Dinge auf mehrere Clips verteilen oder eine kurze Fassung mit weniger Dingen wählen. Bei Gemini Omni sind 8 Sekunden pro Clip eingeplant.</p><div class="field"><label for="randomWorld">Welche Welt?</label><select id="randomWorld"><option value="fairy">Märchenwelt · Humor</option><option value="free">Freie Welt · Avatar / Alltag / Fantasie</option></select></div><div class="field"><label for="randomSource">Wer bestimmt die 10 Gegenstände?</label><select id="randomSource"><option value="liora">LIORA überrascht mich mit 10 kreativen Gegenständen</option><option value="own">Ich bestimme die 10 Dinge selbst</option></select></div><div class="field hidden" id="randomItemsField"><div id="randomItemInputs" class="grid" role="group" aria-label="Deine 10 Dinge"></div><textarea id="randomItems" hidden tabindex="-1" aria-hidden="true"></textarea><p class="hint" id="randomItemsCount" role="status">0 von 10 ausgefüllt</p></div><p class="hint">Bei Märchen dürfen Requisiten verschiedener Märchen und moderne Gegenstände gemischt werden. Die Märchenfigur kennt moderne Technik nicht automatisch.</p></div>
@@ -489,4 +497,4 @@
   <a href="https://nyraimpressum.netlify.app/">Impressum</a>
   <a href="https://nyradatenschutz.netlify.app/">Datenschutz</a>
 </footer>
-<script type="module" src="./app.js?v=remix-own-concept-20261126-1"></script></body></html>
+<script type="module" src="./app.js?v=remix-approach-20261126-1"></script></body></html>
