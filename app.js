@@ -1,4 +1,4 @@
-import {initDemoAdmin} from './demo-admin.js?v=20261127';
+import {initDemoAdmin} from './demo-admin.js?v=demo-dropdown-20261127';
 import { initAdminCommunity } from './community.js?v=20261125-1';
 function videoCoachGuidance(){
  const guided=document.getElementById("guidedMode")?.checked!==false;
@@ -326,12 +326,11 @@ h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chos
   rememberLoginRole(true);
   const { members } = data ?? await R("/admin/list");
   const panel = document.getElementById("customer-admin");
-  initDemoAdmin(panel,R);
-  const status = panel.querySelector("[role=status]");
-  const list = panel.querySelector("ul");
+  const status = panel.querySelector(":scope > [role=status]");
+  const list = panel.querySelector('ul[aria-labelledby="admin-member-list-title"]');
   const search = panel.querySelector("[data-member-search]");
   const count = panel.querySelector("[data-member-count]");
-  const form = panel.querySelector("form");
+  const form = panel.querySelector(".admin-controls form");
   let groupFilter = panel.querySelector("[data-member-group]");
   if (!groupFilter) {
     const wrapper = document.createElement("div");
@@ -340,7 +339,7 @@ h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chos
     label.textContent = "Personengruppe";
     groupFilter = document.createElement("select");
     groupFilter.dataset.memberGroup = "";
-    for (const [value, text] of [["all", "Alle"], ["app", "Nur App"], ["course", "Kursmitglieder"]]) {
+    for (const [value, text] of [["all", "Alle"], ["app", "Nur App"], ["course", "Kursmitglieder"], ["demo", "Demo-Zugänge"]]) {
       const option = document.createElement("option");
       option.value = value;
       option.textContent = text;
@@ -354,6 +353,7 @@ h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chos
     hint.textContent = "Die Kurszuordnung verwaltest du manuell. Sie verändert weder Abo noch Gratiszeit. „Nur App“ bedeutet: kein Kurs hinterlegt.";
     wrapper.after(hint);
   }
+  const demoPanel = initDemoAdmin(panel,R);
   const formatDate = new Intl.DateTimeFormat("de-CH", {
     dateStyle: "medium", timeStyle: "short", timeZone: "Europe/Zurich"
   });
@@ -370,6 +370,15 @@ h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chos
   }
 
   function render() {
+    const isDemo = groupFilter.value === "demo";
+    demoPanel.hidden = !isDemo;
+    form.hidden = isDemo;
+    search.closest(".admin-control").hidden = isDemo;
+    panel.querySelector(".admin-list-heading").hidden = isDemo;
+    list.hidden = isDemo;
+    const groupHint = groupFilter.closest(".admin-control").nextElementSibling;
+    if (groupHint?.classList.contains("hint")) groupHint.hidden = isDemo;
+    if (isDemo) return;
     const query = search.value.trim().toLowerCase();
     const matches = members.filter(({ email, courseMember }) =>
       email.toLowerCase().includes(query) &&
@@ -484,7 +493,8 @@ h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chos
     refreshButton.disabled = true;
     status.textContent = "Liste wird aktualisiert …";
     try {
-      await X();
+      if (groupFilter.value === "demo") { render(); await demoPanel.refresh(); }
+      else await X();
       status.textContent = "Liste aktualisiert.";
     } catch (error) {
       status.textContent = "Aktualisieren fehlgeschlagen: " + error.message;
@@ -498,6 +508,7 @@ h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chos
   const courseCount = members.filter(person => person.courseMember === true).length;
   for (const option of groupFilter.options) {
     option.textContent = option.value === "all" ? "Alle (" + members.length + ")" :
+      option.value === "demo" ? "Demo-Zugänge" :
       option.value === "course" ? "Kursmitglieder (" + courseCount + ")" :
       "Nur App (" + (members.length - courseCount) + ")";
   }
