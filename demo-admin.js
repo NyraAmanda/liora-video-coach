@@ -1,9 +1,9 @@
 export function initDemoAdmin(panel,request){
  let section=panel.querySelector('[data-demo-admin]');
- if(section)return;
- section=document.createElement('section');section.dataset.demoAdmin='';section.className='admin-control';section.style.marginTop='28px';
+ if(section)return section;
+ section=document.createElement('section');section.dataset.demoAdmin='';section.className='admin-control';section.style.marginTop='20px';section.hidden=true;
  section.innerHTML='<h2>Demo-Zugänge · 3 Tage</h2><p>Gib die E-Mail nach dem Bezug der Demo frei. Die 72 Stunden beginnen beim ersten erfolgreichen Demo-Login. Erneutes Freigeben startet die Zeit nicht neu. Demo-Zugänge verändern weder Kursmitgliedschaft noch App-Abo.</p><form><label>E-Mail für die Demo<input name="email" type="email" autocomplete="off" maxlength="254" required></label><button class="primary" type="submit">Demo freischalten</button></form><button type="button" data-demo-refresh>Demo-Liste aktualisieren</button><p role="status" aria-live="polite"></p><ul aria-label="Demo-Zugänge"></ul>';
- panel.append(section);
+ panel.querySelector(".admin-controls").after(section);
  const form=section.querySelector('form'),status=section.querySelector('[role=status]'),list=section.querySelector('ul'),refresh=section.querySelector('[data-demo-refresh]');
  const date=value=>new Intl.DateTimeFormat('de-DE',{dateStyle:'medium',timeStyle:'short',timeZone:'Europe/Zurich'}).format(new Date(value));
  async function load(){
@@ -19,5 +19,5 @@ export function initDemoAdmin(panel,request){
   }catch(error){status.textContent=error.message;}finally{refresh.disabled=false;}
  }
  form.onsubmit=async event=>{event.preventDefault();const button=form.querySelector('button');button.disabled=true;try{await request('/admin/demo/change',{email:form.elements.email.value,action:'approve'});form.reset();await load();status.textContent='Freischaltung gespeichert. Eine bereits gestartete Testzeit bleibt unverändert.';}catch(error){status.textContent=error.message;}finally{button.disabled=false;}};
- refresh.onclick=load;load();
+ section.refresh=load;refresh.onclick=load;return section;
 }
