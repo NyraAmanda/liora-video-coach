@@ -42,14 +42,15 @@ async function check(){
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)check();});
 setInterval(check,30000);
 const previewButton=document.createElement('button');
-previewButton.type='button';previewButton.className='secondary';
+previewButton.type='button';previewButton.className='ghost';
+previewButton.style.cssText='padding:0;border:0;background:transparent;font:inherit;font-size:12px;color:inherit;opacity:.65;text-decoration:underline;cursor:pointer';
 function showMode(){
  document.getElementById('demo-access-title').textContent=adminPreview?'Demo · Admin-Vorschau':'Deine VideoCoach-Demo';
  form.querySelector('button').textContent=adminPreview?'Mit Admin-Zugang öffnen':'Demo starten / anmelden';
- previewButton.textContent=adminPreview?'Zur Demo-Anmeldung wechseln':'Admin-Vorschau öffnen';
+ previewButton.textContent=adminPreview?'Zur Demo-Anmeldung wechseln':'Administration';
  const passwordLabel=form.elements.password.parentElement;
  passwordLabel.firstChild.textContent=adminPreview?'Admin-Passwort':'Kundenpasswort';
 }
 previewButton.onclick=()=>{adminPreview=!adminPreview;status.textContent='';showMode();};
-form.after(previewButton);showMode();
+document.querySelector('footer[aria-label="Rechtliche Informationen"]').append(previewButton);showMode();
 if(token)check();
