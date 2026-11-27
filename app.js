@@ -468,7 +468,37 @@ h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chos
   }
 
   search.oninput = render;
-  groupFilter.onchange = render;
+  let refreshButton = panel.querySelector("[data-member-refresh]");
+  if (!refreshButton) {
+    refreshButton = document.createElement("button");
+    refreshButton.type = "button";
+    refreshButton.className = "secondary";
+    refreshButton.dataset.memberRefresh = "";
+    refreshButton.textContent = "Liste aktualisieren";
+    panel.querySelector(".admin-controls").append(refreshButton);
+  }
+  async function refreshList() {
+    groupFilter.disabled = true;
+    refreshButton.disabled = true;
+    status.textContent = "Liste wird aktualisiert …";
+    try {
+      await X();
+      status.textContent = "Liste aktualisiert.";
+    } catch (error) {
+      status.textContent = "Aktualisieren fehlgeschlagen: " + error.message;
+    } finally {
+      groupFilter.disabled = false;
+      refreshButton.disabled = false;
+    }
+  }
+  groupFilter.onchange = refreshList;
+  refreshButton.onclick = refreshList;
+  const courseCount = members.filter(person => person.courseMember === true).length;
+  for (const option of groupFilter.options) {
+    option.textContent = option.value === "all" ? "Alle (" + members.length + ")" :
+      option.value === "course" ? "Kursmitglieder (" + courseCount + ")" :
+      "Nur App (" + (members.length - courseCount) + ")";
+  }
   render();
   form.onsubmit = async (event) => {
     event.preventDefault();
