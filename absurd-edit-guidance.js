@@ -1,0 +1,15 @@
+export function absurdEditGuidance(kind) {
+  if (!['signature', 'trends'].includes(kind)) return '';
+  return [
+    '=== ABSURDE GAGS: SCHNITTTRICK BEI BEDARF ===',
+    'Gilt für Absurd Reality und VideoRemix, wenn ein Gag absichtlich unmögliche Physik oder ein kritisches Timing voraussetzt. Bei gewöhnlichen, klar umsetzbaren Aktionen keine zusätzlichen Schnitte erzwingen.',
+    'Bewahre die bestätigte absurde Idee, ihren Auslöser und ihre Pointe. Die Welt darf unmöglich sein; die sichtbare Reihenfolge und die Reaktionen müssen nachvollziehbar bleiben. Nicht zur physikalisch plausibleren, aber unerwünschten Handlung umschreiben.',
+    'Prüfe vor dem finalen Videoprompt, ob das Modell in einer durchgehenden Einstellung einen unmöglichen Zustand aufrechterhalten müsste. Plane dann eigenständig eine konkrete filmische Lösung: Aktion bis zum Verlassen des Bildes zeigen, am passenden Moment schneiden und die Folge in einer Einstellung erzählen, die den problematischen Zustand nicht sichtbar nachweisen muss. Nicht auf ausdrücklichen Wunsch nach einem Schnitt warten.',
+    'BEISPIEL ZITRONE: Sie wirft die Zitrone kurz vor dem Wegtragen nach oben. Einstellung A endet, sobald die Zitrone den oberen Bildrand vollständig verlassen hat. Schnitt zu Einstellung B: Ely trägt sie zärtlich weg, sie kichert verlegen; die Zitrone bleibt außerhalb des Bildausschnitts. Kein sichtbares Herunterfallen hinzufügen. Das zeigt weder eine dauerhaft schwebende Zitrone noch beweist es deren Schweben. Falls gerade das sichtbare Schweben die Pointe ist, stattdessen eine separat erstellte Zitronenebene mit Freeze oder Compositing vorschlagen und den nötigen Schnittschritt offen benennen.',
+    'ANSCHLÜSSE: Identitäten, Outfit, Handbelegung, Objektbesitz, Position, Blick- und Bewegungsrichtung zwischen den Einstellungen abgleichen. Keine plötzlich wieder auftauchenden Requisiten oder unbeabsichtigten Handwechsel. Die emotionale Energie und gewünschte körperliche Aktion erhalten; technische Vereinfachung darf die Szene nicht wieder ruhig oder leblos machen.',
+    'UMSETZUNG: Klar zwischen Schnitt innerhalb eines Renders und getrennten Clips mit anschließendem Schnitt unterscheiden. Die bestätigte Engine, Dauer, Referenzmöglichkeiten und den Begleitmodus beachten. Wenn präzises Timing im bisherigen Einzelrender nicht gelang, nicht nur immer neue Promptvarianten oder garantierte Schnittbefolgung versprechen. Einen gezielten Clipanschluss beziehungsweise bei Bedarf einen Schnitt- oder Compositing-Schritt liefern. Zusätzliche kostenpflichtige Render nur mit Nutzerfreigabe starten.',
+    'Keine sichere Diagnose behaupten, dass ein Modell logisch reagiert oder Schwerkraft erzwingt. Eine erwartbare Fallbewegung ist eine mögliche Erklärung. Die Schnittplanung kann die Anforderung vereinfachen, garantiert aber kein fehlerfreies Ergebnis.',
+    'Diese Vorgabe präzisiert die Regie für den betreffenden Gag und hat bei Konflikten Vorrang vor allgemeiner physikalischer Plausibilität. Unabhängige räumliche Beziehungen weiterhin sauber planen.',
+    '=== ENDE SCHNITTTRICK ===', ''
+  ].join('\n\n');
+}
