@@ -1,4 +1,4 @@
-import './demo-engine.js';
+import {demoRequest} from './demo-gate.js';
 function videoCoachGuidance(){
  const guided=document.getElementById("guidedMode")?.checked!==false;
  return "=== VERBINDLICHER BEGLEITMODUS – VORRANG BEI ABLAUFKONFLIKTEN ===\n"+
@@ -332,7 +332,7 @@ let mainFigureSlot=null;
 function renderFigureOptions(){applyDemoProfile()}
 const demoDialog=document.getElementById('my-figures');
 let demoProfile=null;
-try{demoProfile=JSON.parse(localStorage.getItem('videocoach-demo-profile-v1')||'null')}catch{}
+try{demoProfile=JSON.parse(localStorage.getItem('videocoach-demo-profile-v1:'+document.body.dataset.accessScope)||'null')}catch{}
 function enforceDemo(){
  n('ciAudience').value='';
  n('kind').value='talk';document.querySelector('[name=ideaMode][value=inspire]').checked=true;
@@ -353,7 +353,7 @@ function demoSetup(){
  document.querySelector('.mast-context').textContent='Talking-Head-Demo';
  document.querySelector('.hero-copy .eyebrow').textContent='DEIN ERSTER EINBLICK';
  document.querySelector('.hero-copy h1').innerHTML='Deine Figur.<br><em>Dein erster Talking Head.</em>';
- document.querySelector('.hero-copy > p:last-child').textContent='Teste den VideoCoach ohne Anmeldung. Eine Figur, Talking Head und ein vollständiger Auftrag für deinen KI-Chat.';
+ document.querySelector('.hero-copy > p:last-child').textContent='Teste den VideoCoach nach deiner Freischaltung drei Tage lang. Eine Figur, Talking Head und ein vollständiger Auftrag für deinen KI-Chat.';
  const menu=document.querySelector('.app-menu-items');for(const el of Array.from(menu.children))if(!el.matches('[data-figures-open]')&&el.tagName!=='A')el.remove();
  const guide=menu.querySelector('a');guide.href='./demo-anleitung.html';
  document.querySelectorAll('[data-figures-open]').forEach(b=>b.onclick=openDemoProfile);
@@ -365,7 +365,7 @@ function demoSetup(){
  demoDialog.querySelector('[data-figure-clear-photo]').onclick=()=>{image='';demoDialog.querySelector('[data-figure-preview]').hidden=true;demoDialog.querySelector('input[name=photo]').value=''};
  demoDialog.querySelector('form').onsubmit=async ev=>{ev.preventDefault();const form=ev.currentTarget;const status=demoDialog.querySelector('[role=status]');try{
  const file=form.elements.photo.files[0];if(file){if(file.size>10000000)throw Error('Bitte ein Bild unter 10 MB auswählen.');const bitmap=await createImageBitmap(file);const canvas=document.createElement('canvas');const scale=Math.min(1,224/Math.max(bitmap.width,bitmap.height));canvas.width=Math.round(bitmap.width*scale);canvas.height=Math.round(bitmap.height*scale);canvas.getContext('2d').drawImage(bitmap,0,0,canvas.width,canvas.height);image=canvas.toDataURL('image/jpeg',.75);bitmap.close()}
- const profile=Object.fromEntries(['name','appearance','personality','voice','relationship'].map(k=>[k,form.elements[k].value.trim()]));if(!profile.name)throw Error('Bitte einen Namen eingeben.');profile.image=image;localStorage.setItem('videocoach-demo-profile-v1',JSON.stringify(profile));demoProfile=profile;mainFigureSlot=0;applyDemoProfile();C();demoDialog.close();
+ const profile=Object.fromEntries(['name','appearance','personality','voice','relationship'].map(k=>[k,form.elements[k].value.trim()]));if(!profile.name)throw Error('Bitte einen Namen eingeben.');profile.image=image;localStorage.setItem('videocoach-demo-profile-v1:'+document.body.dataset.accessScope,JSON.stringify(profile));demoProfile=profile;mainFigureSlot=0;applyDemoProfile();C();demoDialog.close();
  }catch(err){status.textContent=err.message}};
  for(const card of document.querySelectorAll('[data-format]'))if(card.dataset.format!=='talk'){card.disabled=true;card.style.filter='grayscale(1)';card.style.opacity='.45';card.querySelector('.format-copy > span').textContent='Nur in der Vollversion';}
  for(const opt of n('kind').options)if(opt.value!=='talk')opt.disabled=true;
@@ -384,11 +384,11 @@ function demoSetup(){
  document.querySelectorAll('details').forEach(d=>{if(d.querySelector('summary')?.textContent.includes('Wissensbasis'))d.hidden=true});
  n('priority').closest('.field').hidden=true;
  const notice=document.createElement('p');notice.className='notice';notice.textContent='Demo: Nur Referenzbilder, keine Keyframe-Serie. Lade deine Bilder später zusätzlich im Chat hoch.';n('personRefs').before(notice);
- document.querySelector('#app > footer').textContent='VideoCoach · Talking-Head-Demo · Ohne Anmeldung · Figur und Entwürfe bleiben nur in diesem Browser. Die App erzeugt einen Masterprompt, keine Videos.';
+ document.querySelector('#app > footer').textContent='VideoCoach · Talking-Head-Demo · 72 Stunden ab dem ersten Login · Figur und Entwürfe bleiben nur in diesem Browser. Die App erzeugt einen Masterprompt, keine Videos.';
  applyDemoProfile();C();
 }
 // Keep the complete, previously public production prompt core and current client direction rules.
-Se(()=>{enforceDemo();fillDemoPerson();let result=window.demoBasePrompt();if(demoProfile)result+='\n\nFIGURENPROFIL: '+JSON.stringify({name:demoProfile.name,appearance:demoProfile.appearance,personality:demoProfile.personality,voice:demoProfile.voice,relationship:demoProfile.relationship});return result+'\n\nVERBINDLICHER DEMO-UMFANG: Genau ein Talking Head, eine sichtbare Person, Ideen vorschlagen. Nur Referenzbilder; keine Keyframe-Serie oder dynamische Kamerarotation. Geführten oder direkten Modus wie ausgewählt beachten. Alle Qualitätsregeln für Stimme, konkrete Gestik, Mimik, Timing und Modellprüfung gelten vollständig. Profilbilder werden nicht übertragen; benötigte Referenzen im Chat anfordern.'});
+Se(async()=>{enforceDemo();fillDemoPerson();let {prompt:result}=await demoRequest('/demo/prompt',oe());if(demoProfile)result+='\n\nFIGURENPROFIL: '+JSON.stringify({name:demoProfile.name,appearance:demoProfile.appearance,personality:demoProfile.personality,voice:demoProfile.voice,relationship:demoProfile.relationship});return result+'\n\nVERBINDLICHER DEMO-UMFANG: Genau ein Talking Head, eine sichtbare Person, Ideen vorschlagen. Nur Referenzbilder; keine Keyframe-Serie oder dynamische Kamerarotation. Geführten oder direkten Modus wie ausgewählt beachten. Alle Qualitätsregeln für Stimme, konkrete Gestik, Mimik, Timing und Modellprüfung gelten vollständig. Profilbilder werden nicht übertragen; benötigte Referenzen im Chat anfordern.'});
 demoSetup();
 n('newVideo').addEventListener('click',()=>{enforceDemo();F();j();n('scriptText').disabled=true;applyDemoProfile();C()});
 
@@ -396,3 +396,4 @@ function ie(){document.body.dataset.figureImageInput="references";return ()=>"re
 function availableImageInputs(platform,model){return ["references"]}
 
 function selectedFigureProfiles(){return demoProfile?[{...demoProfile,slot:0,isMain:true,referenceIndex:1}]:[]}
+
