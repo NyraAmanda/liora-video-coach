@@ -330,6 +330,28 @@ h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chos
   const search = panel.querySelector("[data-member-search]");
   const count = panel.querySelector("[data-member-count]");
   const form = panel.querySelector("form");
+  let groupFilter = panel.querySelector("[data-member-group]");
+  if (!groupFilter) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "admin-control";
+    const label = document.createElement("label");
+    label.textContent = "Personengruppe";
+    groupFilter = document.createElement("select");
+    groupFilter.dataset.memberGroup = "";
+    for (const [value, text] of [["all", "Alle"], ["app", "Nur App"], ["course", "Kursmitglieder"]]) {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = text;
+      groupFilter.append(option);
+    }
+    label.append(groupFilter);
+    wrapper.append(label);
+    panel.querySelector(".admin-controls").append(wrapper);
+    const hint = document.createElement("p");
+    hint.className = "hint";
+    hint.textContent = "Die Kurszuordnung verwaltest du manuell. Sie verändert weder Abo noch Gratiszeit. „Nur App“ bedeutet: kein Kurs hinterlegt.";
+    wrapper.after(hint);
+  }
   const formatDate = new Intl.DateTimeFormat("de-CH", {
     dateStyle: "medium", timeStyle: "short", timeZone: "Europe/Zurich"
   });
@@ -347,13 +369,16 @@ h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chos
 
   function render() {
     const query = search.value.trim().toLowerCase();
-    const matches = members.filter(({ email }) => email.toLowerCase().includes(query));
+    const matches = members.filter(({ email, courseMember }) =>
+      email.toLowerCase().includes(query) &&
+      (groupFilter.value === "all" || (groupFilter.value === "course" ? courseMember === true : courseMember !== true))
+    );
     count.textContent = matches.length
-      ? (query ? `${matches.length} von ${members.length} Personen` : `${members.length} Personen`)
-      : query ? "Keine passende E-Mail-Adresse gefunden." : "Noch keine Personen hinzugefügt.";
+      ? `${matches.length} von ${members.length} Personen`
+      : members.length ? "Keine Personen für diese Auswahl gefunden." : "Noch keine Personen hinzugefügt.";
     list.replaceChildren();
 
-    for (const { email, enabled, lastLoginAt, unlimited, trialEligible, trialStartedAt, trialUntil } of matches) {
+    for (const { email, enabled, lastLoginAt, unlimited, trialEligible, trialStartedAt, trialUntil, courseMember } of matches) {
       const row = document.createElement("li");
       const heading = document.createElement("div");
       heading.className = "admin-member-heading";
@@ -366,6 +391,31 @@ h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chos
       badge.textContent = enabled ? "Freigegeben" : "Gesperrt";
       heading.append(name, badge);
       row.append(heading);
+      const membership = document.createElement("small");
+      membership.className = "admin-member-access";
+      membership.textContent = courseMember ? "Kursmitglied" : "Nur App · kein Kurs hinterlegt";
+      row.append(membership);
+      const courseLabel = document.createElement("label");
+      courseLabel.className = "choice";
+      courseLabel.style.cssText = "display:flex;align-items:center;gap:10px;margin:12px 0";
+      const courseCheckbox = document.createElement("input");
+      courseCheckbox.type = "checkbox";
+      courseCheckbox.checked = courseMember === true;
+      courseCheckbox.style.cssText = "width:20px;height:20px;flex:0 0 auto";
+      courseCheckbox.setAttribute("aria-label", "Kursmitglied: " + email);
+      courseLabel.append(courseCheckbox, "Kursmitglied (LIORA- oder Video-Kurs)");
+      courseCheckbox.onchange = async () => {
+        const checked = courseCheckbox.checked;
+        courseCheckbox.disabled = true;
+        try {
+          const saved = await change(email, checked ? "courseMemberOn" : "courseMemberOff");
+          if (saved) status.textContent = checked ? "Als Kursmitglied gespeichert." : "Kurszuordnung entfernt. Person steht unter „Nur App“.";
+          else courseCheckbox.checked = !checked;
+        } finally {
+          courseCheckbox.disabled = false;
+        }
+      };
+      row.append(courseLabel);
 
       if (typeof unlimited === "boolean") {
         const access = document.createElement("small");
@@ -418,6 +468,7 @@ h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chos
   }
 
   search.oninput = render;
+  groupFilter.onchange = render;
   render();
   form.onsubmit = async (event) => {
     event.preventDefault();
