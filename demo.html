@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VideoCoach · Talking-Head-Demo</title><meta name="robots" content="noindex,nofollow">
+  <link rel="stylesheet" href="./src/styles.css?v=card-crop-1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; connect-src https://*.supabase.co; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'"><link rel="stylesheet" href="./access.css"><link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#24142d"><style>
+#customer-access {max-width:980px;background:#fffbf8;border-color:#ead9cf}
+.nyra-hero {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background:#f2e1d6;border-radius:18px;overflow:hidden}
+.nyra-login {min-width:0;padding:clamp(20px,4vw,44px);align-self:center}
+.nyra-hero img {display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.nyra-note {max-width:66ch;margin:32px auto 8px;line-height:1.65}
+.nyra-note h2 {font:400 clamp(1.8rem,4vw,2.5rem) var(--serif);margin-bottom:.35em}
+.nyra-note h3 {margin:1.1em 0 .35em}
+.nyra-note ul {padding-inline-start:1.2rem}
+#customer-admin {
+  --admin-ink: #302339;
+  --admin-muted: #63556b;
+  --admin-border: #e7ddea;
+  max-width: 920px;
+  margin: 72px auto 36px;
+  padding: clamp(16px, 4vw, 36px);
+  color: var(--admin-ink);
+  background: linear-gradient(145deg, #f5edf8, #fff 400px);
+  border: 1px solid var(--admin-border);
+  border-radius: 24px;
+  box-shadow: 0 18px 54px rgb(48 35 57 / 8%);
+}
+#customer-admin h1 { margin: 0; font-size: clamp(2rem, 5vw, 3rem); }
+#customer-admin .admin-intro { margin: 8px 0 26px; color: var(--admin-muted); }
+#customer-admin .admin-controls { display: grid; grid-template-columns: 1.25fr 1fr; gap: 14px; }
+#customer-admin .admin-control {
+  min-width: 0;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid var(--admin-border);
+  border-radius: 16px;
+}
+#customer-admin .admin-control label { display: block; margin: 0; font-weight: 650; }
+#customer-admin .admin-control input { width: 100%; margin-top: 8px; }
+#customer-admin .admin-control button { margin-top: 10px; }
+#customer-admin [role="status"] { color: var(--admin-muted); }
+#customer-admin [role="status"]:empty { display: none; }
+#customer-admin .admin-list-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 16px;
+  justify-content: space-between;
+  margin-top: 26px;
+}
+#customer-admin .admin-list-heading h2 { margin: 0; font: 600 1.1rem var(--sans, system-ui); }
+#customer-admin [data-member-count] { margin: 0; color: var(--admin-muted); font-size: .875rem; }
+#customer-admin ul { display: grid; gap: 10px; padding: 0; margin: 12px 0 0; list-style: none; }
+#customer-admin li { margin: 0; padding: 14px 16px; background: #fff; border: 1px solid var(--admin-border); border-radius: 14px; }
+#customer-admin .admin-member-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; }
+#customer-admin .admin-member-heading strong { min-width: 0; }
+#customer-admin .admin-member-badge { padding: 3px 9px; border-radius: 999px; color: #235b4b; background: #e3f3ec; font-size: .75rem; font-weight: 700; }
+#customer-admin .admin-member-badge[data-state="blocked"] { color: #803546; background: #fbe9ee; }
+#customer-admin .admin-member-badge[data-state="expired"] { color: #755025; background: #fff2dc; }
+#customer-admin .admin-member-access, #customer-admin .admin-member-login { display: block; margin-top: 4px; color: var(--admin-muted); }
+#customer-admin .admin-member-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 11px; }
+#customer-admin .admin-member-actions button {
+  min-height: 36px;
+  padding: 6px 10px;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  background: #faf6fc;
+  color: #5d3d68;
+  font-size: .8rem;
+}
+#customer-admin .admin-member-actions button:hover { background: #f1e6f5; }
+#customer-admin .admin-member-actions [data-action="remove"] { background: #fff; color: #803546; }
+#customer-admin > [data-logout] {
+  position: fixed;
+  inset-block-start: max(12px, env(safe-area-inset-top));
+  inset-inline-end: max(12px, env(safe-area-inset-right));
+  z-index: 10;
+  min-height: 44px;
+  color: var(--admin-ink);
+  background: #fff;
+  box-shadow: 0 4px 16px rgb(36 20 45 / 18%);
+}
+@media (max-width: 960px) {
+  #customer-admin { margin-inline: 12px; }
+}
+@media (max-width: 620px) {
+  #customer-admin .admin-controls { grid-template-columns: 1fr; }
+  #customer-admin .admin-member-actions button { min-height: 44px; }
+}
+#admin-feedback { max-width: 920px; margin: 72px auto 36px; background: #faf5fc; }
+#admin-feedback h1 { font-size: clamp(2rem, 5vw, 3rem); }
+#admin-feedback ul { margin: 1rem 0; padding: 0; list-style: none; }
+#admin-feedback li { padding: 14px 16px; border: 1px solid #e7ddea; border-radius: 14px; background: white; }
+#admin-feedback li small { display: block; color: #63556b; }
+#admin-feedback .feedback-message { white-space: pre-wrap; overflow-wrap: anywhere; }
+#admin-feedback .feedback-logout { position: fixed; inset-block-start: max(12px, env(safe-area-inset-top)); inset-inline-end: max(12px, env(safe-area-inset-right)); z-index: 10; min-height: 44px; background: white; }
+.feedback-navigation { display: inline-block; margin: 8px 0; padding: 8px 12px; border: 1px solid #e7ddea; border-radius: 8px; font-weight: 650; text-decoration: none; color: #60416d; background: #fff; }
+.feedback-navigation:hover { background: #f1e6f5; }
+.feedback-dialog { width: min(540px, calc(100% - 32px)); box-sizing: border-box; border: 1px solid #e7ddea; border-radius: 16px; padding: 22px; color: #302339; background: #fff; }
+.feedback-dialog::backdrop { background: rgb(36 20 45 / 55%); }
+.feedback-dialog textarea { display: block; width: 100%; box-sizing: border-box; margin-top: 8px; }
+.feedback-dialog h2 { margin-top: 0; }
+#admin-feedback .admin-member-actions, .feedback-dialog .admin-member-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+#admin-feedback [data-action="remove"] { color: #803546; }
+@media (max-width: 960px) { #admin-feedback { margin-inline: 12px; } }
+#my-figures { max-height: calc(100vh - 32px); overflow: auto; }
+#my-figures label { display: block; margin: 8px 0; }
+#my-figures select, #my-figures input:not([type=file]) { display: block; width: 100%; }
+#my-figures .figure-fields { border: 0; padding: 0; margin: 0 0 10px; min-width: 0; }
+#my-figures .figure-preview { width: 84px; height: 84px; object-fit: cover; border-radius: 12px; margin-bottom: 8px; }
+.figure-options { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-bottom: 10px; }
+.figure-options:empty { margin: 0; }
+.figure-options label { display: inline-flex; align-items: center; gap: 6px; margin: 0; }
+.figure-options input { width: auto; }
+.figure-options img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+#customer-studio .mast-account-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+#customer-studio .mast-account-actions button { min-height: 44px; }
+#logout-status:empty { display: none; }
+#butler [data-feedback-open] { margin-top: 12px; min-height: 44px; }
+@media (max-width: 680px) {
+  #customer-studio .mast-inner { display: grid; grid-template-columns: 1fr auto; gap: 8px 14px; padding-block: 10px; }
+  #customer-studio .mast-account-actions { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); margin-left: 0; }
+  #logout-status { grid-column: 1 / -1; }
+}
+@media(max-width:680px) {.nyra-hero {grid-template-columns:1fr}.nyra-hero img {aspect-ratio: 4/3;height:auto;object-position:center 43%}.nyra-note {margin-top:24px}}
+.nyra-brand {margin:0 0 .45rem;font-size:clamp(16px,2.5vw,22px);line-height:1.2;color:#4a2e43}
+.nyra-brand strong {font-size:clamp(24px,4vw,36px);font-family:var(--serif);font-weight:600}
+#customer-studio .mast-context {font:600 clamp(19px,2.8vw,29px)/1.1 var(--serif)}
+/* Shared navigation beside the LIORA mark. */
+#customer-studio .mast-inner{display:flex!important;align-items:center;flex-wrap:wrap;gap:10px}
+#customer-studio .mast-context{margin-left:auto}
+#customer-studio #logout-status:empty{display:none}
+#customer-studio #logout-status:not(:empty){flex-basis:100%}
+#customer-studio .app-menu{position:relative;margin:0;border:0;overflow:visible;background:transparent;flex:0 0 auto}
+#customer-studio .app-menu>summary{display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:7px;color:#fff;border:1px solid #ffffff70;border-radius:10px;font:700 24px/1 system-ui;list-style:none}
+#customer-studio .app-menu>summary::-webkit-details-marker{display:none}
+#customer-studio .app-menu>summary::after{content:none}
+#customer-studio .app-menu-items{position:absolute;left:0;top:calc(100% + 10px);width:min(270px,calc(100vw - 32px));padding:8px;border:1px solid #e4d9eb;border-radius:14px;background:#fff;box-shadow:0 12px 32px #24142d33;z-index:100}
+#customer-studio .app-menu-items button,#customer-studio .app-menu-items a{display:flex;align-items:center;width:100%;min-height:44px;margin:0;padding:12px 14px;border:0;border-radius:8px;background:transparent;color:#372b46;font:600 15px/1.4 system-ui;text-align:left;text-decoration:none}
+#customer-studio .app-menu-items button:hover,#customer-studio .app-menu-items a:hover{background:#f2e9f8}
+#customer-studio .app-menu-items .app-menu-logout{border-top:1px solid #e9e0ed;border-radius:0;margin-top:6px}
+#customer-studio .app-menu summary:focus-visible,#customer-studio .app-menu-items :focus-visible{outline:3px solid #a7e7d2;outline-offset:2px}
+.billing-links{display:grid;gap:8px;margin-top:12px}.billing-links a{display:block;padding:11px 13px;border-radius:10px;background:#eee6f3;color:#4d2a64;text-decoration:none;font-size:14px;font-weight:600;line-height:1.4}.billing-links a:hover{background:#e1d3eb}.billing-links a:focus-visible{outline:3px solid #9dd9c5;outline-offset:2px}.billing-choice{margin:22px 0 8px;padding:16px;border:1px solid #e1d5e8;border-radius:14px;background:#fbf8fd}.billing-choice summary{cursor:pointer;font-weight:600;color:#4d2a64}.billing-choice p,.billing-note{font-size:13px;line-height:1.5}.billing-expired{padding:12px;border-radius:10px;background:#f2eafa;color:#4d2a64}.billing-links[hidden]{display:none!important}.feedback-notice{display:block;margin-top:16px;padding:14px 18px;border:1px solid #9dd9c5;border-radius:13px;background:#e5f7ee;color:#254e41;font-weight:700;text-decoration:none}.feedback-notice[hidden]{display:none}.login-contact-button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:12px 18px;border-radius:13px;background:linear-gradient(110deg,#a9ead3,#8ddac0);color:#254e41;text-decoration:none;font-weight:700}.login-contact-button:focus-visible{outline:3px solid #9470b3;outline-offset:3px}.admin-side-tab{position:absolute;inset-inline-end:max(12px,env(safe-area-inset-right));top:0;z-index:40}.admin-side-tab button.ghost{display:block;writing-mode:horizontal-tb;min-height:44px;margin:0;padding:10px 14px;border:1px solid #dacbe6;border-top:0;border-radius:0 0 10px 10px;background:#f2e9f8;color:#62447e;box-shadow:0 3px 10px #372b460c;font-size:11px;font-weight:500;letter-spacing:.2px;line-height:1.4;text-decoration:none;cursor:pointer}.admin-side-tab button.ghost:hover{background:#e8dcf2}.admin-side-tab button.ghost:focus-visible{outline:3px solid #8ddac0;outline-offset:2px}</style><link rel="stylesheet" href="./community.css"></head>
+<body data-access-scope="public-talking-demo-v1"><div id="customer-studio">
+<dialog id="my-figures" class="feedback-dialog" aria-labelledby="my-figures-title">
+  <form>
+    <h2 id="my-figures-title">Meine Figuren</h2>
+    <p>Erzähl mir, was deine Figuren wiedererkennbar macht. Wähle danach im Briefing aus, wer in dieser Szene mitspielt.</p>
+    <p class="small"><strong>Wichtig:</strong> Profilbilder und Bubbles dienen nur zur Orientierung und Auswahl in der App. Sie werden nicht automatisch an ChatGPT oder ein Videotool übertragen. Wenn das Bild für die Planung, Prüfung oder Bilderstellung benötigt wird, lade es zusätzlich direkt im Chat hoch. LIORA sagt dir, welche Referenzen für deine Szene gebraucht werden.</p>
+    <label>Profil auswählen
+      <select data-figure-slot>
+        <option value="0">Hauptavatar</option>
+        <option value="1">Nebenfigur 1</option><option value="2">Nebenfigur 2</option><option value="3">Nebenfigur 3</option>
+        <option value="4">Nebenfigur 4</option><option value="5">Nebenfigur 5</option>
+        <option value="6">Haustier</option>
+      </select>
+    </label>
+    <fieldset class="figure-fields">
+      <label>Name<input name="name" maxlength="80" required></label>
+      <label>Aussehen oder Tierart<textarea name="appearance" rows="2" maxlength="500" placeholder="Woran erkennt man die Figur?"></textarea></label>
+      <p class="small">Für ein möglichst konsistentes Aussehen empfehlen wir dir, deinen Avatar einmal anhand seines Standardporträts beschreiben zu lassen. Prüfe die Beschreibung und speichere sie hier. Der Steckbrief wird als Text in den Masterprompt übernommen; das Profilbild selbst wird nicht mitgeschickt. Outfit und Ort klärst du pro Szene im Chat. Lade benötigte Bilder dort zusätzlich hoch. Beim Rendern fügst du die passenden Referenzen auch im Videotool hinzu, sofern der gewählte Modus sie unterstützt.</p>
+      <details>
+        <summary>Aussehen aus einem Bild beschreiben lassen</summary>
+        <p class="small">Hänge das Bild in ChatGPT an, füge den folgenden Prompt ein und kopiere die Beschreibung zurück in das Feld „Aussehen oder Tierart“.</p>
+        <label>Prompt zum Kopieren<textarea readonly rows="4">Beschreibe das wiedererkennbare Aussehen meines Avatars, meiner Figur oder meines Haustiers anhand dieses Bildes auf Deutsch in maximal 450 Zeichen. Nenne sichtbare Merkmale von Gesicht, Augen, Haut und Haaren sowie Besonderheiten wie Sommersprossen. Nenne bei Tieren Tierart, Fellfarbe, Muster und besondere Abzeichen. Lass Outfit, Schmuck, Make-up, Pose, Licht, Hintergrund und unklare Details weg. Frage bei mehreren Figuren, welche gemeint ist. Gib sonst nur die Beschreibung aus.</textarea></label>
+        <p class="small">Persönlichkeit und Sprechweise ergänzt du selbst.</p>
+      </details>
+      <label>Persönlichkeit und typische Reaktionen<textarea name="personality" rows="2" maxlength="500" placeholder="Was macht die Figur aus? Wie reagiert sie?"></textarea></label>
+      <label><span data-figure-voice-label>Sprechweise</span><textarea name="voice" rows="2" maxlength="400" placeholder="Tempo, Tonfall, Eigenheiten"></textarea></label>
+      <label>Beziehung zur Hauptfigur<textarea name="relationship" rows="2" maxlength="300" placeholder="Zum Beispiel Freundin, Partner oder Familienkatze"></textarea></label>
+      <label>Profilbild (freiwillig)<input name="photo" type="file" accept="image/jpeg,image/png,image/webp"></label>
+      <p class="small">Nur als Vorschau in der App. Wenn ChatGPT dieses Bild berücksichtigen soll, lade es zusätzlich im Chat hoch – das Profilbild wird nicht automatisch übertragen.</p>
+      <img data-figure-preview class="figure-preview" alt="Gespeicherte Profilvorschau" hidden>
+      <div class="admin-member-actions">
+        <button type="submit" class="primary">Profil speichern</button>
+        <button type="button" class="secondary" data-figure-clear-photo>Bild entfernen</button>
+        <button type="button" class="secondary" data-figure-remove disabled>Profil löschen</button>
+      </div>
+    </fieldset>
+    <p role="status" aria-live="polite"></p>
+    <button type="button" class="secondary" data-figures-close>Schließen</button>
+  </form>
+</dialog>
+<dialog id="send-feedback" class="feedback-dialog" aria-labelledby="send-feedback-title">
+  <form>
+    <h2 id="send-feedback-title">Feedback zur App</h2>
+    <p>Was hilft dir, was fehlt dir oder wo hakt es? Deine Rückmeldung wird zusammen mit deiner Anmelde-E-Mail an Nyra übermittelt.</p>
+    <label>Deine Rückmeldung<textarea name="message" rows="6" maxlength="2000" required></textarea></label>
+    <p role="status"></p>
+    <div class="admin-member-actions">
+      <button type="submit" class="primary">Feedback senden</button>
+      <button type="button" class="secondary" data-feedback-close>Schließen</button>
+    </div>
+  </form>
+</dialog>
+<header class="masthead">
+  <div class="mast-inner">
+    <a href="./" class="wordmark" aria-label="LIORA Startseite"><span aria-hidden="true">✦</span> LIORA</a>
+    <details class="app-menu" id="app-menu">
+      <summary aria-label="Menü öffnen">☰</summary>
+      <nav class="app-menu-items" aria-label="VideoCoach-Menü">
+        <button type="button" data-figures-open>Meine Figuren</button>
+        <a href="./anleitung.html" target="_blank" rel="noopener">Kurzanleitung ↗</a>
+        <button type="button" data-feedback-open>Feedback geben</button>
+        <section class="app-menu-access" aria-label="Abo & Zugang" style="border-top:1px solid #e9e0ed;margin-top:6px;padding:12px 14px;color:#372b46">
+          <strong style="display:block;font-size:14px">Abo &amp; Zugang</strong>
+          <p data-access-summary role="status" aria-live="polite" style="margin:5px 0 0;font-size:13px;line-height:1.5;white-space:normal">Laufzeit wird geladen …</p><div class="billing-links"><a data-billing-link="monthly" href="https://buy.stripe.com/4gM8wP0inbitby88Iw7AI00" target="_blank" rel="noopener noreferrer">Monatlich · 9,90 €</a><a data-billing-link="annual" href="https://buy.stripe.com/cNifZh1mrcmx31C0c07AI01" target="_blank" rel="noopener noreferrer">Jährlich · 89 €</a><a data-billing-link="portal" href="https://billing.stripe.com/p/login/4gM8wP0inbitby88Iw7AI00" target="_blank" rel="noopener noreferrer">Bestehendes Abo verwalten ↗</a></div><p class="billing-note">Die Academy bleibt unabhängig vom App-Abo. Bereits ein Abo? Bitte verwalte es, statt ein zweites abzuschließen.</p>
+        </section>
+        <button type="button" class="app-menu-logout" data-logout>Abmelden</button>
+      </nav>
+    </details>
+    <span class="mast-context">VideoCoach</span>
+    <span id="logout-status" role="status"></span>
+  </div>
+</header>
+<main class="shell" id="app">
+  <header class="hero">
+    <div class="hero-photo" aria-hidden="true"><span class="photo-tile tile-7"></span></div>
+    <div class="hero-copy">
+      <p class="eyebrow">DEIN VIDEO-STUDIO</p>
+      <h1>Mach aus einer Idee<br> <em>eine Szene.</em></h1>
+      <p>Wähle ein Format, entwickle deine Idee und erstelle deinen Regieauftrag für ChatGPT.</p>
+    </div>
+  </header>
+
+  <nav class="steps" aria-label="Schritte">
+    <button type="button" data-go="1" aria-current="step"><span>1</span> Format</button>
+    <button type="button" data-go="2"><span>2</span> Idee</button>
+    <button type="button" data-go="3"><span>3</span> Regie</button>
+    <button type="button" data-go="4"><span>4</span> Auftrag</button>
+  </nav>
+
+  <div class="workspace">
+    <div class="work-main">
+      <section class="panel work-step" data-step="1" aria-labelledby="step-1-title">
+        <h2 id="step-1-title" tabindex="-1">Wähle dein Videoformat</h2>
+        <p class="step-intro">Entscheide, welche Art von Szene du entwickeln möchtest.</p>
+        <select id="kind" hidden aria-label="Videoformat"><option value="talk">Talking Head</option><option value="signature">Absurd Reality · Deadpan Comedy</option><option value="standup">Stand-up Comedy</option><option value="couple">Couple Content · Love, Romance & Comedy</option><option value="fairytale">Märchenstunde · Humor 🐸</option><option value="storytelling">Storytelling · Kleine Momente, grosse Geschichten ✨</option><option value="random10">10 Random Dinge · Challenge 🎲</option><option value="trends">VideoRemix</option></select>
+        <div class="format-grid" role="group" aria-label="Videoformate">
+        <button type="button" class="format-card" data-format="talk" aria-pressed="false">
+          <span class="format-photo" aria-hidden="true"><img class="format-card-image" src="./assets/format-cards/talk.webp" alt="" loading="lazy" decoding="async" style="--photo-position:33%"></span>
+          <span class="format-copy"><strong>Talking Head</strong><span>Eine Idee direkt in die Kamera erzählen.</span></span>
+          <span class="format-check" aria-hidden="true">✓</span>
+        </button>
+        <button type="button" class="format-card" data-format="standup" aria-pressed="false">
+          <span class="format-photo" aria-hidden="true"><img class="format-card-image" src="./assets/format-cards/standup.webp" alt="" loading="lazy" decoding="async" style="--photo-position:29%"></span>
+          <span class="format-copy"><strong>Stand-up Comedy</strong><span>Eine Pointe mit Timing und Präsenz inszenieren.</span></span>
+          <span class="format-check" aria-hidden="true">✓</span>
+        </button>
+        <button type="button" class="format-card" data-format="fairytale" aria-pressed="false">
+          <span class="format-photo" aria-hidden="true"><img class="format-card-image" src="./assets/format-cards/fairytale.webp" alt="" loading="lazy" decoding="async" style="--photo-position:25%"></span>
+          <span class="format-copy"><strong>Märchenstunde</strong><span>Bekannte Märchen mit einer neuen Pointe.</span></span>
+          <span class="format-check" aria-hidden="true">✓</span>
+        </button>
+        <button type="button" class="format-card" data-format="signature" aria-pressed="false">
+          <span class="format-photo" aria-hidden="true"><img class="format-card-image" src="./assets/format-cards/signature.webp" alt="" loading="lazy" decoding="async" style="--photo-position:42%"></span>
+          <span class="format-copy"><strong>Absurd Reality</strong><span>Unerwartete Wendungen mit trockenem Humor.</span></span>
+          <span class="format-check" aria-hidden="true">✓</span>
+        </button>
+        <button type="button" class="format-card" data-format="storytelling" aria-pressed="false">
+          <span class="format-photo" aria-hidden="true"><img class="format-card-image" src="./assets/format-cards/storytelling.webp" alt="" loading="lazy" decoding="async" style="--photo-position:57%"></span>
+          <span class="format-copy"><strong>Storytelling</strong><span>Kleine Momente, die etwas verändern.</span></span>
+          <span class="format-check" aria-hidden="true">✓</span>
+        </button>
+        <button type="button" class="format-card" data-format="couple" aria-pressed="false">
+          <span class="format-photo" aria-hidden="true"><img class="format-card-image" src="./assets/format-cards/couple.webp" alt="" loading="lazy" decoding="async" style="--photo-position:31%"></span>
+          <span class="format-copy"><strong>Couple Content</strong><span>Nähe, Dynamik und Humor zu zweit.</span></span>
+          <span class="format-check" aria-hidden="true">✓</span>
+        </button>
+        <button type="button" class="format-card" data-format="random10" aria-pressed="false">
+          <span class="format-photo" aria-hidden="true"><span class="photo-tile tile-6"></span></span>
+          <span class="format-copy"><strong>10 Random Dinge</strong><span>Zehn Gegenstände, eine überraschende Story.</span></span>
+          <span class="format-check" aria-hidden="true">✓</span>
+        </button>
+        <button type="button" class="format-card" data-format="trends" aria-pressed="false">
+          <span class="format-photo" aria-hidden="true"><img class="format-card-image" src="./assets/format-cards/videoremix.webp" alt="" loading="lazy" decoding="async"></span>
+          <span class="format-copy"><strong>VideoRemix</strong><span>Die Idee aufgreifen. Das Konzept übernehmen. Dein eigenes Avatar-Video entwickeln.</span></span>
+          <span class="format-check" aria-hidden="true">✓</span>
+        </button>
+        </div>
+        <div class="step-actions"><span></span><button type="button" class="primary" data-go="2">Weiter zur Idee <span aria-hidden="true">→</span></button></div>
+      </section>
+
+      <section class="panel work-step" data-step="2" aria-labelledby="step-2-title" hidden>
+        <h2 id="step-2-title" tabindex="-1">Entwickle deine Idee</h2>
+        <p class="step-intro">Du kannst mit einem eigenen Einfall, einem Vorschlag oder einer Referenz starten.</p>
+        <div data-status-slot></div>
+<div class="field" id="idea-start-options"><label>Wie möchtest du starten?</label><div class="choices"><label class="choice"><input type="radio" name="ideaMode" value="own" checked> Ich habe eine Idee</label><label class="choice"><input type="radio" name="ideaMode" value="inspire"> LIORA soll Ideen vorschlagen</label><label class="choice"><input type="radio" name="ideaMode" value="reference"> Ich habe ein Video als Inspiration</label></div></div>
+<div id="intelligencePanel" class="notice hidden" style="margin:14px 0 18px">
+<strong>🧠 Content Intelligence V106 · Ideenstrategie</strong>
+<p class="hint">Für Talking Head und Stand-up: mutige Perspektiven, intelligente Selbstironie und echte Überraschungen statt weichgespülter 08/15-Sprüche. Auch Podcast-Themen sind möglich.</p>
+<div class="grid" style="margin-top:12px">
+<div class="field"><label for="ciAudience">Zielgruppe <span class="pill">optional</span></label><input id="ciAudience" maxlength="300" placeholder="z. B. Frauen 25–40, Singles, Eltern"></div>
+<div class="field"><label for="ciGoal">Content-Ziel</label><select id="ciGoal"><option value="comments">Diskussion & Kommentare</option><option value="shares">Wiedererkennung & Shares</option><option value="retention">Neugier & Watchtime</option><option value="balanced">Ausgewogen</option></select></div>
+</div>
+<div class="field"><label for="ciTone">Tonalität</label><select id="ciTone"><option value="authentic">Authentisch, pointiert</option><option value="bold">Frech, provokant ohne künstliche Empörung</option><option value="warm">Warm, nahbar, empathisch</option><option value="dry">Trocken, ironisch</option></select></div>
+<p class="hint">Bei Ideenmodus: zuerst zwei klar unterschiedliche Konzepte mit Hook und Begründung, danach erst Story & Shotplan. Bestehende Produktionsregeln bleiben unverändert.</p>
+</div>
+<div id="remix-approach-options" class="field hidden">
+<label for="remixApproach">Wie nah möchtest du an der Vorlage bleiben?</label>
+<select id="remixApproach">
+<option value="similar" selected>Ähnliche Umsetzung</option>
+<option value="principle">Neues aus dem Prinzip</option>
+</select>
+<p class="hint"><strong>Ähnliche Umsetzung:</strong> Grundidee, Thema und Humor bleiben erhalten; Figuren und Details werden angepasst.<br><strong>Neues aus dem Prinzip:</strong> Die Mechanik wird auf ein anderes Thema übertragen und daraus eine neue Geschichte entwickelt.</p>
+</div>
+<div id="trendHelp" class="notice hidden">VideoRemix übernimmt die Idee beziehungsweise das Konzept eines Videos und entwickelt daraus eine eigene Umsetzung mit deinem Avatar. Das Original wird nicht kopiert. Beschreibe kurz deine Videovorlage oder deinen Änderungswunsch. Lade den Clip oder die Bildschirmaufnahme nach dem Einfügen des Masterprompts direkt in ChatGPT hoch, sofern dein Konto den Upload unterstützt.</div>
+<div id="referenceHelp" class="notice hidden"><strong>🎬 Video als Inspiration</strong><br>Beschreibe, was im Video passiert und was du daran magst. Den Screenshot lädst du erst nach dem Einfügen des Auftrags direkt in ChatGPT hoch. LIORA analysiert das Bild und deinen beschriebenen Ablauf, empfiehlt danach eine passende Engine und entwickelt deine eigenständige Version.</div>
+<div id="random10Field" class="notice hidden"><strong>🎲 10 Random Dinge · Challenge</strong><p class="hint">Avatar und Outfit vorgeben, Ort optional. Für alle zehn Dinge plant LIORA rund 30 Sekunden und prüft zuerst Kling 4.0, wenn du eine Empfehlung möchtest. Bei kürzeren Modi kannst du alle zehn Dinge auf mehrere Clips verteilen oder eine kurze Fassung mit weniger Dingen wählen. Bei Gemini Omni sind 8 Sekunden pro Clip eingeplant.</p><div class="field"><label for="randomWorld">Welche Welt?</label><select id="randomWorld"><option value="fairy">Märchenwelt · Humor</option><option value="free">Freie Welt · Avatar / Alltag / Fantasie</option></select></div><div class="field"><label for="randomSource">Wer bestimmt die 10 Gegenstände?</label><select id="randomSource"><option value="liora">LIORA überrascht mich mit 10 kreativen Gegenständen</option><option value="own">Ich bestimme die 10 Dinge selbst</option></select></div><div class="field hidden" id="randomItemsField"><div id="randomItemInputs" class="grid" role="group" aria-label="Deine 10 Dinge"></div><textarea id="randomItems" hidden tabindex="-1" aria-hidden="true"></textarea><p class="hint" id="randomItemsCount" role="status">0 von 10 ausgefüllt</p></div><p class="hint">Bei Märchen dürfen Requisiten verschiedener Märchen und moderne Gegenstände gemischt werden. Die Märchenfigur kennt moderne Technik nicht automatisch.</p></div>
+<div id="storyHelp" class="notice hidden"><strong>✨ Storytelling</strong><br>Zeige in 15–30 Sekunden eine sichtbare Veränderung: verständlicher Kontrast am Anfang, eine freiwillige entscheidende Geste und ein Schlussbild, das dem Anfang eine neue Bedeutung gibt. Ein wiederkehrendes Detail kann die Szenen verbinden. Dialog ist optional.</div><div class="field hidden" id="fairyField"><label for="fairyTale">Welches Märchen?</label><input id="fairySearch" type="search" placeholder="🔎 Märchen suchen (z. B. Rapunzel)" autocomplete="off" aria-label="Märchen suchen"><div id="fairySearchStatus" class="hint" role="status"></div><ul id="fairySearchResults" class="fairy-search-results" aria-label="Passende Märchen" hidden></ul><select id="fairyTale"><option value="recommend">LIORA empfiehlt ein Märchen</option><optgroup label="👑 Weibliche Hauptfigur im Original"><option>Aschenputtel</option><option>Rapunzel</option><option>Schneewittchen</option><option>Rotkäppchen</option><option>Dornröschen</option><option>Frau Holle</option><option>Die Prinzessin auf der Erbse</option><option>Die kleine Meerjungfrau</option><option>Die Schneekönigin</option><option>Die Sterntaler</option><option>Die zertanzten Schuhe</option><option>Die Gänsemagd</option><option>Die sechs Schwäne</option><option>Allerleirauh</option><option>Brüderchen und Schwesterchen</option><option>Die kluge Bauerntochter</option><option>Die zwölf tanzenden Prinzessinnen</option><option>Die drei Spinnerinnen</option><option>Die wilden Schwäne</option><option>Die Schöne und das Biest</option><option>König Drosselbart</option><option>Die sieben Raben</option><option>Das Mädchen ohne Hände</option><option>Die kluge Else</option><option>Einäuglein, Zweiäuglein und Dreiäuglein</option><option>Die Gänsehirtin am Brunnen</option></optgroup><optgroup label="⚔️ Männliche Hauptfigur im Original"><option>Der Froschkönig</option><option>Rumpelstilzchen</option><option>Der gestiefelte Kater</option><option>Des Kaisers neue Kleider</option><option>Das tapfere Schneiderlein</option><option>Tischlein deck dich</option><option>Hans im Glück</option><option>Der goldene Vogel</option><option>Der Eisenhans</option><option>Der starke Hans</option><option>Der Teufel mit den drei goldenen Haaren</option><option>Der Bärenhäuter</option><option>Der arme Müllerbursch und das Kätzchen</option><option>Der Meisterdieb</option><option>Die drei Federn</option><option>Der Königssohn, der sich vor nichts fürchtet</option><option>Der junge Riese</option><option>Daumesdick</option><option>Von einem, der auszog, das Fürchten zu lernen</option><option>Der Gevatter Tod</option><option>Hans mein Igel</option><option>Das blaue Licht</option><option>Der gescheite Hans</option></optgroup><optgroup label="🎭 Mehrere Hauptfiguren / offen"><option>Hänsel und Gretel</option><option>Die Bremer Stadtmusikanten</option><option>Der Wolf und die sieben Geisslein</option><option>Das hässliche Entlein</option><option>Der Fischer und seine Frau</option><option>Die goldene Gans</option><option>Der süsse Brei</option><option>Der Hase und der Igel</option><option>Schneeweisschen und Rosenrot</option><option>Die zwei Brüder</option><option>Die drei Glückskinder</option><option>Jorinde und Joringel</option><option>Die Wichtelmänner</option><option>Die zwölf Brüder</option><option>Die Bienenkönigin</option><option>Der Frieder und das Katherlieschen</option></optgroup><option value="custom">Eigenes Märchen</option></select><div class="field" style="margin-top:12px"><label for="fairyLead">Wer übernimmt die Hauptrolle?</label><select id="fairyLead"><option value="female">Weibliche Hauptfigur</option><option value="male">Männliche Hauptfigur</option><option value="both">Beide Varianten im Chat zur Auswahl</option></select><p class="hint">Das Märchen bleibt dasselbe – LIORA passt Hauptrolle, Anrede, Kostüm und gegebenenfalls Rollenbezeichnungen an. Auch ursprünglich männliche oder weibliche Märchenrollen sind frei besetzbar.</p></div><div id="customFairyField" class="field hidden" style="margin-top:10px"><label for="customFairy">Titel des Märchens</label><input id="customFairy" placeholder="Märchentitel eingeben"></div><p class="hint">Erkennbare Märchenfiguren, eine eigenständige Handlung und eine überraschende, möglichst sichtbare Pointe. LIORA prüft neue Ideen auf Humor, Mimik und unerwartete Wendungen. Die bewährte Märchenregie bleibt erhalten.</p></div>
+<div class="field hidden" id="scriptField"><label for="scriptText">Sprechtext / Comedy-Skript <span class="pill">optional</span></label><textarea id="scriptText" maxlength="20000" placeholder="Hier deinen genauen Sprechtext einsetzen. LIORA bewahrt die Formulierungen und plant Betonung, Pausen, Mimik und Pointen-Timing."></textarea><p class="hint" id="scriptHint">Nur bei Talking Head oder Stand-up-Comedy sichtbar. Wenn leer, entwickelt LIORA den Text mit dir.</p><div id="scriptBudget" class="notice" style="margin-top:12px" aria-live="polite">Füge einen Text ein, um Wortzahl und geschätzte Sprechzeit zu prüfen.</div></div>
+<div class="field"><label id="ideaLabel" for="idea">Beschreibe deine Idee</label><textarea id="idea" maxlength="10000" placeholder="Was soll passieren? Wer macht oder sagt was? Was ist die Pointe?"></textarea><div class="dictation-bar"><button type="button" class="mic-btn" data-dictate="idea" aria-pressed="false">🎙️ Einsprechen</button><span class="char-count" id="ideaCount">0 / 10’000 Zeichen</span><span class="dictation-note" id="ideaMicStatus" role="status"></span></div><p class="hint">Du kannst auch einen fertigen Dialog eingeben. LIORA bewahrt deine Aussagen und Pointe.</p></div>
+        <div class="step-actions"><button type="button" class="ghost" data-go="1">← Format</button><button type="button" class="primary" data-go="3">Weiter zur Regie →</button></div>
+      </section>
+
+      <section class="panel work-step" data-step="3" aria-labelledby="step-3-title" hidden>
+        <h2 id="step-3-title" tabindex="-1">Plane die Regie</h2>
+        <p class="step-intro">Kläre Bild und Besetzung. Das Videomodell kann LIORA für dich empfehlen.</p>
+        <div class="grid">
+<div class="field"><label for="people">Wie viele Personen sind zu sehen?</label><select id="people"><option value="auto">LIORA entscheidet</option><option value="0">Keine</option><option value="1" selected>1 Person</option><option value="2">2 Personen</option><option value="3">3 Personen</option><option value="4">4 Personen</option><option value="5">5 Personen</option></select></div>
+        </div>
+<p class="small">Hier legst du fest, welche Referenzen du bereits hast. Vor der Bildproduktion fragt LIORA im Chat aktiv nach den Charakter- und Outfitbildern. Die Bilder lädst du dort hoch – nicht in diesem Formular.</p>
+<details id="refDetails"><summary>Avatar, Outfits und Ort vorbereiten</summary><div class="inside">
+<div id="personRefs"></div><section class="ref-card" aria-labelledby="saved-figures-title">
+  <div class="ref-title" id="saved-figures-title">Gespeicherte Figuren fürs Briefing</div>
+  <div data-figure-options class="figure-options"></div>
+</section><p class="small" style="margin:10px 0 16px;">Dir fehlt eine Idee für Outfit oder Drehort? Such dir auf Pinterest passende Anhaltspunkte für Farben, Material oder Stimmung. <a href="https://www.pinterest.com/search/pins/?q=outfit%20ideas" target="_blank" rel="noopener noreferrer">Outfit-Inspiration</a> · <a href="https://www.pinterest.com/search/pins/?q=interior%20moodboard" target="_blank" rel="noopener noreferrer">Orts-Inspiration</a></p>
+<p id="remix-location-note" class="notice hidden">Der Ort wird aus deinem Referenzvideo übernommen. Einen anderen Ort kannst du unter „Besondere Wünsche“ angeben.</p><div class="ref-card" id="location-options"><div class="ref-title">Umgebung / Ort</div><div class="grid"><div><label for="location">Wo spielt die Szene?</label><input id="location" placeholder="z. B. Küche, Café, Studio"></div><div><label for="locationRef">Ortsbild</label><select id="locationRef"><option value="none">Noch kein Bild</option><option value="ready">Bild vorhanden – im Chat hochladen</option><option value="create">LIORA soll ein Bildprompt erstellen</option></select></div></div></div>
+<div class="ref-card"><div class="ref-title">Startframe / Keyframe</div><label for="keyframeRef">Hast du bereits einen Startframe?</label><select id="keyframeRef"><option value="unsure">LIORA soll entscheiden, ob einer nötig ist</option><option value="ready">Ja – im Chat hochladen</option><option value="create">Nein – LIORA soll den Bildprompt erstellen</option></select></div>
+<p class="hint">Bildnummern wie Image 1 = Person A werden erst nach dem Hochladen im Chat anhand der tatsächlichen Upload-Reihenfolge festgelegt. Outfit- und Ortsbilder bekommen eigene Rollen.</p>
+</div></details>
+<details><summary>Besondere Wünsche</summary><div class="inside"><div class="field"><label for="extra">Was ist dir zusätzlich wichtig?</label><textarea id="extra" maxlength="10000" placeholder="z. B. trockener Humor, genaue Sätze, natürliche Bewegung, Loop, Kameraschwenk …"></textarea><div class="dictation-bar"><button type="button" class="mic-btn" data-dictate="extra" aria-pressed="false">🎙️ Einsprechen</button><span class="char-count" id="extraCount">0 / 10’000 Zeichen</span><span class="dictation-note" id="extraMicStatus" role="status"></span></div></div><div class="field"><label for="priority">Priorität</label><select id="priority"><option value="quality">Beste Qualität / gute Umsetzbarkeit</option><option value="credits">Möglichst wenig Test-Credits</option><option value="balanced">Ausgewogen</option></select></div></div></details>
+        <details class="technical"><summary>Plattform, Modell und Ton</summary><div class="inside">
+<div class="grid"><div class="field"><label for="platform">Wo generierst du das Video?</label><select id="platform"><option value="unsure">Bitte empfehlen</option><option value="higgsfield">Higgsfield</option><option value="openart">OpenArt</option><option value="flow">Google Flow</option><option value="heygen">HeyGen</option><option value="other">Andere Plattform</option></select></div>
+<div class="field"><label for="model">Videomodell</label><select id="model"></select><p class="hint" id="modelHint"></p></div></div>
+<div class="grid"><div class="field"><label for="ratio">Bildformat</label><select id="ratio"><option value="9:16">9:16 · Hochformat</option><option value="16:9">16:9 · Querformat</option><option value="1:1">1:1 · Quadrat</option><option value="auto">LIORA empfiehlt</option></select><p class="hint" id="ratioHint"></p></div>
+<div class="field"><label for="language">Sprache im Video</label><select id="language"><option value="Deutsch">Deutsch (Deutschland)</option><option value="Deutsch (Schweizer Akzent)">Deutsch (Schweizer Akzent)</option><option>Englisch</option><option>Ohne Sprache</option><option>Andere / bitte im Chat klären</option></select></div></div>
+<div class="field"><label for="music">Hintergrundmusik</label><select id="music"><option value="none">Keine Musik (Standard)</option><option value="generate">Passende Musik generieren (falls unterstützt)</option><option value="later">Musik später selbst hinzufügen</option></select><p class="hint">Ohne Musik bleibt die Stimme im Vordergrund. Natürliche Umgebungsgeräusche sind möglich.</p></div>
+<div id="compat" class="notice">LIORA prüft im Chat die tatsächlichen Funktionen deiner Plattform und Modellversion. Ungeprüfte Kombinationen werden nicht als garantiert kompatibel ausgegeben.</div>
+        </div></details>
+<details><summary>📚 Wissensbasis & Quellen ansehen <span class="pill">V108 · Modellwissen & Quellen</span></summary><div class="inside"><p class="small">Die Regeln sind im erzeugten LIORA-Auftrag enthalten. Offizielle Anleitungen, LIORA-Praxistests und Empfehlungen werden getrennt bewertet. Die Links sind Nachschlagequellen; diese Offline-Web-App aktualisiert sie nicht automatisch.</p><div class="ref-card"><strong>Kling 4.0</strong><p class="small">Für nativen deutschen Dialog bei Kling gezielt Version 4.0 wählen; Verfügbarkeit beim Anbieter prüfen. Offizielle Modellübersicht plus LIORA-Tests zu Dialog, Emotionen und Timing.</p><a href="https://kling.ai/de/quickstart" target="_blank" rel="noopener noreferrer">Offizieller Kling-Guide ↗</a></div><div class="ref-card"><strong>V108 · Voice Acting &amp; erzählte Dialoge</strong><p class="small">Bei nachgespielten Figuren bleibt die Stimmidentität erhalten. Gesprochene Sprecherhinweise vor Zitaten, eindeutige Adressaten, line-genaue Tonhöhe/Betonung/Mimik und Ein-Stimmen-Test. Nachahmung ist kein zweiter Sprecher. Einmaliger Dialogblock mit LINE_ID-Regie; Stimmvariation ist modellabhängig, Testclip empfohlen.</p></div><div class="ref-card"><strong>Living Keyframe · LIORA-Praxistest</strong><p class="small">Der Szenen-Keyframe zeigt die tatsächliche Anfangshandlung: natürliche Körperhaltung, eine sinnvolle Beschäftigung, richtige Requisiten und klare Positionen. Dialoge bekommen konkrete Reaktionen, Betonungen und Pausen statt monotoner Vorträge. Kein zusätzlicher Formularschritt.</p></div><div class="ref-card"><strong>Seedance 2.5</strong><p class="small">Deutsch: Aussprachekontrolle bei Umlauten, sch-Lauten, Vorsilben und zusammengesetzten Wörtern (LIORA-Praxisbeobachtung). LIORA-Praxistest: zwei Identitätsreferenzen + handlungsgenauer Szenen-Keyframe, Whip-Pan-Dialog, Requisiten- und Sprecherkontinuität. Modusabhängigkeit beachten.</p></div><div class="ref-card"><strong>Gemini Omni 1.2 Flash · Offizielle Quellen &amp; LIORA-Praxistest (18.11.2026)</strong><p class="small"><strong>Besonders geeignet:</strong> Deutschsprachige Talking Heads und Stand-up-Comedy. Im LIORA-Nutzertest funktionierte der deutsche Dialog hervorragend. Für Stand-up: lebendige Mimik, wechselnde Betonung, natürliche Gestik, Publikumsreaktionen und Lacherpausen explizit inszenieren; Lacher bei Bedarf in der Nachbearbeitung ergänzen. Kundenfeedback: 8-Sekunden-Szenen, Deutsch und Übergänge gut; Publikumslacher fehlten.</p><p class="small"><strong>Offiziell dokumentiert:</strong> Text-zu-Video, Bild-zu-Video, bis zu sechs Referenzbilder im entsprechenden Workflow, Start-/Endbild, Bearbeitung und Verlängerung von Clips, Sprache/Geräusche/Musik, verbesserte Lippen-Synchronität und mehrere Sprecher. Videodauer 3–15 Sekunden, bei Start-/Endbild 3–10 Sekunden; 9:16 oder 16:9. 360p/720p für Entwürfe; 1080p/4K können hochskaliert werden. Die tatsächlich verfügbaren Funktionen hängen von Plattform, Tarif und Modus ab. In der Gemini-App sind Video-Uploads zur Bearbeitung in der Schweiz derzeit eingeschränkt.</p><p class="small"><strong>Google-Quellen:</strong> <a href="https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemini-omni-1-2-flash/" target="_blank" rel="noopener noreferrer">Offizielle Modellankündigung ↗</a> · <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/omni-1-2-flash" target="_blank" rel="noopener noreferrer">Funktionen &amp; technische Grenzen ↗</a> · <a href="https://colab.research.google.com/github/google-gemini/cookbook/blob/main/quickstarts/Get_started_Omni.ipynb" target="_blank" rel="noopener noreferrer">Google Cookbook / Referenz-Workflows ↗</a> · <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/video/edit-videos" target="_blank" rel="noopener noreferrer">Video-Bearbeitung ↗</a> · <a href="https://deepmind.google/models/model-cards/gemini-omni-1-2-flash/" target="_blank" rel="noopener noreferrer">Model Card &amp; Grenzen ↗</a> · <a href="https://support.google.com/gemini/answer/16126339?hl=en" target="_blank" rel="noopener noreferrer">Gemini-App-Verfügbarkeit ↗</a></p></div><div class="ref-card"><strong>Omni Flash 1.2 · Kundenfeedback &amp; Stand-up-Audio (18.11.2026)</strong><p class="small"><strong>Kunden-Praxistest:</strong> Deutsch funktionierte gut; mehrere aufgeteilte Szenen mit je etwa 8 Sekunden und sanfte Übergänge funktionierten gut. <strong>Beobachteter Fehler:</strong> Die gewünschten Publikumslacher fehlten. Das beweist nicht, dass das Modell grundsätzlich keine Lacher erzeugen kann.</p><p class="small"><strong>LIORA-Produktionsregel:</strong> Publikumslachen nach konkreter Pointe als separates Audio-Ereignis anfordern: Pointe vollständig sprechen → hörbares natürliches Publikumslachen aus dem Saal → Darstellerin reagiert mit Blick/Mimik und wartet → Lachen klingt ab → nächste Zeile. Keine Dauerschleife, keine Hintergrundmusik. Bei fehlenden Lachern funktionierende Bild- und Sprachclips erhalten; Lacher in der Nachbearbeitung auf die eingeplanten Pausen setzen. Für 8-Sekunden-Clips Sprechzeit, Reaktion und Lacherpause realistisch budgetieren. Mehrere Clips mit durchgängiger Stimme, Bühne, Outfit und natürlichem Anschluss.</p><p class="small"><strong>Quellen:</strong> <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/omni-1-2-flash" target="_blank" rel="noopener noreferrer">Google Cloud: Ton, Dauer, Modellfähigkeiten ↗</a> · <a href="https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemini-omni-1-2-flash/" target="_blank" rel="noopener noreferrer">Google: Referenzen, Video-Editing, Cliplängen ↗</a>. Das Kundenfeedback ist eine eigene Praxisbeobachtung, keine Aussage von Google.</p></div><div class="ref-card"><strong>Skin Reality Director V107 · Nano Banana</strong><p class="small">Bei allen sieben Formaten automatisch: referenztreue Haut-Mikrostruktur, natuerliche Farbunterschiede, vorhandene Sommersprossen, feine Gesichtshaare, zur Szene passende gerichtete Beleuchtung und minimale Retusche. Kein pauschaler langer Negativprompt; Make-up bleibt moeglich. Die A–G-Struktur und adaptive Prompt-Tiefe bleiben erhalten. Als Hypothese im identischen Vorher/Nachher-Bildtest pruefen.</p></div><div class="ref-card"><strong>LIORA Creative Signature V106 · Talking Head &amp; Stand-up (18.11.2026)</strong><p class="small"><strong>Redaktionelle Leitlinie:</strong> Frech, schlagfertig, mutig, selbstironisch und überraschend. Keine weichgespülten Kalendersprüche oder austauschbaren 08/15-Beispiele. Talking Head ist ein Darstellungsformat, keine Tonalität. Humor aus Widersprüchen, konkreten Handlungen, eigener Doppelmoral, Eskalation und unerwarteter Pointe entwickeln. Gelegentlich natürliches Fluchen ist erlaubt. Erste gesprochene Zeile muss bereits Neugier wecken.</p><p class="small"><strong>LIORA-Nutzerfeedback:</strong> Frühere Vorschläge über Gästetassen, Handtücher, Handy suchen oder Essensentscheidungen wirkten zu brav und vorhersehbar. Deshalb Ideen vor der Freigabe auf Eigenständigkeit, Figur, Selbstentlarvung und Überraschung prüfen. Dies ist eine interne Kreativregel aus Feedback, keine externe wissenschaftliche Quelle.</p></div><div class="ref-card"><strong>Veo 3.1 / Google Flow</strong><p class="small">LIORA-Praxisbewertung: Deutsche Aussprache bei Veo 3.1 weniger zuverlässig. Für deutschsprachige Talking Heads und Stand-up bevorzugt Gemini Omni 1.2 Flash oder Kling 4.0 prüfen. Veo bei ausdrücklicher Wahl mit kurzem Sprachtest und ohne Erfolgsversprechen einsetzen. Offizielle Anleitung zu Bildgestaltung, Bewegung, Handlung und Dialog.</p><a href="https://deepmind.google/models/veo/prompt-guide/" target="_blank" rel="noopener noreferrer">Google Veo Prompt Guide ↗</a></div><div class="ref-card"><strong>HeyGen</strong><p class="small">Vorläufiges Modellprofil für Avatar-/Talking-Head-Workflows. Konkrete Modusregeln und Tests noch offen.</p></div><div class="ref-card"><strong>Runway (Vergleich)</strong><p class="small">Offizielle Anleitungen zu Image-to-Video, Motion-Prompting und zeitlicher Szenenführung.</p><a href="https://help.runwayml.com/hc/en-us/articles/39789879462419-Gen-4-Video-Prompting-Guide" target="_blank" rel="noopener noreferrer">Runway Gen-4 Guide ↗</a> · <a href="https://help.runwayml.com/hc/en-us/articles/42460036199443-Text-to-Video-Prompting-Guide" target="_blank" rel="noopener noreferrer">Runway Gen-4.5 Guide ↗</a></div></div></details>
+        <div class="step-actions"><button type="button" class="ghost" data-go="2">← Idee</button><button type="button" class="primary" data-go="4">Weiter zum Auftrag →</button></div>
+      </section>
+
+      <section class="panel work-step" data-step="4" aria-labelledby="step-4-title" hidden>
+        <h2 id="step-4-title" tabindex="-1">Dein Regieauftrag</h2>
+        <p class="step-intro">Erstelle den Auftrag, kopiere ihn und füge ihn in ChatGPT ein. Referenzbilder lädst du dort hoch.</p>
+        <div data-status-slot id="result-status">
+<p id="status" class="hint" role="status"></p>
+        </div>
+
+<div class="field">
+<label class="choice" style="display:flex;align-items:center;gap:12px"><input type="checkbox" id="guidedMode" checked style="width:20px;height:20px;flex:0 0 auto"> Schritt für Schritt begleiten</label>
+<details><summary>Was ist der Unterschied?</summary><div class="inside hint">
+<p><strong>Mit Häkchen:</strong> VideoCoach führt dich Schritt für Schritt durch die Umsetzung und wartet jeweils auf deine Antwort oder dein Ergebnis.</p>
+<p><strong>Ohne Häkchen:</strong> VideoCoach erstellt aus deinen Angaben direkt einen vollständigen Entwurf mit den passenden Prompts. Nur wenn etwas Entscheidendes fehlt, fragt VideoCoach nach.</p>
+</div></details>
+</div>
+<div class="actions"><button id="generate" class="primary">Video-Coach-Auftrag erstellen</button><button id="copy" class="secondary hidden">Prompt kopieren</button></div>
+<div id="outputPanel"><div class="field" style="margin-top:16px"><label for="prompt">Dein individueller VideoCoach-Auftrag</label><textarea id="prompt" readonly></textarea></div><div class="notice">Öffne ChatGPT, füge den kopierten Auftrag ein und lade dort deine Referenzbilder hoch. Dieser HTML-Prototyp übermittelt keine Bilder an ChatGPT.</div></div>
+<div class="reset-area">
+  <p class="small" style="margin:0 0 10px"><strong>Ein weiteres Video planen?</strong></p>
+  <div class="actions">
+    <button type="button" id="newVideo" class="secondary">↻ Neues Video · Avatar behalten</button>
+    <button type="button" id="fullReset" class="ghost">Komplett neu starten</button>
+  </div>
+  <p class="hint">«Neues Video» behält Personen, Avatar- und Outfitangaben, persönliche Merkmale, besondere Wünsche und deine bevorzugten Einstellungen. Die Videoidee, Szene und Keyframes werden zurückgesetzt. «Komplett neu starten» löscht auch diese Angaben und den lokal gespeicherten Entwurf. Bereits geöffnete ChatGPT-Chats oder hochgeladene Bilder werden nicht verändert.</p>
+</div>
+        <div class="step-actions"><button type="button" class="ghost" data-go="3">← Regie</button></div>
+      </section>
+    </div>
+
+    <aside class="studio-sidebar" aria-label="Format und Hilfe">
+      <section class="selection" aria-labelledby="selection-title">
+        <span class="selection-label">DEIN FORMAT</span>
+        <strong id="selection-title">Talking Head</strong>
+        <span id="selection-description">Eine Idee direkt in die Kamera erzählen.</span>
+      </section>
+      <details class="butler" id="butler" open>
+        <summary><span class="butler-icon" aria-hidden="true">✦</span><span>LIORA-Butler<small>Hilfe für diesen Schritt</small></span></summary>
+        <div class="inside">
+          <p id="butler-tip">Wähle die Karte, die am besten zu deiner Szene passt. Du kannst das Format später wechseln.</p>
+        </div>
+      </details>
+
+    </aside>
+  </div>
+<footer>LIORA V110 · Ein Video pro Durchlauf · Keine integrierte Video-Generierung · Modellfunktionen werden im Chat geprüft. Formularentwürfe werden nur lokal in diesem Browser gespeichert. Spracheingabe verwendet die Spracherkennung des Browsers und kann über dessen Anbieter verarbeitet werden.</footer>
+</main>
+</div>
+<footer aria-label="Rechtliche Informationen" style="display:flex;justify-content:center;gap:1.25rem;flex-wrap:wrap;padding:16px">
+  <a href="https://nyraimpressum.netlify.app/">Impressum</a>
+  <a href="https://nyradatenschutz.netlify.app/">Datenschutz</a>
+</footer>
+<script type="module" src="./demo-app.js?v=1"></script></body></html>
