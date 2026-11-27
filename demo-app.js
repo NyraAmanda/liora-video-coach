@@ -61,7 +61,7 @@ const imageInputsByPlatform = {
   openart: {kling:["references","frames"],seedance:["references","frames"]},
   flow: {veo:["frames"],omni:["references","frames"]}
 };
-function availableImageInputs(platform, model) {
+function originalAvailableImageInputs(platform, model) {
   return imageInputsByPlatform[platform]?.[model] ?? [];
 }
 function originalImageInputSelector(){let e=n("model"),platform=n("platform"),t=document.createElement("fieldset");t.
