@@ -150,7 +150,7 @@ weniger zuverl\xE4ssig"],["omni","Gemini Omni 1.2 Flash \xB7 Deutsch Praxistest 
  soll pr\xFCfen"]],heygen:[["heygen","HeyGen \xB7 Avatar-Modus pr\xFCfen"]],other:[["recommend","LIORA soll empfehlen"],["seedance","Seedance 2.5 \xB7 Deutsch eing\
 eschr\xE4nkt"],["kling","Kling 4.0 \xB7 bei Deutsch"],["veo","Veo 3.1 \xB7 Deutsch weniger zuverl\xE4ssig"],["omni","Gemini Omni 1.2 Flash \xB7 Deutsch Praxistest \
 positiv"],["heygen","HeyGen \xB7 Modus pr\xFCfen"]]};var B=["ciAudience","ciGoal","ciTone","kind","fairyLead","fairyTale","customFairy","randomWorld","randomSource","randomItems","idea","scriptText","platform","mo\
-del","ratio","language","music","people","location","locationRef","keyframeRef","extra","priority"];function I(){return n("kind").value==="trends"?"reference":document.querySelector('input[name=ideaMode]:checked').value}function oe(){let e=Object.fromEntries(B.map(r=>[r,n(r).value]));e.ciAudience="";if(I()==="inspire"){e.idea="";e.scriptText="";}e.kind==="trends"&&(e.location=document.getElementById("remixApproach")?.value==="principle"?"Ort passend zur neuen Geschichte aus dem Prinzip entwickeln; ausdrückliche Ortswünsche unter extra beachten.":"Ort aus dem im Chat hochgeladenen Referenzvideo übernehmen; abweichende Wünsche unter extra beachten.",e.locationRef="none",e.idea=e.idea.trim()||"Ich lade mein Referenzvideo im Chat hoch. Entwickle daraus meine eigene Avatar-Version."),e.kind==="random10"&&!selectedFigureProfiles().length&&(e.people="1");let t=e.people==="auto"?0:Number(e.people),
+del","ratio","language","music","people","location","locationRef","keyframeRef","extra","priority"];function I(){return n("kind").value==="trends"?"reference":document.querySelector('input[name=ideaMode]:checked').value}function oe(){let e=Object.fromEntries(B.map(r=>[r,n(r).value]));e.ciAudience="";if(I()==="inspire"){e.idea="";e.scriptText="";if(e.kind==="talk")e.ciAudience="";}e.kind==="trends"&&(e.location=document.getElementById("remixApproach")?.value==="principle"?"Ort passend zur neuen Geschichte aus dem Prinzip entwickeln; ausdrückliche Ortswünsche unter extra beachten.":"Ort aus dem im Chat hochgeladenen Referenzvideo übernehmen; abweichende Wünsche unter extra beachten.",e.locationRef="none",e.idea=e.idea.trim()||"Ich lade mein Referenzvideo im Chat hoch. Entwickle daraus meine eigene Avatar-Version."),e.kind==="random10"&&!selectedFigureProfiles().length&&(e.people="1");let t=e.people==="auto"?0:Number(e.people),
 i=[];for(let r=0;r<t;r++)i.push({name:n("person"+r)?.value,notes:n("notes"+r)?.value,avatar:n("avatar"+r)?.value,outfit:n("outfit"+r)?.value});return{...e,mode:I(),
 personReferences:i}}function P(){let e=document.body.dataset.accessScope;return e?"liora-lab-video-v34-draft:"+e:"liora-lab-video-v34-draft"}function C(){saveCategoryDrafts();try{let e={};B.forEach(t=>{
 n(t)&&(e[t]=n(t).value)}),e.guidedMode=document.getElementById("guidedMode")?.checked!==false;e.ideaMode=I();e.remixApproach=document.getElementById("remixApproach")?.value==="principle"?"principle":"similar";for(let t=0;t<5;t++)for(let i of["person","notes","avatar","outfit"]){let r=i+t;n(r)&&(e[r]=n(r).value)}localStorage.setItem(
@@ -221,6 +221,9 @@ king-Head-Text einsetzen. LIORA gestaltet nat\xFCrliche Betonung, Atempausen und
 }
 function syncIdeaModeFields(){
  const suggesting=I()==="inspire";
+ const audience=n("ciAudience");
+ const hideAudience=suggesting&&n("kind").value==="talk";
+ if(audience){audience.closest(".field").classList.toggle("hidden",hideAudience);audience.disabled=hideAudience;}
  const field=n("idea");
  field.closest(".field").classList.toggle("hidden",suggesting);
  field.disabled=suggesting;
