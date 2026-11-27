@@ -1,4 +1,4 @@
-import {demoRequest} from './demo-gate.js';
+import {demoRequest} from './demo-gate.js?v=admin-preview-20261127';
 function videoCoachGuidance(){
  const guided=document.getElementById("guidedMode")?.checked!==false;
  return "=== VERBINDLICHER BEGLEITMODUS – VORRANG BEI ABLAUFKONFLIKTEN ===\n"+
