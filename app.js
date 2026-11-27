@@ -150,7 +150,7 @@ weniger zuverl\xE4ssig"],["omni","Gemini Omni 1.2 Flash \xB7 Deutsch Praxistest 
  soll pr\xFCfen"]],heygen:[["heygen","HeyGen \xB7 Avatar-Modus pr\xFCfen"]],other:[["recommend","LIORA soll empfehlen"],["seedance","Seedance 2.5 \xB7 Deutsch eing\
 eschr\xE4nkt"],["kling","Kling 4.0 \xB7 bei Deutsch"],["veo","Veo 3.1 \xB7 Deutsch weniger zuverl\xE4ssig"],["omni","Gemini Omni 1.2 Flash \xB7 Deutsch Praxistest \
 positiv"],["heygen","HeyGen \xB7 Modus pr\xFCfen"]]};var B=["ciAudience","ciGoal","ciTone","kind","fairyLead","fairyTale","customFairy","randomWorld","randomSource","randomItems","idea","scriptText","platform","mo\
-del","ratio","language","music","people","location","locationRef","keyframeRef","extra","priority"];function I(){return n("kind").value==="trends"?"reference":document.querySelector('input[name=ideaMode]:checked').value}function oe(){let e=Object.fromEntries(B.map(r=>[r,n(r).value]));e.kind==="trends"&&(e.location=document.getElementById("remixApproach")?.value==="principle"?"Ort passend zur neuen Geschichte aus dem Prinzip entwickeln; ausdrückliche Ortswünsche unter extra beachten.":"Ort aus dem im Chat hochgeladenen Referenzvideo übernehmen; abweichende Wünsche unter extra beachten.",e.locationRef="none",e.idea=e.idea.trim()||"Ich lade mein Referenzvideo im Chat hoch. Entwickle daraus meine eigene Avatar-Version."),e.kind==="random10"&&!selectedFigureProfiles().length&&(e.people="1");let t=e.people==="auto"?0:Number(e.people),
+del","ratio","language","music","people","location","locationRef","keyframeRef","extra","priority"];function I(){return n("kind").value==="trends"?"reference":document.querySelector('input[name=ideaMode]:checked').value}function oe(){let e=Object.fromEntries(B.map(r=>[r,n(r).value]));if(I()==="inspire"){e.idea="";e.scriptText="";}e.kind==="trends"&&(e.location=document.getElementById("remixApproach")?.value==="principle"?"Ort passend zur neuen Geschichte aus dem Prinzip entwickeln; ausdrückliche Ortswünsche unter extra beachten.":"Ort aus dem im Chat hochgeladenen Referenzvideo übernehmen; abweichende Wünsche unter extra beachten.",e.locationRef="none",e.idea=e.idea.trim()||"Ich lade mein Referenzvideo im Chat hoch. Entwickle daraus meine eigene Avatar-Version."),e.kind==="random10"&&!selectedFigureProfiles().length&&(e.people="1");let t=e.people==="auto"?0:Number(e.people),
 i=[];for(let r=0;r<t;r++)i.push({name:n("person"+r)?.value,notes:n("notes"+r)?.value,avatar:n("avatar"+r)?.value,outfit:n("outfit"+r)?.value});return{...e,mode:I(),
 personReferences:i}}function P(){let e=document.body.dataset.accessScope;return e?"liora-lab-video-v34-draft:"+e:"liora-lab-video-v34-draft"}function C(){saveCategoryDrafts();try{let e={};B.forEach(t=>{
 n(t)&&(e[t]=n(t).value)}),e.guidedMode=document.getElementById("guidedMode")?.checked!==false;e.ideaMode=I();e.remixApproach=document.getElementById("remixApproach")?.value==="principle"?"principle":"similar";for(let t=0;t<5;t++)for(let i of["person","notes","avatar","outfit"]){let r=i+t;n(r)&&(e[r]=n(r).value)}localStorage.setItem(
@@ -206,7 +206,7 @@ den-Planung: Stand-up ca. 35\u201345 W\xF6rter, Talking Head ca. 45\u201355 W\xF
 tbudget.";return}let l=i>r||s>30;d.textContent=`${i} W\xF6rter \xB7 gesch\xE4tzt ${s} Sekunden inkl. ${o} s Pausen-/Reaktionsreserve \xB7 vorsichtiger Richtwert: b\
 is ${r} W\xF6rter / 30 s. ${l?"\u26A0\uFE0F F\xFCr 30 Sekunden wahrscheinlich zu dicht. Text gemeinsam k\xFCrzen oder auf mehrere Clips verteilen; nicht ungefragt \xE4ndern.":
 "\u2713 Im groben Planungsbereich; genaue Sprechdauer, Aussprache und Performance vor dem Rendern trotzdem pr\xFCfen."} Keine garantierte Kling-Grenze.`}function j(){
-let e=n("kind").value,t=e==="talk"||e==="standup";n("scriptField").classList.toggle("hidden",!t),n("scriptText").disabled=!t,be(),n("scriptHint").textContent=e===
+let e=n("kind").value,t=(e==="talk"||e==="standup")&&I()!=="inspire";n("scriptField").classList.toggle("hidden",!t),n("scriptText").disabled=!t,be(),n("scriptHint").textContent=e===
 "standup"?"Optional: Set-up, Pointe und Nachsatz einsetzen. LIORA pr\xFCft Tempo, Pausen, Lacher und Sprechdauer vor dem Rendern.":"Optional: Deinen genauen Tal\
 king-Head-Text einsetzen. LIORA gestaltet nat\xFCrliche Betonung, Atempausen und bei humorvollen Stellen gezieltes Comedy-Timing."}function fe(){n("kind").value===
 "whip"?(n("ratio").value="16:9",n("ratioHint").textContent="Empfehlung: 16:9 gibt dem seitlichen Whip-Pan mehr Raum. F\xFCr Reels ist 9:16 weiterhin m\xF6glich."):
@@ -219,7 +219,15 @@ king-Head-Text einsetzen. LIORA gestaltet nat\xFCrliche Betonung, Atempausen und
  const intro=document.querySelector('[data-step="2"] .step-intro');
  if(intro)intro.textContent=remix?"Greife die Idee eines Videos auf und entwickle daraus etwas Eigenes mit deinem Avatar. Das Video lädst du nach dem Kopieren des Masterprompts direkt im Chat hoch.":"Du kannst mit einem eigenen Einfall, einem Vorschlag oder einer Referenz starten.";
 }
-function F(){syncRemixEntry();let e=I(),t=e==="inspire",
+function syncIdeaModeFields(){
+ const suggesting=I()==="inspire";
+ const field=n("idea");
+ field.closest(".field").classList.toggle("hidden",suggesting);
+ field.disabled=suggesting;
+ if(suggesting)w();
+ j();
+}
+function F(){syncRemixEntry();syncIdeaModeFields();let e=I(),t=e==="inspire",
 i=e==="reference",r=n("kind").value==="trends";n("trendHelp").classList.toggle("hidden",!r),n("referenceHelp").classList.toggle("hidden",!i||r),n("intelligenceP\
 anel").classList.toggle("hidden",!(t&&["talk","standup"].includes(n("kind").value))),n("ideaLabel").textContent=r?"Änderungswünsche zur Vorlage (optional)":i?"\
 Was passiert im Inspirationsvideo?":t?"Wor\xFCber soll LIORA Ideen entwickeln? (optional)":"Beschreibe deine Idee",n("idea").placeholder=r?"Beschreibe kurz deine Vorlage oder deinen Änderungswunsch. Das Video lädst du anschließend im Chat hoch.":i?"Beschreibe die Handlung in zeitlicher Reihenfolge: Was macht die Person, was bewegt sich, welche Kamera\
@@ -279,7 +287,7 @@ u kannst ihn jetzt in ChatGPT einf\xFCgen.":"Kopieren wurde blockiert. Der Text 
 hResults").hidden&&(r.preventDefault(),n("fairySearchResults").querySelector("button").click())}),n("fairyTale").addEventListener("change",N),n("randomWorld").addEventListener(
 "change",z),n("randomSource").addEventListener("change",z),n("fairyTale").addEventListener("change",z),n("platform").addEventListener("change",T),n("kind").addEventListener(
 "change",switchCategoryDraft),n("model").addEventListener("change",A),n("language").addEventListener("change",A),n("people").addEventListener("change",
-D),document.querySelectorAll("input[name=ideaMode]").forEach(r=>r.addEventListener("change",F)),document.addEventListener("input",r=>{r.target.closest("#app")&&
+D),document.querySelectorAll("input[name=ideaMode]").forEach(r=>r.addEventListener("change",()=>{F();Ce()})),document.addEventListener("input",r=>{r.target.closest("#app")&&
 C()}),document.addEventListener("change",r=>{r.target.closest("#app")&&C()}),Ie(),T(),fe(),D(),setupCategoryDrafts(),le({updateModels:T,updateIdeaMode:F,renderPeople:D,updateCompatibility:A}),
 activeDraftCategory=n("kind").value,saveCategoryDrafts(),F(),j(),z(),we(),me(),ae()}import{edgeUrl as Fe}from"./customer-config.js";var g=document.getElementById("customer-access"),ze=document.getElementById("customer-studio"),h=document.body.hasAttribute(
 "data-admin-preview"),V=h?"liora-video-coach:lab-session":"liora-video-coach:session",L="liora-video-coach:remembered-session",_="liora-video-coach:remembered-e\
