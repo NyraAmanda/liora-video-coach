@@ -288,15 +288,10 @@
         <p class="step-intro">Du kannst mit einem eigenen Einfall, einem Vorschlag oder einer Referenz starten.</p>
         <div data-status-slot></div>
 <div class="field" id="idea-start-options"><label>Wie möchtest du starten?</label><div class="choices"><label class="choice"><input type="radio" name="ideaMode" value="own" checked> Ich habe eine Idee</label><label class="choice"><input type="radio" name="ideaMode" value="inspire"> LIORA soll Ideen vorschlagen</label><label class="choice"><input type="radio" name="ideaMode" value="reference"> Ich habe ein Video als Inspiration</label></div></div>
-<div id="intelligencePanel" class="notice hidden" style="margin:14px 0 18px">
-<strong>🧠 Content Intelligence V106 · Ideenstrategie</strong>
-<p class="hint">Für Talking Head und Stand-up: mutige Perspektiven, intelligente Selbstironie und echte Überraschungen statt weichgespülter 08/15-Sprüche. Auch Podcast-Themen sind möglich.</p>
-<div class="grid" style="margin-top:12px">
+<div id="intelligencePanel" hidden style="display:none" aria-hidden="true">
 <input type="hidden" id="ciAudience" value="">
-<div class="field"><label for="ciGoal">Content-Ziel</label><select id="ciGoal"><option value="comments">Diskussion & Kommentare</option><option value="shares">Wiedererkennung & Shares</option><option value="retention">Neugier & Watchtime</option><option value="balanced">Ausgewogen</option></select></div>
-</div>
-<div class="field"><label for="ciTone">Tonalität</label><select id="ciTone"><option value="authentic">Authentisch, pointiert</option><option value="bold">Frech, provokant ohne künstliche Empörung</option><option value="warm">Warm, nahbar, empathisch</option><option value="dry">Trocken, ironisch</option></select></div>
-<p class="hint">Bei Ideenmodus: zuerst zwei klar unterschiedliche Konzepte mit Hook und Begründung, danach erst Story & Shotplan. Bestehende Produktionsregeln bleiben unverändert.</p>
+<input type="hidden" id="ciGoal" value="comments">
+<input type="hidden" id="ciTone" value="authentic">
 </div>
 <div id="remix-approach-options" class="field hidden">
 <label for="remixApproach">Wie nah möchtest du an der Vorlage bleiben?</label>
