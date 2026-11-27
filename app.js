@@ -223,7 +223,7 @@ function syncIdeaModeFields(){
  const suggesting=I()==="inspire";
  const audience=n("ciAudience");
  const hideAudience=suggesting&&n("kind").value==="talk";
- if(audience){audience.closest(".field").classList.toggle("hidden",hideAudience);audience.disabled=hideAudience;}
+ if(audience){audience.closest(".field")?.classList.toggle("hidden",hideAudience);audience.disabled=hideAudience;}
  const field=n("idea");
  field.closest(".field").classList.toggle("hidden",suggesting);
  field.disabled=suggesting;
