@@ -389,7 +389,9 @@ function demoSetup(){
 // Keep the complete, previously public production prompt core and current client direction rules.
 Se(()=>{enforceDemo();fillDemoPerson();let result=window.demoBasePrompt();if(demoProfile)result+='\n\nFIGURENPROFIL: '+JSON.stringify({name:demoProfile.name,appearance:demoProfile.appearance,personality:demoProfile.personality,voice:demoProfile.voice,relationship:demoProfile.relationship});return result+'\n\nVERBINDLICHER DEMO-UMFANG: Genau ein Talking Head, eine sichtbare Person, Ideen vorschlagen. Nur Referenzbilder; keine Keyframe-Serie oder dynamische Kamerarotation. Geführten oder direkten Modus wie ausgewählt beachten. Alle Qualitätsregeln für Stimme, konkrete Gestik, Mimik, Timing und Modellprüfung gelten vollständig. Profilbilder werden nicht übertragen; benötigte Referenzen im Chat anfordern.'});
 demoSetup();
-n('newVideo').addEventListener('click',()=>{enforceDemo();F();j();applyDemoProfile();C()});
+n('newVideo').addEventListener('click',()=>{enforceDemo();F();j();n('scriptText').disabled=true;applyDemoProfile();C()});
 
 function ie(){document.body.dataset.figureImageInput="references";return ()=>"references"}
 function availableImageInputs(platform,model){return ["references"]}
+
+function selectedFigureProfiles(){return demoProfile?[{...demoProfile,slot:0,isMain:true,referenceIndex:1}]:[]}
