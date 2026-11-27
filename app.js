@@ -1,3 +1,4 @@
+import {initDemoAdmin} from './demo-admin.js?v=20261127';
 import { initAdminCommunity } from './community.js?v=20261125-1';
 function videoCoachGuidance(){
  const guided=document.getElementById("guidedMode")?.checked!==false;
@@ -325,6 +326,7 @@ h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chos
   rememberLoginRole(true);
   const { members } = data ?? await R("/admin/list");
   const panel = document.getElementById("customer-admin");
+  initDemoAdmin(panel,R);
   const status = panel.querySelector("[role=status]");
   const list = panel.querySelector("ul");
   const search = panel.querySelector("[data-member-search]");
@@ -1334,3 +1336,4 @@ function resetCategoryDrafts(){
 }
 
 Be();
+
