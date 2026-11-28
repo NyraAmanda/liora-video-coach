@@ -1,3 +1,4 @@
+import {memberBillingState} from './billing-admin.js?v=20261128-1';
 import {absurdEditGuidance} from './absurd-edit-guidance.js?v=20261127-1';
 import {initDemoAdmin} from './demo-admin.js?v=demo-dropdown-20261127';
 import { initAdminCommunity } from './community.js?v=20261125-1';
@@ -325,7 +326,7 @@ password:d.get("password")});navigator.credentials.store(m).catch(()=>{})}catch{
 s.disabled=!1,r.disabled=!1}}}function De(e){rememberLoginRole(false);billingCustomerEmail=e.email||billingCustomerEmail;syncBillingLinks();renderCustomerAccessInfo(e);document.body.dataset.accessScope=h?"admin-lab":e.draftScope,g.hidden=!0,ze.hidden=!1,loadFigures(),ye||(Se(async t=>{const chosen = selectedFigureProfiles(); const briefing = mergeFigureProfiles(t, chosen); let{prompt:i}=await R(
 h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chosen)},{enableCameraRoll:e.cameraRollSupported===!0}),ye=!0)}async function X(data) {
   rememberLoginRole(true);
-  const { members } = data ?? await R("/admin/list");
+  const { members, billingSync } = data ?? await R("/admin/list");
   const panel = document.getElementById("customer-admin");
   const status = panel.querySelector(":scope > [role=status]");
   const list = panel.querySelector('ul[aria-labelledby="admin-member-list-title"]');
@@ -354,6 +355,12 @@ h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chos
     hint.textContent = "Die Kurszuordnung verwaltest du manuell. Sie verändert weder Abo noch Gratiszeit. „Nur App“ bedeutet: kein Kurs hinterlegt.";
     wrapper.after(hint);
   }
+  let billingSummary=panel.querySelector('[data-billing-sync]');
+  if(!billingSummary){billingSummary=document.createElement('p');billingSummary.dataset.billingSync='';billingSummary.className='hint';billingSummary.setAttribute('role','status');panel.querySelector('.admin-controls').before(billingSummary);}
+  const billingTime=billingSync?.checkedAt ? new Intl.DateTimeFormat('de-CH',{dateStyle:'short',timeStyle:'short',timeZone:'Europe/Zurich'}).format(new Date(billingSync.checkedAt)) : '';
+  billingSummary.textContent=billingSync?.state==='connected' ? 'Tentary verbunden · geprüft '+billingTime+'. Neue App-Käufe werden beim Öffnen oder Aktualisieren übernommen (höchstens alle 3 Minuten).'
+    : billingSync?.state==='unavailable' ? 'Tentary konnte gerade nicht aktualisiert werden. Du siehst den gespeicherten Stand. Bitte später erneut aktualisieren.'
+    : billingSync?.state==='not_configured' ? 'Tentary ist noch nicht verbunden.' : 'Tentary-Status wird beim nächsten Aktualisieren geprüft.';
   const demoPanel = initDemoAdmin(panel,R);
   const formatDate = new Intl.DateTimeFormat("de-CH", {
     dateStyle: "medium", timeStyle: "short", timeZone: "Europe/Zurich"
@@ -390,17 +397,19 @@ h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chos
       : members.length ? "Keine Personen für diese Auswahl gefunden." : "Noch keine Personen hinzugefügt.";
     list.replaceChildren();
 
-    for (const { email, enabled, lastLoginAt, unlimited, trialEligible, trialStartedAt, trialUntil, courseMember } of matches) {
+    for (const member of matches) {
+      const { email, enabled, lastLoginAt, unlimited, trialEligible, trialStartedAt, trialUntil, courseMember, tentaryPaidUntil, tentaryCheckedAt, tentaryCancelAtPeriodEnd } = member;
+      const billingState=memberBillingState(member);
       const row = document.createElement("li");
       const heading = document.createElement("div");
       heading.className = "admin-member-heading";
       const name = document.createElement("strong");
       name.textContent = email;
       const badge = document.createElement("span");
-      const expired = !unlimited && trialUntil && Date.parse(trialUntil) <= Date.now();
+      const expired = billingState.expired;
       badge.className = "admin-member-badge";
-      badge.dataset.state = !enabled ? "blocked" : expired ? "expired" : "enabled";
-      badge.textContent = enabled ? "Freigegeben" : "Gesperrt";
+      badge.dataset.state = billingState.state;
+      badge.textContent = billingState.label;
       heading.append(name, badge);
       row.append(heading);
       const membership = document.createElement("small");
@@ -436,6 +445,12 @@ h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chos
           ? (expired ? "Gratiszugang abgelaufen am " : "Gratiszugang bis ") + formatDate.format(new Date(trialUntil))
           : trialEligible ? "Ein Gratismonat ab erster Anmeldung" : "Zugang über App-Abo";
         row.append(access);
+        if(billingState.knownTentary){
+          const billing=document.createElement('small');billing.className='admin-member-access';
+          billing.textContent=tentaryPaidUntil ? 'Tentary-Abo · bezahlt bis '+formatDate.format(new Date(tentaryPaidUntil))+(tentaryCancelAtPeriodEnd?' · Kündigung vorgemerkt.':'.') : 'Tentary-Abo · kein aktuell bestätigter bezahlter Zeitraum.';
+          if(tentaryCheckedAt)billing.textContent+=' Geprüft: '+formatDate.format(new Date(tentaryCheckedAt))+'.';
+          row.append(billing);
+        }
       }
       if (lastLoginAt) {
         const login = document.createElement("small");
