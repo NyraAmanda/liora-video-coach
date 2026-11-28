@@ -434,7 +434,7 @@ h?"/admin/prompt":"/prompt",briefing);return addFigureCheck(re(i,briefing), chos
         access.className = "admin-member-access";
         access.textContent = unlimited ? "Unbefristeter Zugang" : trialUntil
           ? (expired ? "Gratiszugang abgelaufen am " : "Gratiszugang bis ") + formatDate.format(new Date(trialUntil))
-          : trialEligible ? "Ein Gratismonat ab erster Anmeldung" : "Zugang über Stripe-Abo";
+          : trialEligible ? "Ein Gratismonat ab erster Anmeldung" : "Zugang über App-Abo";
         row.append(access);
       }
       if (lastLoginAt) {
@@ -1278,6 +1278,7 @@ if (appMenu) {
 let billingCustomerEmail = '';
 function billingLinkUrl(base, email, kind) {
  const url = new URL(base);
+ if (url.hostname === 'aphroditepromt.mytentary.com') return url.href;
  const value = String(email || '').trim().toLowerCase();
  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) url.searchParams.set(kind === 'portal' ? 'prefilled_email' : 'locked_prefilled_email', value);
  if (kind !== 'portal') url.searchParams.set('locale', 'de');
