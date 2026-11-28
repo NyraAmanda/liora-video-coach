@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {entitlement,findEntitlement,withTentary,PRODUCT_ID} from './tentary.mjs';
+import {entitlement,findEntitlement,listEntitlements,withTentary,PRODUCT_ID} from './tentary.mjs';
 const now=Date.parse('2026-11-28T12:00:00Z');
 const email='buyer@example.com';
 function order(patch={}){return {id:12,buyer_data:{email},product:{id:PRODUCT_ID},status:'paid',refund:'none',billing:'subscription',has_access:true,chargeback:false,subscription:{status:'active',interval_months:1,ends_at:null,payments:[{created_at:'2026-11-20T13:20:00Z',status:'paid',amount:'9.90',refunded_amount:'0',chargeback:false}]},...patch};}
@@ -63,4 +63,36 @@ test('session refresh cannot look up another credential type',async()=>{
  const queries=[];const pool={query:async(sql,params)=>{queries.push({sql,params});return {rows:[]};}};
  let delegated=false;const adapter=withTentary({credential:async(hash,kind)=>{delegated=true;assert.equal(kind,'session');}},pool,{key:'test'});
  await adapter.credential('hash','session');assert.ok(delegated);assert.deepEqual(queries[0].params,['hash','session']);assert.ok(queries[0].sql.includes('expires_at>now()'));
+});
+test('administrator snapshot discovers new purchases and groups duplicate e-mails',async()=>{
+ const a=order(),b=order({id:13}),refund=order({id:14,buyer_data:{email:'refunded@example.com'},refund:'full',has_access:false});
+ b.buyer_data.email=' BUYER@EXAMPLE.COM ';b.subscription={...a.subscription,ends_at:'2026-12-01T00:00:00Z'};
+ const result=await listEntitlements('test',async url=>({ok:true,json:async()=>url.includes('/12')?a:url.includes('/13')?b:{orders:[a,b,refund],next_cursor:null}}),now);
+ assert.equal(result.size,2);assert.equal(result.get(email).orderId,12);assert.equal(result.get('refunded@example.com'),null);
+});
+test('administrator snapshot rejects incomplete API pages',async()=>{
+ await assert.rejects(listEntitlements('test',async()=>({ok:true,json:async()=>({orders:[],next_cursor:'repeated'})}),now),/cursor/);
+});
+test('admin list imports new paid account before its first login and reports status',async()=>{
+ const queries=[];const current=order();current.subscription.payments[0].created_at=new Date().toISOString();
+ const pool={query:async(sql,params)=>{queries.push({sql,params});return {rows:[],rowCount:0};}};
+ pool.connect=async()=>({...pool,release(){}});
+ const adapter=withTentary({list:async()=>[]},pool,{key:'test',fetcher:async url=>({ok:true,json:async()=>url.includes('/12')?current:{orders:[current],next_cursor:null}})});
+ await adapter.list();assert.ok(queries.some(q=>q.sql.includes('INSERT INTO')));assert.ok(queries.some(q=>q.sql==='COMMIT'));
+ assert.equal(adapter.billingSyncInfo().state,'connected');assert.ok(adapter.billingSyncInfo().checkedAt);
+ assert.ok(!queries.some(q=>q.sql.includes('SET enabled')));
+});
+test('incomplete admin verification performs no billing writes',async()=>{
+ const queries=[];let calls=0;
+ const pool={query:async(sql)=>{queries.push(sql);return {rows:[]};}};
+ const adapter=withTentary({list:async()=>[]},pool,{key:'test',fetcher:async()=>({ok:true,json:async()=>++calls===1?{orders:[],next_cursor:'next'}:{orders:null}})});
+ await adapter.list();assert.equal(adapter.billingSyncInfo().state,'unavailable');assert.ok(queries.every(sql=>!sql.startsWith('UPDATE')&&!sql.startsWith('INSERT')));
+});
+test('successful empty snapshot clears old entitlement while retaining account identity',async()=>{
+ const queries=[];
+ const pool={query:async(sql,params)=>{queries.push({sql,params});return {rows:sql==='SELECT email FROM liora_lab_access.access_members WHERE tentary_order_id IS NOT NULL'?[{email}]:[],rowCount:1};}};
+ pool.connect=async()=>({...pool,release(){}});
+ const adapter=withTentary({list:async()=>[]},pool,{key:'test',fetcher:async()=>({ok:true,json:async()=>({orders:[],next_cursor:null})})});
+ await adapter.list();const write=queries.find(q=>q.sql.startsWith('UPDATE'));
+ assert.deepEqual(write.params,[email,null,null,false]);assert.ok(write.sql.includes('coalesce($3,tentary_order_id)'));assert.ok(!queries.some(q=>q.sql.startsWith('DELETE')));
 });
