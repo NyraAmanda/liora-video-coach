@@ -63,9 +63,73 @@ export async function findEntitlement(email, key, fetcher = fetch, now = Date.no
   throw new Error('tentary_pagination_limit');
 }
 
+// Full, bounded snapshot for the administrator: discover purchases before first app login.
+export async function listEntitlements(key, fetcher=fetch, now=Date.now()) {
+  const result=new Map(), seen=new Set(); let cursor=null;
+  const signal=AbortSignal.timeout(20000);
+  async function get(url){
+    const response=await fetcher(url,{headers:{Authorization:`Bearer ${key}`},signal,redirect:'error'});
+    if(!response.ok)throw new Error(`tentary_http_${response.status}`);
+    return response.json();
+  }
+  for(let page=0;page<20;page++){
+    const url=new URL('https://api.tentary.com/v1/orders');
+    url.searchParams.set('product_id',String(PRODUCT_ID));url.searchParams.set('billing','subscription');url.searchParams.set('limit','50');
+    if(cursor)url.searchParams.set('cursor',cursor);
+    const data=await get(url.href);
+    if(!Array.isArray(data.orders))throw new Error('tentary_invalid_orders');
+    for(const item of data.orders){
+      const email=normalizeEmail(item.buyer_data?.email);
+      if(item.product?.id!==PRODUCT_ID||item.billing!=='subscription'||email.length>254||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))continue;
+      if(!result.has(email))result.set(email,null);
+      if(item.status!=='paid'||!item.has_access||item.refund==='full')continue;
+      if(!Number.isSafeInteger(item.id)||item.id<1)throw new Error('tentary_invalid_order_id');
+      const detail=await get(`https://api.tentary.com/v1/orders/${item.id}`);
+      if(detail.id!==item.id)throw new Error('tentary_order_mismatch');
+      const paid=entitlement(detail,email,now),previous=result.get(email);
+      if(paid&&(!previous||paid.paidUntil>previous.paidUntil))result.set(email,paid);
+    }
+    if(data.next_cursor==null)return result;
+    if(typeof data.next_cursor!=='string'||seen.has(data.next_cursor))throw new Error('tentary_invalid_cursor');
+    cursor=data.next_cursor;seen.add(cursor);
+  }
+  throw new Error('tentary_pagination_limit');
+}
+
 export function withTentary(store, pool, options={}) {
   const key = options.key ?? Deno.env.get('TENTARY_API_KEY');
   const pending = new Map();
+  let lastAdminSync=0,adminSyncPromise=null;
+  let syncStatus={state:key?'not_checked':'not_configured',checkedAt:null};
+  async function writePaid(db,email,paid){
+    await db.query("SELECT pg_advisory_xact_lock(hashtextextended('liora-member:' || $1::text,0))",[email]);
+    const params=[email,paid?.paidUntil||null,paid?.orderId||null,paid?.cancelAtPeriodEnd||false];
+    const updated=await db.query(`UPDATE liora_lab_access.access_members SET tentary_paid_until=$2,
+      tentary_checked_at=now(),tentary_order_id=coalesce($3,tentary_order_id),tentary_cancel_at_period_end=$4 WHERE email=$1`,params);
+    if(!updated.rowCount&&paid)await db.query(`INSERT INTO liora_lab_access.access_members
+      (email,enabled,billing_override,trial_eligible,course_member,tentary_paid_until,tentary_checked_at,tentary_order_id,tentary_cancel_at_period_end)
+      SELECT $1,true,false,false,false,$2,now(),$3,$4 WHERE NOT EXISTS(SELECT 1 FROM liora_lab_access.access_members WHERE email=$1)`,params);
+  }
+  async function syncAdmin(){
+    if(!key)return;
+    if(adminSyncPromise)return adminSyncPromise;
+    if(Date.now()-lastAdminSync<180000)return;
+    adminSyncPromise=(async()=>{
+      try{
+        const paidByEmail=await listEntitlements(key,options.fetcher);
+        const existing=await pool.query('SELECT email FROM liora_lab_access.access_members WHERE tentary_order_id IS NOT NULL');
+        for(const row of existing.rows)if(!paidByEmail.has(row.email))paidByEmail.set(row.email,null);
+        // Apply only a complete verified snapshot. API failures never partially revoke accounts.
+        if(paidByEmail.size){
+          const db=await pool.connect();
+          try{await db.query('BEGIN');for(const [email,paid] of [...paidByEmail].sort(([a],[b])=>a.localeCompare(b)))await writePaid(db,email,paid);await db.query('COMMIT');}
+          catch(error){await db.query('ROLLBACK');throw error;}finally{db.release();}
+        }
+        lastAdminSync=Date.now();syncStatus={state:'connected',checkedAt:new Date(lastAdminSync).toISOString()};
+      }catch{lastAdminSync=Date.now()-150000;syncStatus={state:'unavailable',checkedAt:syncStatus.checkedAt};console.warn(JSON.stringify({event:'liora-tentary',stage:'admin_sync_unavailable'}));}
+    })();
+    try{await adminSyncPromise;}finally{adminSyncPromise=null;}
+  }
   async function sync(email) {
     email=normalizeEmail(email);
     if(!key)return;
@@ -84,13 +148,7 @@ export function withTentary(store, pool, options={}) {
       const db=await pool.connect();
       try {
         await db.query('BEGIN');
-        await db.query("SELECT pg_advisory_xact_lock(hashtextextended('liora-member:' || $1::text,0))",[email]);
-        const params=[email,paid?.paidUntil||null,paid?.orderId||null,paid?.cancelAtPeriodEnd||false];
-        const updated=await db.query(`UPDATE liora_lab_access.access_members SET tentary_paid_until=$2,
-          tentary_checked_at=now(),tentary_order_id=$3,tentary_cancel_at_period_end=$4 WHERE email=$1`,params);
-        if(!updated.rowCount&&paid)await db.query(`INSERT INTO liora_lab_access.access_members
-          (email,enabled,billing_override,trial_eligible,course_member,tentary_paid_until,tentary_checked_at,tentary_order_id,tentary_cancel_at_period_end)
-          SELECT $1,true,false,false,false,$2,now(),$3,$4 WHERE NOT EXISTS(SELECT 1 FROM liora_lab_access.access_members WHERE email=$1)`,params);
+        await writePaid(db,email,paid);
         await db.query('COMMIT');
       } catch(error) {await db.query('ROLLBACK');throw error;} finally {db.release();}
     })();
@@ -115,10 +173,12 @@ export function withTentary(store, pool, options={}) {
       return info;
     },
     async list(){
+      await syncAdmin();
       const members=await store.list();
       const {rows}=await pool.query(`SELECT email,tentary_paid_until AS "tentaryPaidUntil",tentary_checked_at AS "tentaryCheckedAt",tentary_cancel_at_period_end AS "tentaryCancelAtPeriodEnd" FROM liora_lab_access.access_members WHERE tentary_order_id IS NOT NULL`);
       const byEmail=new Map(rows.map(row=>[row.email,row]));
       return members.map(row=>({...row,...byEmail.get(row.email)}));
-    }
+    },
+    billingSyncInfo(){return {...syncStatus};}
   };
 }
