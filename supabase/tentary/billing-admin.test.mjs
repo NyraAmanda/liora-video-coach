@@ -1,0 +1,11 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {memberBillingState} from '../../billing-admin.js';
+const now=Date.parse('2026-11-28T12:00:00Z');
+const paid={enabled:true,trialEligible:true,trialStartedAt:'2026-09-01',trialUntil:'2026-10-01',tentaryPaidUntil:'2026-12-01',tentaryCheckedAt:'2026-11-28T11:59:00Z'};
+test('paid subscription wins over an old expired free month',()=>assert.equal(memberBillingState(paid,now).label,'Abo aktiv'));
+test('manual block wins over paid subscription',()=>assert.equal(memberBillingState({...paid,enabled:false},now).state,'blocked'));
+test('refund or expired paid access is not shown as active',()=>assert.equal(memberBillingState({...paid,tentaryPaidUntil:null},now).label,'Zugang abgelaufen'));
+test('stale verification is not shown as paid active',()=>assert.equal(memberBillingState({...paid,tentaryCheckedAt:'2026-11-28T11:40:00Z'},now).paid,false));
+test('lifetime account remains independent of payment',()=>assert.equal(memberBillingState({...paid,unlimited:true,tentaryPaidUntil:null},now).label,'Dauerzugang'));
+test('unused course month remains ready',()=>assert.equal(memberBillingState({enabled:true,trialEligible:true,trialStartedAt:null},now).label,'Gratiszugang'));
